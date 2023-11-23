@@ -1,5 +1,6 @@
-using Data.Repository;
 using Data;
+using Data.Repository;
+using Data.Repository.Interfaces;
 using Repository;
 using Service;
 
@@ -17,19 +18,14 @@ public class Program
 
         // Add services to the container.
         // vi sætter både vores connection string her og i CoffeeShopDbContext.cs
-        builder.Services.AddDbContext<CoffeeShopDbContext>(opts =>
-            opts.UseSqlServer("Server=EASV-DB4,1433;Database=CSe2022t_t_2_3rdSemesterExamProject;User Id=CSe2022t_t_2;Password=CSe2022tT2#;TrustedServerCertificate=True;"));
-        builder.Services.AddAutoMapper(typeof(Program));
+        builder.Services.AddDbContext<CoffeeShopDbContext>();
+        
+        
         builder.Services.AddLogging();
         builder.Services.AddCors();
         
-        // Services
-        builder.Services.AddScoped<ICoffeeService, CoffeeService>();
-        //builder.Services.AddScoped<IIngredientService, IngredientService>();
+        ConfigureServices(builder.Services);
         
-        //Repositories
-        builder.Services.AddScoped<ICoffeeRepository, CoffeeRepository>();
-        //builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
         builder.Services.AddControllers();
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -59,6 +55,29 @@ public class Program
 
         app.Run();
     }
+    
+    public static void ConfigureServices(IServiceCollection services)
+    {
+        // Add repositories
+        services.AddScoped<ICoffeeCupRepository, CoffeeCupRepository>();
+        services.AddScoped<IIngredientRepository, IngredientRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
+        // Add services
+        services.AddScoped<ICoffeeCupService, CoffeeCupService>();
+        services.AddScoped<IIngredientService, IngredientService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IOrderDetailService, OrderDetailService>();
+     
+        services.AddAutoMapper(typeof(MappingProfile));
+        
+    }
+    
 }
 
 

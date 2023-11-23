@@ -7,52 +7,32 @@ namespace Data.Repository;
 
 
 
-public class CoffeeRepository : ICoffeeRepository
+public class CoffeeCupRepository : ICoffeeCupRepository
 {
-    private readonly CoffeeShopDbContext _context;
+    private List<CoffeeCup> coffeeCups = new List<CoffeeCup>();
 
-    public CoffeeRepository(CoffeeShopDbContext context)
+    public CoffeeCup GetCoffeeCupById(Guid cupId)
     {
-        _context = context;
+        return coffeeCups.FirstOrDefault(c => c.Id == cupId);
     }
 
-    public IList<Coffee> GetCoffees()
+    public IEnumerable<CoffeeCup> GetAllCoffeeCups()
     {
-        return _context.Coffees.ToList();
+        return coffeeCups;
     }
 
-    public Coffee GetCoffee(Guid id)
+    public void AddCoffeeCup(CoffeeCup coffeeCup)
     {
-        return _context.Coffees.Find(id);
+        coffeeCups.Add(coffeeCup);
     }
 
-    public bool CoffeeExists(Guid id)
+    public void UpdateCoffeeCup(CoffeeCup coffeeCup)
     {
-        return _context.Coffees.Any(x => x.Id == id);
+        // Implementation to update a coffee cup in the database
     }
 
-    public Coffee UpdateCoffee(Guid id, Coffee coffee)
+    public void DeleteCoffeeCup(Guid cupId)
     {
-        var coffeeToUpdate = GetCoffee(id);
-        coffeeToUpdate.Name = coffee.Name;
-        coffeeToUpdate.Price = coffee.Price;
-        coffeeToUpdate.Description = coffee.Description;
-        _context.SaveChanges();
-        return coffeeToUpdate;
+        coffeeCups.RemoveAll(c => c.Id == cupId);
     }
-
-    public void DeleteCoffee(Guid id)
-    {
-        _context.Coffees.Remove(GetCoffee(id));
-        _context.SaveChanges();
-    }
-
-    public Coffee CreateCoffee(Coffee coffee)
-    {
-        _context.Coffees.Add(coffee);
-        _context.SaveChanges();
-        return coffee;
-    }
-
- 
 }

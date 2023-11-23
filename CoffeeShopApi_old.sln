@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{4AFD66CF-56DA-49C2-853A-1A73F5FDC448}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeShopApiTests", "CoffeeShopApiTests\CoffeeShopApiTests.csproj", "{A831E0CF-A884-4BA7-8D43-66C455524CE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{4AFD66CF-56DA-49C2-853A-1A73F5FDC448}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AFD66CF-56DA-49C2-853A-1A73F5FDC448}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AFD66CF-56DA-49C2-853A-1A73F5FDC448}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A831E0CF-A884-4BA7-8D43-66C455524CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A831E0CF-A884-4BA7-8D43-66C455524CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A831E0CF-A884-4BA7-8D43-66C455524CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A831E0CF-A884-4BA7-8D43-66C455524CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

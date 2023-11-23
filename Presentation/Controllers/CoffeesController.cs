@@ -1,112 +1,80 @@
-﻿namespace Controllers;
+﻿namespace Presentation.Controllers;
 
-using Models;
-using Data;
+using DTOs;
 
-
-
-
-// using Microsoft.AspNetCore.Authorization; //ville være based, men vi skal lige kigge på det
-using Microsoft.AspNetCore.Identity;
+using AutoMapper;
+using Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 
-//[Authorize(Roles = "Admin")] // Restrict access to users in the "Admin" role
-//[Route("api/[controller]")]
 [ApiController]
-public class CoffeesController : ControllerBase
+[Route("api/[controller]")]
+public class CoffeeCupController : ControllerBase
 {
-    private readonly CoffeeShopDbContext _context;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly ICoffeeCupService _coffeeCupService;
+    private readonly IMapper _mapper;
 
-    public CoffeesController(CoffeeShopDbContext context, UserManager<IdentityUser> userManager)
+    public CoffeeCupController(ICoffeeCupService coffeeCupService, IMapper mapper)
     {
-        _context = context;
-        _userManager = userManager;
+        _coffeeCupService = coffeeCupService;
+        _mapper = mapper;
     }
 
-    // GET: api/coffees
-    [HttpGet]
-    public async Task<IActionResult> GetCoffees()
-    {
-        var coffees = await _context.Coffees.ToListAsync();
-        return Ok(coffees);
-    }
-
-    // GET: api/coffees/5
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCoffee(int id)
+    public IActionResult GetCoffeeCup(Guid id)
     {
-        var coffee = await _context.Coffees.FindAsync(id);
+        var coffeeCup = _coffeeCupService.GetCoffeeCupById(id);
 
-        if (coffee == null)
+        if (coffeeCup == null)
         {
             return NotFound();
         }
 
-        return Ok(coffee);
+        var coffeeCupDto = _mapper.Map<CoffeeCupDto>(coffeeCup);
+        return Ok(coffeeCupDto);
     }
 
-    // POST: api/coffees
+    [HttpGet]
+    public IActionResult GetAllCoffeeCups()
+    {
+        var coffeeCups = _coffeeCupService.GetAllCoffeeCups();
+        var coffeeCupDtos = _mapper.Map<List<CoffeeCupDto>>(coffeeCups);
+
+        return Ok(coffeeCupDtos);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> PostCoffee(Coffee coffee)
+    public IActionResult AddCoffeeCup([FromBody] CoffeeCupDto coffeeCupDto)
     {
-        _context.Coffees.Add(coffee);
-        await _context.SaveChangesAsync();
+        if (coffeeCupDto == null)
+        {
+            return BadRequest("CoffeeCupDto cannot be null");
+        }
 
-        return CreatedAtAction("GetCoffee", new { id = coffee.Id }, coffee);
+        _coffeeCupService.AddCoffeeCup(coffeeCupDto);
+
+        return CreatedAtAction(nameof(GetCoffeeCup), new { id = coffeeCupDto.CupID }, coffeeCupDto);
     }
 
-    // PUT: api/coffees/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutCoffee(Guid id, Coffee coffee)
+    public IActionResult UpdateCoffeeCup(Guid id, [FromBody] CoffeeCupDto coffeeCupDto)
     {
-        if (id != coffee.Id)
+        if (id != coffeeCupDto.CupID)
         {
-            return BadRequest();
+            return BadRequest("Mismatched IDs");
         }
 
-        _context.Entry(coffee).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!CoffeeExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+        _coffeeCupService.UpdateCoffeeCup(coffeeCupDto);
 
         return NoContent();
     }
 
-    // DELETE: api/coffees/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCoffee(int id)
+    public IActionResult DeleteCoffeeCup(Guid id)
     {
-        var coffee = await _context.Coffees.FindAsync(id);
-        if (coffee == null)
-        {
-            return NotFound();
-        }
-
-        _context.Coffees.Remove(coffee);
-        await _context.SaveChangesAsync();
+        _coffeeCupService.DeleteCoffeeCup(id);
 
         return NoContent();
-    }
-
-    private bool CoffeeExists(Guid id)
-    {
-        return _context.Coffees.Any(e => e.Id == id);
     }
 }
