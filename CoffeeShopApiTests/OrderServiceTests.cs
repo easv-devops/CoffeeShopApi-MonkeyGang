@@ -30,8 +30,13 @@ public class OrderServiceTests
     {
         // Arrange
         Guid orderId = Guid.NewGuid();
-        var orderEntity = new Order { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 45.99m };
-        var orderDto = new OrderDto { OrderID = orderId, CustomerID = orderEntity.CustomerID, OrderDate = orderEntity.OrderDate, TotalAmount = 45.99m };
+        var orderEntity = new Order
+            { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 45.99m };
+        var orderDto = new OrderDto
+        {
+            OrderID = orderId, CustomerID = orderEntity.CustomerID, OrderDate = orderEntity.OrderDate,
+            TotalAmount = 45.99m
+        };
 
         mockOrderRepository.Setup(repo => repo.GetOrderById(orderId)).Returns(orderEntity);
         mockMapper.Setup(mapper => mapper.Map<OrderDto>(orderEntity)).Returns(orderDto);
@@ -53,14 +58,28 @@ public class OrderServiceTests
         // Arrange
         var orderEntities = new List<Order>
         {
-            new Order { OrderID = Guid.NewGuid(), CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 35.99m },
-            new Order { OrderID = Guid.NewGuid(), CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 25.99m }
+            new Order
+            {
+                OrderID = Guid.NewGuid(), CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 35.99m
+            },
+            new Order
+            {
+                OrderID = Guid.NewGuid(), CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 25.99m
+            }
         };
 
         var orderDtos = new List<OrderDto>
         {
-            new OrderDto { OrderID = orderEntities[0].OrderID, CustomerID = orderEntities[0].CustomerID, OrderDate = orderEntities[0].OrderDate, TotalAmount = 35.99m },
-            new OrderDto { OrderID = orderEntities[1].OrderID, CustomerID = orderEntities[1].CustomerID, OrderDate = orderEntities[1].OrderDate, TotalAmount = 25.99m }
+            new OrderDto
+            {
+                OrderID = orderEntities[0].OrderID, CustomerID = orderEntities[0].CustomerID,
+                OrderDate = orderEntities[0].OrderDate, TotalAmount = 35.99m
+            },
+            new OrderDto
+            {
+                OrderID = orderEntities[1].OrderID, CustomerID = orderEntities[1].CustomerID,
+                OrderDate = orderEntities[1].OrderDate, TotalAmount = 25.99m
+            }
         };
 
         mockOrderRepository.Setup(repo => repo.GetAllOrders()).Returns(orderEntities);
@@ -82,7 +101,11 @@ public class OrderServiceTests
     {
         // Arrange
         var orderDto = new OrderDto { CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 19.99m };
-        var orderEntity = new Order { OrderID = Guid.NewGuid(), CustomerID = orderDto.CustomerID, OrderDate = orderDto.OrderDate, TotalAmount = 19.99m };
+        var orderEntity = new Order
+        {
+            OrderID = Guid.NewGuid(), CustomerID = orderDto.CustomerID, OrderDate = orderDto.OrderDate,
+            TotalAmount = 19.99m
+        };
 
         mockMapper.Setup(mapper => mapper.Map<Order>(orderDto)).Returns(orderEntity);
 
@@ -98,8 +121,12 @@ public class OrderServiceTests
     {
         // Arrange
         Guid orderId = Guid.NewGuid();
-        var orderDto = new OrderDto { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 29.99m };
-        var orderEntity = new Order { OrderID = orderId, CustomerID = orderDto.CustomerID, OrderDate = orderDto.OrderDate, TotalAmount = 29.99m };
+        var orderDto = new OrderDto
+            { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 29.99m };
+        var orderEntity = new Order
+        {
+            OrderID = orderId, CustomerID = orderDto.CustomerID, OrderDate = orderDto.OrderDate, TotalAmount = 29.99m
+        };
 
         mockMapper.Setup(mapper => mapper.Map<Order>(orderDto)).Returns(orderEntity);
 

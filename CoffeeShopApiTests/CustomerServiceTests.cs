@@ -33,8 +33,10 @@ public class CustomerServiceTests
     {
         // Arrange
         Guid customerId = Guid.NewGuid();
-        var customerEntity = new Customer { CustomerID = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
-        var customerDto = new CustomerDto { CustomerID = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
+        var customerEntity = new Customer
+            { CustomerID = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
+        var customerDto = new CustomerDto
+            { CustomerID = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
 
         mockCustomerRepository.Setup(repo => repo.GetCustomerById(customerId)).Returns(customerEntity);
         mockMapper.Setup(mapper => mapper.Map<CustomerDto>(customerEntity)).Returns(customerDto);
@@ -56,14 +58,28 @@ public class CustomerServiceTests
         // Arrange
         var customerEntities = new List<Customer>
         {
-            new Customer { CustomerID = Guid.NewGuid(), FirstName = "Alice", LastName = "Smith", Email = "alice.smith@example.com" },
-            new Customer { CustomerID = Guid.NewGuid(), FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com" }
+            new Customer
+            {
+                CustomerID = Guid.NewGuid(), FirstName = "Alice", LastName = "Smith", Email = "alice.smith@example.com"
+            },
+            new Customer
+            {
+                CustomerID = Guid.NewGuid(), FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com"
+            }
         };
 
         var customerDtos = new List<CustomerDto>
         {
-            new CustomerDto { CustomerID = customerEntities[0].CustomerID, FirstName = "Alice", LastName = "Smith", Email = "alice.smith@example.com" },
-            new CustomerDto { CustomerID = customerEntities[1].CustomerID, FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com" }
+            new CustomerDto
+            {
+                CustomerID = customerEntities[0].CustomerID, FirstName = "Alice", LastName = "Smith",
+                Email = "alice.smith@example.com"
+            },
+            new CustomerDto
+            {
+                CustomerID = customerEntities[1].CustomerID, FirstName = "Bob", LastName = "Johnson",
+                Email = "bob.johnson@example.com"
+            }
         };
 
         mockCustomerRepository.Setup(repo => repo.GetAllCustomers()).Returns(customerEntities);
@@ -84,8 +100,12 @@ public class CustomerServiceTests
     public void AddCustomer_ShouldAddCustomer()
     {
         // Arrange
-        var customerDto = new CustomerDto { FirstName = "New", LastName = "Customer", Email = "new.customer@example.com" };
-        var customerEntity = new Customer { CustomerID = Guid.NewGuid(), FirstName = "New", LastName = "Customer", Email = "new.customer@example.com" };
+        var customerDto = new CustomerDto
+            { FirstName = "New", LastName = "Customer", Email = "new.customer@example.com" };
+        var customerEntity = new Customer
+        {
+            CustomerID = Guid.NewGuid(), FirstName = "New", LastName = "Customer", Email = "new.customer@example.com"
+        };
 
         mockMapper.Setup(mapper => mapper.Map<Customer>(customerDto)).Returns(customerEntity);
 
@@ -101,8 +121,16 @@ public class CustomerServiceTests
     {
         // Arrange
         Guid customerId = Guid.NewGuid();
-        var customerDto = new CustomerDto { CustomerID = customerId, FirstName = "Updated", LastName = "Customer", Email = "updated.customer@example.com" };
-        var customerEntity = new Customer { CustomerID = customerId, FirstName = "Updated", LastName = "Customer", Email = "updated.customer@example.com" };
+        var customerDto = new CustomerDto
+        {
+            CustomerID = customerId, FirstName = "Updated", LastName = "Customer",
+            Email = "updated.customer@example.com"
+        };
+        var customerEntity = new Customer
+        {
+            CustomerID = customerId, FirstName = "Updated", LastName = "Customer",
+            Email = "updated.customer@example.com"
+        };
 
         mockMapper.Setup(mapper => mapper.Map<Customer>(customerDto)).Returns(customerEntity);
 
@@ -125,5 +153,4 @@ public class CustomerServiceTests
         // Assert
         mockCustomerRepository.Verify(repo => repo.DeleteCustomer(customerId), Times.Once);
     }
-    
 }

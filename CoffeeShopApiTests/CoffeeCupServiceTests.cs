@@ -1,4 +1,3 @@
-
 using Models;
 using Presentation.DTOs;
 using Repository;
@@ -11,8 +10,6 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-
-
 
 [TestFixture]
 public class CoffeeCupServiceTests
@@ -36,7 +33,7 @@ public class CoffeeCupServiceTests
     {
         // Arrange
         Guid coffeeCupId = Guid.NewGuid();
-        var coffeeCupEntity = new CoffeeCup { Id = coffeeCupId, Name = "Americano", Price = 3.99m };
+        var coffeeCupEntity = new CoffeeCup { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
         var coffeeCupDto = new CoffeeCupDto { CupID = coffeeCupId, Name = "Americano", Price = 3.99m };
 
         mockCoffeeCupRepository.Setup(repo => repo.GetCoffeeCupById(coffeeCupId)).Returns(coffeeCupEntity);
@@ -58,14 +55,14 @@ public class CoffeeCupServiceTests
         // Arrange
         var coffeeCupEntities = new List<CoffeeCup>
         {
-            new CoffeeCup { Id = Guid.NewGuid(), Name = "Latte", Price = 4.99m },
-            new CoffeeCup { Id = Guid.NewGuid(), Name = "Cappuccino", Price = 5.99m }
+            new CoffeeCup { ItemId = Guid.NewGuid(), Name = "Latte", Price = 4.99m },
+            new CoffeeCup { ItemId = Guid.NewGuid(), Name = "Cappuccino", Price = 5.99m }
         };
 
         var coffeeCupDtos = new List<CoffeeCupDto>
         {
-            new CoffeeCupDto { CupID = coffeeCupEntities[0].Id, Name = "Latte", Price = 4.99m },
-            new CoffeeCupDto { CupID = coffeeCupEntities[1].Id, Name = "Cappuccino", Price = 5.99m }
+            new CoffeeCupDto { CupID = coffeeCupEntities[0].ItemId, Name = "Latte", Price = 4.99m },
+            new CoffeeCupDto { CupID = coffeeCupEntities[1].ItemId, Name = "Cappuccino", Price = 5.99m }
         };
 
         mockCoffeeCupRepository.Setup(repo => repo.GetAllCoffeeCups()).Returns(coffeeCupEntities);

@@ -30,7 +30,7 @@ public class IngredientServiceTests
     {
         // Arrange
         Guid ingredientId = Guid.NewGuid();
-        var ingredientEntity = new Ingredient { IngredientID = ingredientId, Name = "Sugar", QuantityInStock = 100 };
+        var ingredientEntity = new Ingredient { IngredientId = ingredientId, Name = "Sugar", StockQuantity = 100 };
         var ingredientDto = new IngredientDto { IngredientID = ingredientId, Name = "Sugar", QuantityInStock = 100 };
 
         mockIngredientRepository.Setup(repo => repo.GetIngredientById(ingredientId)).Returns(ingredientEntity);
@@ -52,14 +52,15 @@ public class IngredientServiceTests
         // Arrange
         var ingredientEntities = new List<Ingredient>
         {
-            new Ingredient { IngredientID = Guid.NewGuid(), Name = "Coffee Beans", QuantityInStock = 200 },
-            new Ingredient { IngredientID = Guid.NewGuid(), Name = "Milk", QuantityInStock = 50 }
+            new Ingredient { IngredientId = Guid.NewGuid(), Name = "Coffee Beans", StockQuantity = 200 },
+            new Ingredient { IngredientId = Guid.NewGuid(), Name = "Milk", StockQuantity = 50 }
         };
 
         var ingredientDtos = new List<IngredientDto>
         {
-            new IngredientDto { IngredientID = ingredientEntities[0].IngredientID, Name = "Coffee Beans", QuantityInStock = 200 },
-            new IngredientDto { IngredientID = ingredientEntities[1].IngredientID, Name = "Milk", QuantityInStock = 50 }
+            new IngredientDto
+                { IngredientID = ingredientEntities[0].IngredientId, Name = "Coffee Beans", QuantityInStock = 200 },
+            new IngredientDto { IngredientID = ingredientEntities[1].IngredientId, Name = "Milk", QuantityInStock = 50 }
         };
 
         mockIngredientRepository.Setup(repo => repo.GetAllIngredients()).Returns(ingredientEntities);
@@ -81,7 +82,8 @@ public class IngredientServiceTests
     {
         // Arrange
         var ingredientDto = new IngredientDto { Name = "New Ingredient", QuantityInStock = 75 };
-        var ingredientEntity = new Ingredient { IngredientID = Guid.NewGuid(), Name = "New Ingredient", QuantityInStock = 75 };
+        var ingredientEntity = new Ingredient
+            { IngredientId = Guid.NewGuid(), Name = "New Ingredient", StockQuantity = 75 };
 
         mockMapper.Setup(mapper => mapper.Map<Ingredient>(ingredientDto)).Returns(ingredientEntity);
 
@@ -97,8 +99,10 @@ public class IngredientServiceTests
     {
         // Arrange
         Guid ingredientId = Guid.NewGuid();
-        var ingredientDto = new IngredientDto { IngredientID = ingredientId, Name = "Updated Ingredient", QuantityInStock = 120 };
-        var ingredientEntity = new Ingredient { IngredientID = ingredientId, Name = "Updated Ingredient", QuantityInStock = 120 };
+        var ingredientDto = new IngredientDto
+            { IngredientID = ingredientId, Name = "Updated Ingredient", QuantityInStock = 120 };
+        var ingredientEntity = new Ingredient
+            { IngredientId = ingredientId, Name = "Updated Ingredient", StockQuantity = 120 };
 
         mockMapper.Setup(mapper => mapper.Map<Ingredient>(ingredientDto)).Returns(ingredientEntity);
 

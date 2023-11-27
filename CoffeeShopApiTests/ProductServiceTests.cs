@@ -59,8 +59,10 @@ public class ProductServiceTests
 
         var productDtos = new List<ProductDto>
         {
-            new ProductDto { ProductID = productEntities[0].ProductID, Name = "Cappuccino", Price = 4.99m, StockQuantity = 30 },
-            new ProductDto { ProductID = productEntities[1].ProductID, Name = "Latte", Price = 5.99m, StockQuantity = 20 }
+            new ProductDto
+                { ProductID = productEntities[0].ProductID, Name = "Cappuccino", Price = 4.99m, StockQuantity = 30 },
+            new ProductDto
+                { ProductID = productEntities[1].ProductID, Name = "Latte", Price = 5.99m, StockQuantity = 20 }
         };
 
         mockProductRepository.Setup(repo => repo.GetAllProducts()).Returns(productEntities);
@@ -82,7 +84,8 @@ public class ProductServiceTests
     {
         // Arrange
         var productDto = new ProductDto { Name = "New Product", Price = 6.99m, StockQuantity = 40 };
-        var productEntity = new Product { ProductID = Guid.NewGuid(), Name = "New Product", Price = 6.99m, StockQuantity = 40 };
+        var productEntity = new Product
+            { ProductID = Guid.NewGuid(), Name = "New Product", Price = 6.99m, StockQuantity = 40 };
 
         mockMapper.Setup(mapper => mapper.Map<Product>(productDto)).Returns(productEntity);
 
@@ -98,8 +101,10 @@ public class ProductServiceTests
     {
         // Arrange
         Guid productId = Guid.NewGuid();
-        var productDto = new ProductDto { ProductID = productId, Name = "Updated Product", Price = 7.99m, StockQuantity = 25 };
-        var productEntity = new Product { ProductID = productId, Name = "Updated Product", Price = 7.99m, StockQuantity = 25 };
+        var productDto = new ProductDto
+            { ProductID = productId, Name = "Updated Product", Price = 7.99m, StockQuantity = 25 };
+        var productEntity = new Product
+            { ProductID = productId, Name = "Updated Product", Price = 7.99m, StockQuantity = 25 };
 
         mockMapper.Setup(mapper => mapper.Map<Product>(productDto)).Returns(productEntity);
 

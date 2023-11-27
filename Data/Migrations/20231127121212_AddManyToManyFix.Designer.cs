@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(CoffeeShopDbContext))]
-    partial class CoffeeShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127121212_AddManyToManyFix")]
+    partial class AddManyToManyFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,14 +101,20 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ItemType")
                         .HasColumnType("int");
 
                     b.HasKey("ItemId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Item");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Models.Order", b =>
@@ -139,10 +148,20 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CoffeeCupItemId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ItemType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ProductID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
@@ -153,16 +172,26 @@ namespace Data.Migrations
 
                     b.HasKey("OrderDetailId");
 
+                    b.HasIndex("CoffeeCupItemId");
+
                     b.HasIndex("ItemId");
 
                     b.HasIndex("OrderId");
 
+                    b.HasIndex("ProductID");
+
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("Models.Cake", b =>
+            modelBuilder.Entity("Models.Product", b =>
                 {
-                    b.HasBaseType("Models.Item");
+                    b.Property<Guid>("ProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -171,12 +200,46 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Cakes");
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductID");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Models.Cake", b =>
+                {
+                    b.HasBaseType("Models.Item");
+
+                    b.Property<Guid>("CakeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.ToTable("Items", t =>
+                        {
+                            t.Property("Name")
+                                .HasColumnName("Cake_Name");
+
+                            t.Property("Price")
+                                .HasColumnName("Cake_Price");
+                        });
+
+                    b.HasDiscriminator().HasValue("Cake");
                 });
 
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
                     b.HasBaseType("Models.Item");
+
+                    b.Property<Guid>("CoffeeCupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -188,7 +251,7 @@ namespace Data.Migrations
                     b.Property<int>("size")
                         .HasColumnType("int");
 
-                    b.ToTable("CoffeeCups");
+                    b.HasDiscriminator().HasValue("CoffeeCup");
                 });
 
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
@@ -223,6 +286,10 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.OrderDetail", b =>
                 {
+                    b.HasOne("Models.CoffeeCup", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("CoffeeCupItemId");
+
                     b.HasOne("Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
@@ -235,27 +302,13 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Product", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ProductID");
+
                     b.Navigation("Item");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Models.Cake", b =>
-                {
-                    b.HasOne("Models.Item", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Cake", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.CoffeeCup", b =>
-                {
-                    b.HasOne("Models.Item", null)
-                        .WithOne()
-                        .HasForeignKey("Models.CoffeeCup", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Customer", b =>
@@ -273,9 +326,16 @@ namespace Data.Migrations
                     b.Navigation("OrderDetails");
                 });
 
+            modelBuilder.Entity("Models.Product", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
                     b.Navigation("CoffeeCupIngredients");
+
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

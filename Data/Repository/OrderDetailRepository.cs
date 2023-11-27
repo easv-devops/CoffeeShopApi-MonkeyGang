@@ -8,7 +8,7 @@ public class OrderDetailRepository : IOrderDetailRepository
 
     public OrderDetail GetOrderDetailById(Guid orderDetailId)
     {
-        return orderDetails.FirstOrDefault(od => od.OrderDetailID == orderDetailId);
+        return orderDetails.FirstOrDefault(od => od.OrderDetailId == orderDetailId);
     }
 
     public IEnumerable<OrderDetail> GetAllOrderDetails()
@@ -28,6 +28,6 @@ public class OrderDetailRepository : IOrderDetailRepository
 
     public void DeleteOrderDetail(Guid orderDetailId)
     {
-        orderDetails.RemoveAll(od => od.OrderDetailID == orderDetailId);
+        orderDetails.RemoveAll(od => od.OrderDetailId == orderDetailId);
     }
 }

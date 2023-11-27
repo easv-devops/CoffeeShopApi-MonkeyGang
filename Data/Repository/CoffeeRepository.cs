@@ -1,11 +1,7 @@
-﻿
-using Repository;
+﻿using Repository;
 using Models;
 
 namespace Data.Repository;
-
-
-
 
 public class CoffeeCupRepository : ICoffeeCupRepository
 {
@@ -13,7 +9,7 @@ public class CoffeeCupRepository : ICoffeeCupRepository
 
     public CoffeeCup GetCoffeeCupById(Guid cupId)
     {
-        return coffeeCups.FirstOrDefault(c => c.Id == cupId);
+        return coffeeCups.FirstOrDefault(c => c.ItemId == cupId);
     }
 
     public IEnumerable<CoffeeCup> GetAllCoffeeCups()
@@ -33,6 +29,6 @@ public class CoffeeCupRepository : ICoffeeCupRepository
 
     public void DeleteCoffeeCup(Guid cupId)
     {
-        coffeeCups.RemoveAll(c => c.Id == cupId);
+        coffeeCups.RemoveAll(c => c.ItemId == cupId);
     }
 }

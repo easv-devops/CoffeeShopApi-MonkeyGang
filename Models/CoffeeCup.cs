@@ -1,18 +1,25 @@
-﻿
-
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
-
-public class CoffeeCup
+[Table("CoffeeCups")]
+public class CoffeeCup : Item
 {
-    
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Size { get; set; }
-    //decimal is used for money things 🤑
-    public decimal Price { get; set; }
 
-    // Navigation property for the many-to-many relationship
-    public List<Ingredient> Ingredients { get; set; }
+ 
+    //public Guid CoffeeCupId { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    
+    public int size { get; set; }
+
+    //navigation properties
+    public List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
+    //public ICollection<OrderDetail> OrderDetails { get; set; }    
+    public CoffeeCup()
+    {
+        ItemType = ItemType.CoffeeCup;
+    }
+    
+    
 }

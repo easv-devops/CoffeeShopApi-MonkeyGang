@@ -2,7 +2,7 @@ namespace Presentation.DTOs;
 
 public class CoffeeCupIngredientDto
 {
-    public Guid CoffeeCupID { get; set; }
-    public Guid IngredientID { get; set; }
+    public Guid CoffeeCupId { get; set; }
+    public Guid IngredientId { get; set; }
     public int Quantity { get; set; }
 }

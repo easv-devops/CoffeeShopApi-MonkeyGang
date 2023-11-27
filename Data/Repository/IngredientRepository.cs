@@ -8,7 +8,7 @@ public class IngredientRepository : IIngredientRepository
 
     public Ingredient GetIngredientById(Guid ingredientId)
     {
-        return ingredients.FirstOrDefault(i => i.IngredientID == ingredientId);
+        return ingredients.FirstOrDefault(i => i.IngredientId == ingredientId);
     }
 
     public IEnumerable<Ingredient> GetAllIngredients()
@@ -28,6 +28,6 @@ public class IngredientRepository : IIngredientRepository
 
     public void DeleteIngredient(Guid ingredientId)
     {
-        ingredients.RemoveAll(i => i.IngredientID == ingredientId);
+        ingredients.RemoveAll(i => i.IngredientId == ingredientId);
     }
 }

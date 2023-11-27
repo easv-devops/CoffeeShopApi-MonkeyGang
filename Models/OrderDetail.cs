@@ -1,12 +1,24 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Models;
 
 public class OrderDetail
 {
-    public Guid OrderDetailID { get; set; }
-    public Guid OrderID { get; set; }
-    public Order Order { get; set; } // Navigation property
-    public Guid ItemID { get; set; }
-    public string ItemType { get; set; }
+    [Key]
+    public Guid OrderDetailId { get; set; }
+
+    public Guid OrderId { get; set; }
+    public Order Order { get; set; }
     public int Quantity { get; set; }
     public decimal Subtotal { get; set; }
+    
+    
+    
+    
+    // Foreign key property
+    public Guid ItemId { get; set; }
+
+    // Navigation property
+    public Item Item { get; set; }
+    
 }

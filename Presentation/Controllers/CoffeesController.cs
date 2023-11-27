@@ -1,7 +1,6 @@
 ﻿namespace Presentation.Controllers;
 
 using DTOs;
-
 using AutoMapper;
 using Service;
 using Microsoft.AspNetCore.Mvc;

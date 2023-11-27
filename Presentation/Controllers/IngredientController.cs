@@ -7,6 +7,7 @@ namespace Presentation.Controllers;
 
 using System;
 using System.Collections.Generic;
+
 [ApiController]
 [Route("api/[controller]")]
 public class IngredientsController : ControllerBase

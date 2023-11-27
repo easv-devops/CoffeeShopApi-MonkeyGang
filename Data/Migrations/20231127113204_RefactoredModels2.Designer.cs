@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(CoffeeShopDbContext))]
-    partial class CoffeeShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127113204_RefactoredModels2")]
+    partial class RefactoredModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,33 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Models.CoffeeCup", b =>
+                {
+                    b.Property<Guid>("CoffeeCupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ItemType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("size")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoffeeCupId");
+
+                    b.ToTable("CoffeeCup");
+                });
 
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
                 {
@@ -92,22 +122,6 @@ namespace Data.Migrations
                     b.ToTable("Ingredients");
                 });
 
-            modelBuilder.Entity("Models.Item", b =>
-                {
-                    b.Property<Guid>("ItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ItemType")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemId");
-
-                    b.ToTable("Item");
-
-                    b.UseTptMappingStrategy();
-                });
-
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.Property<Guid>("OrderID")
@@ -135,14 +149,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.OrderDetail", b =>
                 {
-                    b.Property<Guid>("OrderDetailId")
+                    b.Property<Guid>("OrderDetailID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ItemId")
+                    b.Property<Guid>("ItemID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ItemType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ProductID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
@@ -151,18 +172,24 @@ namespace Data.Migrations
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("OrderDetailId");
-
-                    b.HasIndex("ItemId");
+                    b.HasKey("OrderDetailID");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductID");
 
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("Models.Cake", b =>
+            modelBuilder.Entity("Models.Product", b =>
                 {
-                    b.HasBaseType("Models.Item");
+                    b.Property<Guid>("ProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -171,24 +198,12 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Cakes");
-                });
-
-            modelBuilder.Entity("Models.CoffeeCup", b =>
-                {
-                    b.HasBaseType("Models.Item");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("size")
+                    b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
-                    b.ToTable("CoffeeCups");
+                    b.HasKey("ProductID");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
@@ -223,39 +238,22 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.OrderDetail", b =>
                 {
-                    b.HasOne("Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Item");
+                    b.HasOne("Models.Product", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ProductID");
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Models.Cake", b =>
-                {
-                    b.HasOne("Models.Item", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Cake", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
-                    b.HasOne("Models.Item", null)
-                        .WithOne()
-                        .HasForeignKey("Models.CoffeeCup", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("CoffeeCupIngredients");
                 });
 
             modelBuilder.Entity("Models.Customer", b =>
@@ -273,9 +271,9 @@ namespace Data.Migrations
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("Models.CoffeeCup", b =>
+            modelBuilder.Entity("Models.Product", b =>
                 {
-                    b.Navigation("CoffeeCupIngredients");
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

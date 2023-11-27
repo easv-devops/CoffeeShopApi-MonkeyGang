@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(CoffeeShopDbContext))]
-    partial class CoffeeShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127125931_AddManyToManyFix5")]
+    partial class AddManyToManyFix5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,11 @@ namespace Data.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<int>("ItemType").HasValue(0);
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Models.Order", b =>
@@ -171,7 +176,16 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Cakes");
+                    b.ToTable("Items", t =>
+                        {
+                            t.Property("Name")
+                                .HasColumnName("Cake_Name");
+
+                            t.Property("Price")
+                                .HasColumnName("Cake_Price");
+                        });
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Models.CoffeeCup", b =>
@@ -188,7 +202,7 @@ namespace Data.Migrations
                     b.Property<int>("size")
                         .HasColumnType("int");
 
-                    b.ToTable("CoffeeCups");
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
@@ -238,24 +252,6 @@ namespace Data.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Models.Cake", b =>
-                {
-                    b.HasOne("Models.Item", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Cake", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.CoffeeCup", b =>
-                {
-                    b.HasOne("Models.Item", null)
-                        .WithOne()
-                        .HasForeignKey("Models.CoffeeCup", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Customer", b =>

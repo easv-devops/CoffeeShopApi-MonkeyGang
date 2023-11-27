@@ -30,8 +30,8 @@ public class OrderDetailServiceTests
     {
         // Arrange
         Guid orderDetailId = Guid.NewGuid();
-        var orderDetailEntity = new OrderDetail { OrderDetailID = orderDetailId, ItemID = Guid.NewGuid(), ItemType = "Product", Quantity = 2, Subtotal = 15.99m };
-        var orderDetailDto = new OrderDetailDto { OrderDetailID = orderDetailId, ItemID = orderDetailEntity.ItemID, ItemType = "Product", Quantity = 2, Subtotal = 15.99m };
+        var orderDetailEntity = new OrderDetail { OrderDetailId = orderDetailId, ItemId = Guid.NewGuid(), Quantity = 2, Subtotal = 15.99m };
+        var orderDetailDto = new OrderDetailDto { OrderDetailID = orderDetailId, ItemID = orderDetailEntity.ItemId, ItemType = "Product", Quantity = 2, Subtotal = 15.99m };
 
         mockOrderDetailRepository.Setup(repo => repo.GetOrderDetailById(orderDetailId)).Returns(orderDetailEntity);
         mockMapper.Setup(mapper => mapper.Map<OrderDetailDto>(orderDetailEntity)).Returns(orderDetailDto);
@@ -54,14 +54,14 @@ public class OrderDetailServiceTests
         // Arrange
         var orderDetailEntities = new List<OrderDetail>
         {
-            new OrderDetail { OrderDetailID = Guid.NewGuid(), ItemID = Guid.NewGuid(), ItemType = "Product", Quantity = 2, Subtotal = 15.99m },
-            new OrderDetail { OrderDetailID = Guid.NewGuid(), ItemID = Guid.NewGuid(), ItemType = "Product", Quantity = 1, Subtotal = 9.99m }
+            new OrderDetail { OrderDetailId = Guid.NewGuid(), ItemId = Guid.NewGuid(), Quantity = 2, Subtotal = 15.99m },
+            new OrderDetail { OrderDetailId = Guid.NewGuid(), ItemId = Guid.NewGuid(), Quantity = 1, Subtotal = 9.99m }
         };
 
         var orderDetailDtos = new List<OrderDetailDto>
         {
-            new OrderDetailDto { OrderDetailID = orderDetailEntities[0].OrderDetailID, ItemID = orderDetailEntities[0].ItemID, ItemType = "Product", Quantity = 2, Subtotal = 15.99m },
-            new OrderDetailDto { OrderDetailID = orderDetailEntities[1].OrderDetailID, ItemID = orderDetailEntities[1].ItemID, ItemType = "Product", Quantity = 1, Subtotal = 9.99m }
+            new OrderDetailDto { OrderDetailID = orderDetailEntities[0].OrderDetailId, ItemID = orderDetailEntities[0].ItemId, ItemType = "Product", Quantity = 2, Subtotal = 15.99m },
+            new OrderDetailDto { OrderDetailID = orderDetailEntities[1].OrderDetailId, ItemID = orderDetailEntities[1].ItemId, ItemType = "Product", Quantity = 1, Subtotal = 9.99m }
         };
 
         mockOrderDetailRepository.Setup(repo => repo.GetAllOrderDetails()).Returns(orderDetailEntities);
@@ -84,7 +84,7 @@ public class OrderDetailServiceTests
     {
         // Arrange
         var orderDetailDto = new OrderDetailDto { ItemID = Guid.NewGuid(), ItemType = "Product", Quantity = 3, Subtotal = 29.99m };
-        var orderDetailEntity = new OrderDetail { OrderDetailID = Guid.NewGuid(), ItemID = orderDetailDto.ItemID, ItemType = "Product", Quantity = 3, Subtotal = 29.99m };
+        var orderDetailEntity = new OrderDetail { OrderDetailId = Guid.NewGuid(), ItemId = orderDetailDto.ItemID, Quantity = 3, Subtotal = 29.99m };
 
         mockMapper.Setup(mapper => mapper.Map<OrderDetail>(orderDetailDto)).Returns(orderDetailEntity);
 

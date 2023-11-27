@@ -3,7 +3,6 @@ using Presentation.DTOs;
 
 namespace Service;
 
-
 public interface IOrderService
 {
     OrderDto GetOrderById(Guid id);
