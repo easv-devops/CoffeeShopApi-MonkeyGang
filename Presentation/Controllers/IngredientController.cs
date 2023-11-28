@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.DTOs;
+using Models.DTOs;
 using Service;
 
 namespace Presentation.Controllers;

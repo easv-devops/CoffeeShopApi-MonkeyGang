@@ -1,6 +1,7 @@
-﻿namespace Presentation.Controllers;
+﻿using Models.DTOs;
 
-using DTOs;
+namespace Presentation.Controllers;
+
 using AutoMapper;
 using Service;
 using Microsoft.AspNetCore.Mvc;
@@ -53,13 +54,13 @@ public class CoffeeCupController : ControllerBase
 
         _coffeeCupService.AddCoffeeCup(coffeeCupDto);
 
-        return CreatedAtAction(nameof(GetCoffeeCup), new { id = coffeeCupDto.CupID }, coffeeCupDto);
+        return CreatedAtAction(nameof(GetCoffeeCup), new { id = coffeeCupDto.ItemId }, coffeeCupDto);
     }
 
     [HttpPut("{id}")]
     public IActionResult UpdateCoffeeCup(Guid id, [FromBody] CoffeeCupDto coffeeCupDto)
     {
-        if (id != coffeeCupDto.CupID)
+        if (id != coffeeCupDto.ItemId)
         {
             return BadRequest("Mismatched IDs");
         }

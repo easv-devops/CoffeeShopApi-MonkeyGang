@@ -1,6 +1,6 @@
 using Data.Repository;
 using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 
 namespace Service;
 

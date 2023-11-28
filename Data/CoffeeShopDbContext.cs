@@ -5,7 +5,7 @@ using Models;
 
 public class CoffeeShopDbContext : DbContext
 {
-    public DbSet<CoffeeCup> CoffeeCup { get; set; }
+    public DbSet<CoffeeCup> CoffeeCups { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
     public DbSet<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
     //public DbSet<Product> Products { get; set; }
@@ -14,6 +14,7 @@ public class CoffeeShopDbContext : DbContext
     public DbSet<OrderDetail> OrderDetails { get; set; }
     //public DbSet<Item> Items { get; set; }
     public DbSet<Cake> Cakes { get; set; }
+    public DbSet<Post> Posts { get; set; }
     
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,6 +52,14 @@ public class CoffeeShopDbContext : DbContext
             .WithMany(i => i.CoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
         
+        /*
+        // to avoid cycles in the object graph, we need to disable cascading deletes
+        modelBuilder.Entity<Post>()
+            .HasOne(p => p.Order)
+            .WithMany()
+            .HasForeignKey(p => p.OrderId)
+            .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
+        */
         
     }
 

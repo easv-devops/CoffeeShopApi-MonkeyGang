@@ -1,7 +1,7 @@
 using AutoMapper;
 using Data.Repository;
 using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 using Service;
 using NUnit.Framework;
 using Moq;

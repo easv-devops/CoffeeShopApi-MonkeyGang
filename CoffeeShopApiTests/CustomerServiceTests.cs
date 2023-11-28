@@ -1,7 +1,7 @@
 using AutoMapper;
 using Data.Repository;
 using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 using Service;
 
 namespace CoffeeShopApiTests;
@@ -34,9 +34,9 @@ public class CustomerServiceTests
         // Arrange
         Guid customerId = Guid.NewGuid();
         var customerEntity = new Customer
-            { CustomerID = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
+            { CustomerId = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
         var customerDto = new CustomerDto
-            { CustomerID = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
+            { CustomerId = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
 
         mockCustomerRepository.Setup(repo => repo.GetCustomerById(customerId)).Returns(customerEntity);
         mockMapper.Setup(mapper => mapper.Map<CustomerDto>(customerEntity)).Returns(customerDto);
@@ -46,7 +46,7 @@ public class CustomerServiceTests
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(customerDto.CustomerID, result.CustomerID);
+        Assert.AreEqual(customerDto.CustomerId, result.CustomerId);
         Assert.AreEqual(customerDto.FirstName, result.FirstName);
         Assert.AreEqual(customerDto.LastName, result.LastName);
         Assert.AreEqual(customerDto.Email, result.Email);
@@ -60,11 +60,11 @@ public class CustomerServiceTests
         {
             new Customer
             {
-                CustomerID = Guid.NewGuid(), FirstName = "Alice", LastName = "Smith", Email = "alice.smith@example.com"
+                CustomerId = Guid.NewGuid(), FirstName = "Alice", LastName = "Smith", Email = "alice.smith@example.com"
             },
             new Customer
             {
-                CustomerID = Guid.NewGuid(), FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com"
+                CustomerId = Guid.NewGuid(), FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com"
             }
         };
 
@@ -72,12 +72,12 @@ public class CustomerServiceTests
         {
             new CustomerDto
             {
-                CustomerID = customerEntities[0].CustomerID, FirstName = "Alice", LastName = "Smith",
+                CustomerId = customerEntities[0].CustomerId, FirstName = "Alice", LastName = "Smith",
                 Email = "alice.smith@example.com"
             },
             new CustomerDto
             {
-                CustomerID = customerEntities[1].CustomerID, FirstName = "Bob", LastName = "Johnson",
+                CustomerId = customerEntities[1].CustomerId, FirstName = "Bob", LastName = "Johnson",
                 Email = "bob.johnson@example.com"
             }
         };
@@ -91,7 +91,7 @@ public class CustomerServiceTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(customerDtos[0].CustomerID, result[0].CustomerID);
+        Assert.AreEqual(customerDtos[0].CustomerId, result[0].CustomerId);
         Assert.AreEqual(customerDtos[1].FirstName, result[1].FirstName);
         Assert.AreEqual(customerDtos[1].Email, result[1].Email);
     }
@@ -104,7 +104,7 @@ public class CustomerServiceTests
             { FirstName = "New", LastName = "Customer", Email = "new.customer@example.com" };
         var customerEntity = new Customer
         {
-            CustomerID = Guid.NewGuid(), FirstName = "New", LastName = "Customer", Email = "new.customer@example.com"
+            CustomerId = Guid.NewGuid(), FirstName = "New", LastName = "Customer", Email = "new.customer@example.com"
         };
 
         mockMapper.Setup(mapper => mapper.Map<Customer>(customerDto)).Returns(customerEntity);
@@ -123,12 +123,12 @@ public class CustomerServiceTests
         Guid customerId = Guid.NewGuid();
         var customerDto = new CustomerDto
         {
-            CustomerID = customerId, FirstName = "Updated", LastName = "Customer",
+            CustomerId = customerId, FirstName = "Updated", LastName = "Customer",
             Email = "updated.customer@example.com"
         };
         var customerEntity = new Customer
         {
-            CustomerID = customerId, FirstName = "Updated", LastName = "Customer",
+            CustomerId = customerId, FirstName = "Updated", LastName = "Customer",
             Email = "updated.customer@example.com"
         };
 

@@ -1,34 +1,53 @@
-﻿using Repository;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Data;
+using Microsoft.EntityFrameworkCore;
 using Models;
+using Repository;
 
-namespace Data.Repository;
 
 public class CoffeeCupRepository : ICoffeeCupRepository
 {
-    private List<CoffeeCup> coffeeCups = new List<CoffeeCup>();
+    private readonly CoffeeShopDbContext _context;
 
-    public CoffeeCup GetCoffeeCupById(Guid cupId)
+    public CoffeeCupRepository(CoffeeShopDbContext context)
     {
-        return coffeeCups.FirstOrDefault(c => c.ItemId == cupId);
+        _context = context;
+    }
+
+    public CoffeeCup GetCoffeeCupById(Guid id)
+    {
+        return _context.CoffeeCups
+            .Include(c => ((Item)c).Description)  
+            .FirstOrDefault(c => c.ItemId == id);
     }
 
     public IEnumerable<CoffeeCup> GetAllCoffeeCups()
     {
-        return coffeeCups;
+        return _context.CoffeeCups.ToList();
     }
 
     public void AddCoffeeCup(CoffeeCup coffeeCup)
     {
-        coffeeCups.Add(coffeeCup);
+        _context.CoffeeCups.Add(coffeeCup);
+        _context.SaveChanges();
     }
 
     public void UpdateCoffeeCup(CoffeeCup coffeeCup)
     {
-        // Implementation to update a coffee cup in the database
+        _context.Entry(coffeeCup).State = EntityState.Modified;
+        _context.SaveChanges();
     }
 
-    public void DeleteCoffeeCup(Guid cupId)
+    public void DeleteCoffeeCup(Guid id)
     {
-        coffeeCups.RemoveAll(c => c.ItemId == cupId);
+        var coffeeCupToDelete = _context.CoffeeCups.Find(id);
+        if (coffeeCupToDelete != null)
+        {
+            _context.CoffeeCups.Remove(coffeeCupToDelete);
+            _context.SaveChanges();
+        }
     }
+
 }

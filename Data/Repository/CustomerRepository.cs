@@ -8,7 +8,7 @@ public class CustomerRepository : ICustomerRepository
 
     public Customer GetCustomerById(Guid customerId)
     {
-        return customers.FirstOrDefault(c => c.CustomerID == customerId);
+        return customers.FirstOrDefault(c => c.CustomerId == customerId);
     }
 
     public IEnumerable<Customer> GetAllCustomers()
@@ -28,6 +28,6 @@ public class CustomerRepository : ICustomerRepository
 
     public void DeleteCustomer(Guid customerId)
     {
-        customers.RemoveAll(c => c.CustomerID == customerId);
+        customers.RemoveAll(c => c.CustomerId == customerId);
     }
 }

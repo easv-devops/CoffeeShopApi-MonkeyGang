@@ -12,9 +12,6 @@ public class OrderDetail
     public int Quantity { get; set; }
     public decimal Subtotal { get; set; }
     
-    
-    
-    
     // Foreign key property
     public Guid ItemId { get; set; }
 

@@ -1,11 +1,11 @@
-namespace Presentation.DTOs;
+namespace Models.DTOs;
 
 public class OrderDetailDto
 {
-    public Guid OrderDetailID { get; set; }
-    public Guid OrderID { get; set; }
-    public Guid ItemID { get; set; }
-    public string ItemType { get; set; }
+    public Guid OrderDetailId { get; set; }
+    public Guid OrderId { get; set; }
     public int Quantity { get; set; }
     public decimal Subtotal { get; set; }
+    public Guid ItemId { get; set; }
+    public ItemDto Item { get; set; }
 }

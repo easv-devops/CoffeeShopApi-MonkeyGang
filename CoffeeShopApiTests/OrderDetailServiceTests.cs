@@ -1,7 +1,7 @@
 using AutoMapper;
 using Data.Repository;
 using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 using Service;
 using NUnit.Framework;
 using Moq;
@@ -31,7 +31,7 @@ public class OrderDetailServiceTests
         // Arrange
         Guid orderDetailId = Guid.NewGuid();
         var orderDetailEntity = new OrderDetail { OrderDetailId = orderDetailId, ItemId = Guid.NewGuid(), Quantity = 2, Subtotal = 15.99m };
-        var orderDetailDto = new OrderDetailDto { OrderDetailID = orderDetailId, ItemID = orderDetailEntity.ItemId, ItemType = "Product", Quantity = 2, Subtotal = 15.99m };
+        var orderDetailDto = new OrderDetailDto { OrderDetailId = orderDetailId, ItemId = orderDetailEntity.ItemId, Quantity = 2, Subtotal = 15.99m };
 
         mockOrderDetailRepository.Setup(repo => repo.GetOrderDetailById(orderDetailId)).Returns(orderDetailEntity);
         mockMapper.Setup(mapper => mapper.Map<OrderDetailDto>(orderDetailEntity)).Returns(orderDetailDto);
@@ -41,9 +41,8 @@ public class OrderDetailServiceTests
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(orderDetailDto.OrderDetailID, result.OrderDetailID);
-        Assert.AreEqual(orderDetailDto.ItemID, result.ItemID);
-        Assert.AreEqual(orderDetailDto.ItemType, result.ItemType);
+        Assert.AreEqual(orderDetailDto.OrderDetailId, result.OrderDetailId);
+        Assert.AreEqual(orderDetailDto.ItemId, result.ItemId);
         Assert.AreEqual(orderDetailDto.Quantity, result.Quantity);
         Assert.AreEqual(orderDetailDto.Subtotal, result.Subtotal);
     }
@@ -60,8 +59,8 @@ public class OrderDetailServiceTests
 
         var orderDetailDtos = new List<OrderDetailDto>
         {
-            new OrderDetailDto { OrderDetailID = orderDetailEntities[0].OrderDetailId, ItemID = orderDetailEntities[0].ItemId, ItemType = "Product", Quantity = 2, Subtotal = 15.99m },
-            new OrderDetailDto { OrderDetailID = orderDetailEntities[1].OrderDetailId, ItemID = orderDetailEntities[1].ItemId, ItemType = "Product", Quantity = 1, Subtotal = 9.99m }
+            new OrderDetailDto { OrderDetailId = orderDetailEntities[0].OrderDetailId, ItemId = orderDetailEntities[0].ItemId, Quantity = 2, Subtotal = 15.99m },
+            new OrderDetailDto { OrderDetailId = orderDetailEntities[1].OrderDetailId, ItemId = orderDetailEntities[1].ItemId, Quantity = 1, Subtotal = 9.99m }
         };
 
         mockOrderDetailRepository.Setup(repo => repo.GetAllOrderDetails()).Returns(orderDetailEntities);
@@ -73,8 +72,8 @@ public class OrderDetailServiceTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(orderDetailDtos[0].OrderDetailID, result[0].OrderDetailID);
-        Assert.AreEqual(orderDetailDtos[1].ItemID, result[1].ItemID);
+        Assert.AreEqual(orderDetailDtos[0].OrderDetailId, result[0].OrderDetailId);
+        Assert.AreEqual(orderDetailDtos[1].ItemId, result[1].ItemId);
         Assert.AreEqual(orderDetailDtos[1].Quantity, result[1].Quantity);
         Assert.AreEqual(orderDetailDtos[1].Subtotal, result[1].Subtotal);
     }
@@ -83,8 +82,8 @@ public class OrderDetailServiceTests
     public void AddOrderDetail_ShouldAddOrderDetail()
     {
         // Arrange
-        var orderDetailDto = new OrderDetailDto { ItemID = Guid.NewGuid(), ItemType = "Product", Quantity = 3, Subtotal = 29.99m };
-        var orderDetailEntity = new OrderDetail { OrderDetailId = Guid.NewGuid(), ItemId = orderDetailDto.ItemID, Quantity = 3, Subtotal = 29.99m };
+        var orderDetailDto = new OrderDetailDto { ItemId = Guid.NewGuid(), Quantity = 3, Subtotal = 29.99m };
+        var orderDetailEntity = new OrderDetail { OrderDetailId = Guid.NewGuid(), ItemId = orderDetailDto.ItemId, Quantity = 3, Subtotal = 29.99m };
 
         mockMapper.Setup(mapper => mapper.Map<OrderDetail>(orderDetailDto)).Returns(orderDetailEntity);
 

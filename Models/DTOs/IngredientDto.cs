@@ -1,4 +1,4 @@
-namespace Presentation.DTOs;
+namespace Models.DTOs;
 
 public class IngredientDto
 {

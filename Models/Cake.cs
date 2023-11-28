@@ -10,8 +10,7 @@ public class Cake : Item
     }
     
     //public Guid CakeId { get; set; }
-    public string Name { get; set; }
-    public decimal Price { get; set; }
+    
     
     
 }

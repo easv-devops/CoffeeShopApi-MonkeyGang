@@ -1,5 +1,5 @@
 using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 using Repository;
 using Service;
 
@@ -34,7 +34,7 @@ public class CoffeeCupServiceTests
         // Arrange
         Guid coffeeCupId = Guid.NewGuid();
         var coffeeCupEntity = new CoffeeCup { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
-        var coffeeCupDto = new CoffeeCupDto { CupID = coffeeCupId, Name = "Americano", Price = 3.99m };
+        var coffeeCupDto = new CoffeeCupDto { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
 
         mockCoffeeCupRepository.Setup(repo => repo.GetCoffeeCupById(coffeeCupId)).Returns(coffeeCupEntity);
         mockMapper.Setup(mapper => mapper.Map<CoffeeCupDto>(coffeeCupEntity)).Returns(coffeeCupDto);
@@ -44,7 +44,7 @@ public class CoffeeCupServiceTests
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(coffeeCupDto.CupID, result.CupID);
+        Assert.AreEqual(coffeeCupDto.ItemId, result.ItemId);
         Assert.AreEqual(coffeeCupDto.Name, result.Name);
         Assert.AreEqual(coffeeCupDto.Price, result.Price);
     }
@@ -61,8 +61,8 @@ public class CoffeeCupServiceTests
 
         var coffeeCupDtos = new List<CoffeeCupDto>
         {
-            new CoffeeCupDto { CupID = coffeeCupEntities[0].ItemId, Name = "Latte", Price = 4.99m },
-            new CoffeeCupDto { CupID = coffeeCupEntities[1].ItemId, Name = "Cappuccino", Price = 5.99m }
+            new CoffeeCupDto { ItemId = coffeeCupEntities[0].ItemId, Name = "Latte", Price = 4.99m },
+            new CoffeeCupDto { ItemId = coffeeCupEntities[1].ItemId, Name = "Cappuccino", Price = 5.99m }
         };
 
         mockCoffeeCupRepository.Setup(repo => repo.GetAllCoffeeCups()).Returns(coffeeCupEntities);
@@ -74,7 +74,7 @@ public class CoffeeCupServiceTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(coffeeCupDtos[0].CupID, result[0].CupID);
+        Assert.AreEqual(coffeeCupDtos[0].ItemId, result[0].ItemId);
         Assert.AreEqual(coffeeCupDtos[1].Name, result[1].Name);
         Assert.AreEqual(coffeeCupDtos[1].Price, result[1].Price);
     }

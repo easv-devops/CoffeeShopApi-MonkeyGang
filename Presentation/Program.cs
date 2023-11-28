@@ -75,6 +75,6 @@ public class Program
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderDetailService, OrderDetailService>();
 
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(typeof(Program));
     }
 }

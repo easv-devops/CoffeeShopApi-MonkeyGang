@@ -10,5 +10,10 @@ public class Item
     public ItemType ItemType { get; set; } // Enum representing the type of item
     // Common properties for all items...
 
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string Description { get; set; }
+    public string Image { get; set; }
+
 
 }

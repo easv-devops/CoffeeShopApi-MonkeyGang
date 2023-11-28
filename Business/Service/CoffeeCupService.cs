@@ -1,47 +1,47 @@
 ﻿using AutoMapper;
 using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 using Repository;
 
 namespace Service;
 
 public class CoffeeCupService : ICoffeeCupService
 {
-    private readonly IMapper _mapper;
     private readonly ICoffeeCupRepository _coffeeCupRepository;
+    private readonly IMapper _mapper;
 
-    public CoffeeCupService(IMapper mapper, ICoffeeCupRepository coffeeCupRepository)
+    public CoffeeCupService( IMapper mapper, ICoffeeCupRepository coffeeCupRepository)
     {
-        _mapper = mapper;
         _coffeeCupRepository = coffeeCupRepository;
+        _mapper = mapper;
     }
 
-    public CoffeeCupDto GetCoffeeCupById(Guid id)
+    public CoffeeCupDto GetCoffeeCupById(Guid coffeeCupId)
     {
-        var coffeeCup = _coffeeCupRepository.GetCoffeeCupById(id);
-        return _mapper.Map<CoffeeCupDto>(coffeeCup);
+        var coffeeCupEntity = _coffeeCupRepository.GetCoffeeCupById(coffeeCupId);
+        return _mapper.Map<CoffeeCupDto>(coffeeCupEntity);
     }
 
     public List<CoffeeCupDto> GetAllCoffeeCups()
     {
-        var coffeeCups = _coffeeCupRepository.GetAllCoffeeCups();
-        return _mapper.Map<List<CoffeeCupDto>>(coffeeCups);
+        var coffeeCupEntities = _coffeeCupRepository.GetAllCoffeeCups();
+        return _mapper.Map<List<CoffeeCupDto>>(coffeeCupEntities);
     }
 
     public void AddCoffeeCup(CoffeeCupDto coffeeCupDto)
     {
-        var coffeeCup = _mapper.Map<CoffeeCup>(coffeeCupDto);
-        _coffeeCupRepository.AddCoffeeCup(coffeeCup);
+        var coffeeCupEntity = _mapper.Map<CoffeeCup>(coffeeCupDto);
+        _coffeeCupRepository.AddCoffeeCup(coffeeCupEntity);
     }
 
     public void UpdateCoffeeCup(CoffeeCupDto coffeeCupDto)
     {
-        var coffeeCup = _mapper.Map<CoffeeCup>(coffeeCupDto);
-        _coffeeCupRepository.UpdateCoffeeCup(coffeeCup);
+        var coffeeCupEntity = _mapper.Map<CoffeeCup>(coffeeCupDto);
+        _coffeeCupRepository.UpdateCoffeeCup(coffeeCupEntity);
     }
 
-    public void DeleteCoffeeCup(Guid id)
+    public void DeleteCoffeeCup(Guid coffeeCupId)
     {
-        _coffeeCupRepository.DeleteCoffeeCup(id);
+        _coffeeCupRepository.DeleteCoffeeCup(coffeeCupId);
     }
 }

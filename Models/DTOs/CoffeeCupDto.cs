@@ -1,9 +1,10 @@
-namespace Presentation.DTOs;
 
-public class CoffeeCupDto
+using Models.DTOs;
+
+namespace Models.DTOs;
+
+public class CoffeeCupDto : ItemDto
 {
-    public Guid CupID { get; set; }
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-    public List<CoffeeCupIngredientDto> Ingredients { get; set; }
+    public int Size { get; set; }
+    // Additional properties specific to CoffeeCupDTO...
 }

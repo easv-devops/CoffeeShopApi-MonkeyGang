@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.DTOs;
+using Models.DTOs;
 using Service;
 
 namespace Presentation.Controllers;
@@ -54,13 +54,13 @@ public class OrderDetailsController : ControllerBase
 
         _orderDetailService.AddOrderDetail(orderDetailDto);
 
-        return CreatedAtAction(nameof(GetOrderDetail), new { id = orderDetailDto.OrderDetailID }, orderDetailDto);
+        return CreatedAtAction(nameof(GetOrderDetail), new { id = orderDetailDto.OrderDetailId }, orderDetailDto);
     }
 
     [HttpPut("{id}")]
     public IActionResult UpdateOrderDetail(Guid id, [FromBody] OrderDetailDto orderDetailDto)
     {
-        if (id != orderDetailDto.OrderDetailID)
+        if (id != orderDetailDto.OrderDetailId)
         {
             return BadRequest("Mismatched IDs");
         }

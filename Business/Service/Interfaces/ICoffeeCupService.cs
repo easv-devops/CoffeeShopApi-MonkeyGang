@@ -1,13 +1,13 @@
 ﻿using Models;
-using Presentation.DTOs;
+using Models.DTOs;
 
 namespace Service;
 
 public interface ICoffeeCupService
 {
-    CoffeeCupDto GetCoffeeCupById(Guid id);
+    CoffeeCupDto GetCoffeeCupById(Guid coffeeCupId);
     List<CoffeeCupDto> GetAllCoffeeCups();
     void AddCoffeeCup(CoffeeCupDto coffeeCupDto);
     void UpdateCoffeeCup(CoffeeCupDto coffeeCupDto);
-    void DeleteCoffeeCup(Guid id);
+    void DeleteCoffeeCup(Guid coffeeCupId);
 }
