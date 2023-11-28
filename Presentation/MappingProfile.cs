@@ -40,6 +40,11 @@ public class MappingProfile : Profile
         CreateMap<OrderDetail, OrderDetailDto>();
         CreateMap<OrderDetailDto, OrderDetail>();
 
+
+        CreateMap<CustomCoffeeCup, CustomCoffeeCupDto>();
+        CreateMap<CustomCoffeeCupDto, CustomCoffeeCup>();
+
+
         //CreateMap<Post, PostDto>();
     }
 }

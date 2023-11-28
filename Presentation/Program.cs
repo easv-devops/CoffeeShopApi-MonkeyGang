@@ -61,7 +61,7 @@ public class Program
         services.AddScoped<ICoffeeCupRepository, CoffeeCupRepository>();
         services.AddScoped<IIngredientRepository, IngredientRepository>();
         services.AddScoped<ICoffeeCupIngredientRepository, CoffeeCupIngredientRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
+
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
@@ -70,7 +70,7 @@ public class Program
         services.AddScoped<ICoffeeCupService, CoffeeCupService>();
         services.AddScoped<IIngredientService, IngredientService>();
         services.AddScoped<ICoffeeCupIngredientService, CoffeeCupIngredientService>();
-        services.AddScoped<IProductService, ProductService>();
+
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderDetailService, OrderDetailService>();

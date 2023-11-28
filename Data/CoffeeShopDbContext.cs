@@ -15,6 +15,7 @@ public class CoffeeShopDbContext : DbContext
     //public DbSet<Item> Items { get; set; }
     public DbSet<Cake> Cakes { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<CustomCoffeeCup> CustomCoffeeCups { get; set; }
     
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,7 +29,8 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(od => od.Item)
             .WithMany()
             .HasForeignKey(od => od.ItemId);
-
+        
+        
 /*
         modelBuilder.Entity<CoffeeCup>()
             .HasKey(cc => cc.ItemId);

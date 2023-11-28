@@ -110,6 +110,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsOnMenu")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ItemType")
                         .HasColumnType("int");
 
@@ -215,10 +218,22 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Models.Item");
 
-                    b.Property<int>("size")
+                    b.Property<int>("Size")
                         .HasColumnType("int");
 
                     b.ToTable("CoffeeCups");
+                });
+
+            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
+                {
+                    b.HasBaseType("Models.CoffeeCup");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CustomCoffeeCups");
                 });
 
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
@@ -305,6 +320,23 @@ namespace Data.Migrations
                         .HasForeignKey("Models.CoffeeCup", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
+                {
+                    b.HasOne("Models.CoffeeCup", null)
+                        .WithOne()
+                        .HasForeignKey("Models.CustomCoffeeCup", "ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Customer", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Customer", b =>
