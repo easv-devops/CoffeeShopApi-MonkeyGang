@@ -19,7 +19,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
             // Map other properties...
             .IncludeBase<Item, ItemDto>(); // Include base class mapping
-        
+
         CreateMap<ItemDto, Item>();
         CreateMap<Item, ItemDto>();
 
@@ -40,11 +40,19 @@ public class MappingProfile : Profile
         CreateMap<OrderDetail, OrderDetailDto>();
         CreateMap<OrderDetailDto, OrderDetail>();
 
+        CreateMap<Cake, CakeDto>();
+        CreateMap<CakeDto, Cake>();
 
-        CreateMap<CustomCoffeeCup, CustomCoffeeCupDto>();
-        CreateMap<CustomCoffeeCupDto, CustomCoffeeCup>();
+        CreateMap<CoffeeBean, CoffeeBeanDto>();
+        CreateMap<CoffeeBeanDto, CoffeeBean>();
 
+        CreateMap<Store, StoreDto>();
+        CreateMap<StoreDto, Store>();
 
-        //CreateMap<Post, PostDto>();
+        CreateMap<Brand, BrandDto>();
+        CreateMap<BrandDto, Brand>();
+
+        CreateMap<Post, PostDto>();
+        CreateMap<PostDto, Post>();
     }
 }

@@ -22,6 +22,21 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Models.Brand", b =>
+                {
+                    b.Property<Guid>("BrandId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BrandId");
+
+                    b.ToTable("Brands");
+                });
+
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
                 {
                     b.Property<Guid>("CoffeeCupId")
@@ -81,6 +96,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("MeasurementUnit")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -91,7 +109,12 @@ namespace Data.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("IngredientId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Ingredients");
                 });
@@ -109,9 +132,6 @@ namespace Data.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsOnMenu")
-                        .HasColumnType("bit");
 
                     b.Property<int>("ItemType")
                         .HasColumnType("int");
@@ -145,12 +165,17 @@ namespace Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("StoreID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("OrderID");
 
                     b.HasIndex("CustomerID");
+
+                    b.HasIndex("StoreID");
 
                     b.ToTable("Orders");
                 });
@@ -207,6 +232,26 @@ namespace Data.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("Models.Store", b =>
+                {
+                    b.Property<Guid>("StoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StoreId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Stores");
+                });
+
             modelBuilder.Entity("Models.Cake", b =>
                 {
                     b.HasBaseType("Models.Item");
@@ -214,26 +259,39 @@ namespace Data.Migrations
                     b.ToTable("Cakes");
                 });
 
+            modelBuilder.Entity("Models.CoffeeBean", b =>
+                {
+                    b.HasBaseType("Models.Item");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoastLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("CoffeeBeans");
+                });
+
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
                     b.HasBaseType("Models.Item");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
-                    b.ToTable("CoffeeCups");
-                });
-
-            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
-                {
-                    b.HasBaseType("Models.CoffeeCup");
-
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StoreId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CustomerId");
 
-                    b.ToTable("CustomCoffeeCups");
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("CoffeeCups");
                 });
 
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
@@ -255,6 +313,17 @@ namespace Data.Migrations
                     b.Navigation("Ingredient");
                 });
 
+            modelBuilder.Entity("Models.Ingredient", b =>
+                {
+                    b.HasOne("Models.Store", "Store")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.HasOne("Models.Customer", "Customer")
@@ -263,7 +332,15 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Store", "Store")
+                        .WithMany("Orders")
+                        .HasForeignKey("StoreID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Models.OrderDetail", b =>
@@ -304,6 +381,17 @@ namespace Data.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("Models.Store", b =>
+                {
+                    b.HasOne("Models.Brand", "Brand")
+                        .WithMany("Stores")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
             modelBuilder.Entity("Models.Cake", b =>
                 {
                     b.HasOne("Models.Item", null)
@@ -313,30 +401,43 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.CoffeeBean", b =>
+                {
+                    b.HasOne("Models.Item", null)
+                        .WithOne()
+                        .HasForeignKey("Models.CoffeeBean", "ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
+                    b.HasOne("Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.Item", null)
                         .WithOne()
                         .HasForeignKey("Models.CoffeeCup", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
+            modelBuilder.Entity("Models.Brand", b =>
                 {
-                    b.HasOne("Models.CoffeeCup", null)
-                        .WithOne()
-                        .HasForeignKey("Models.CustomCoffeeCup", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Customer", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.Navigation("Stores");
                 });
 
             modelBuilder.Entity("Models.Customer", b =>
@@ -354,6 +455,13 @@ namespace Data.Migrations
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("Models.Store", b =>
+                {
+                    b.Navigation("Ingredients");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Models.CoffeeCup", b =>

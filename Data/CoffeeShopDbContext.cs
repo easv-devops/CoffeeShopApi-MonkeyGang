@@ -5,23 +5,31 @@ using Models;
 
 public class CoffeeShopDbContext : DbContext
 {
+    
+    
+    // ordered by date of creation (oldest first)
     public DbSet<CoffeeCup> CoffeeCups { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
+
     public DbSet<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
+
     //public DbSet<Product> Products { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Order> Orders { get; set; }
+
     public DbSet<OrderDetail> OrderDetails { get; set; }
+
     //public DbSet<Item> Items { get; set; }
     public DbSet<Cake> Cakes { get; set; }
     public DbSet<Post> Posts { get; set; }
-    public DbSet<CustomCoffeeCup> CustomCoffeeCups { get; set; }
-    
+
+    public DbSet<Store> Stores { get; set; }
+    public DbSet<Brand> Brands { get; set; }
+    public DbSet<CoffeeBean> CoffeeBeans { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
-
         modelBuilder.Entity<OrderDetail>()
             .HasKey(od => od.OrderDetailId);
 
@@ -29,8 +37,8 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(od => od.Item)
             .WithMany()
             .HasForeignKey(od => od.ItemId);
-        
-        
+
+
 /*
         modelBuilder.Entity<CoffeeCup>()
             .HasKey(cc => cc.ItemId);
@@ -39,7 +47,7 @@ public class CoffeeShopDbContext : DbContext
             .HasKey(c => c.ItemId);
     */
 
- 
+
         // many-to-many: CoffeeCupIngredient
         modelBuilder.Entity<CoffeeCupIngredient>()
             .HasKey(cci => new { cci.CoffeeCupId, cci.IngredientId });
@@ -53,6 +61,14 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(cci => cci.Ingredient)
             .WithMany(i => i.CoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
+
+        
+        // one-to-many: Store-Ingredient
+        // to avoid cycles in the object graph, we need to disable cascading deletes
+        modelBuilder.Entity<Ingredient>()
+            .HasOne(i => i.Store)
+            .WithMany(s => s.Ingredients)
+            .OnDelete(DeleteBehavior.Restrict);
         
         /*
         // to avoid cycles in the object graph, we need to disable cascading deletes
@@ -62,7 +78,6 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(p => p.OrderId)
             .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
         */
-        
     }
 
 

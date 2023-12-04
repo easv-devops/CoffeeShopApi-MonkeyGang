@@ -4,5 +4,6 @@ public enum ItemType
 {
     Item,
     CoffeeCup,
-    Cake
+    Cake,
+    CoffeeBean
 }

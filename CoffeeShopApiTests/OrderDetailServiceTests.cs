@@ -5,6 +5,9 @@ using Models.DTOs;
 using Service;
 using NUnit.Framework;
 using Moq;
+
+namespace CoffeeShopApiTests;
+
 using System;
 using System.Collections.Generic;
 
