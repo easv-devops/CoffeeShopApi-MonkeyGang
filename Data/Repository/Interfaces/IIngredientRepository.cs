@@ -4,9 +4,9 @@ namespace Data.Repository;
 
 public interface IIngredientRepository
 {
-    Ingredient GetIngredientById(Guid ingredientId);
-    IEnumerable<Ingredient> GetAllIngredients();
-    void AddIngredient(Ingredient ingredient);
-    void UpdateIngredient(Ingredient ingredient);
-    void DeleteIngredient(Guid ingredientId);
+    Task<List<Ingredient>> GetAllIngredientsAsync();
+    Task<Ingredient> GetIngredientByIdAsync(Guid ingredientId);
+    Task<Guid> AddIngredientAsync(Ingredient ingredient);
+    Task<bool> UpdateIngredientAsync(Ingredient ingredient);
+    Task<bool> DeleteIngredientAsync(Ingredient ingredient);
 }

@@ -106,15 +106,7 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("StockQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("IngredientId");
-
-                    b.HasIndex("StoreId");
 
                     b.ToTable("Ingredients");
                 });
@@ -313,17 +305,6 @@ namespace Data.Migrations
                     b.Navigation("Ingredient");
                 });
 
-            modelBuilder.Entity("Models.Ingredient", b =>
-                {
-                    b.HasOne("Models.Store", "Store")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("Models.Item", b =>
                 {
                     b.HasOne("Models.Store", "Store")
@@ -462,8 +443,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Store", b =>
                 {
-                    b.Navigation("Ingredients");
-
                     b.Navigation("Orders");
                 });
 

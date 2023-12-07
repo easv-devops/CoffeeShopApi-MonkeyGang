@@ -71,12 +71,19 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(cci => cci.IngredientId);
 
         
+        /*
+         * INGREDIENT - STORE DISABLED
+         */
+        
+        
         // one-to-many: Store-Ingredient
         // to avoid cycles in the object graph, we need to disable cascading deletes
+        /*
         modelBuilder.Entity<Ingredient>()
             .HasOne(i => i.Store)
             .WithMany(s => s.Ingredients)
             .OnDelete(DeleteBehavior.Restrict);
+            */
         
         /*
         // to avoid cycles in the object graph, we need to disable cascading deletes

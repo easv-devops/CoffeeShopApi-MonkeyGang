@@ -10,71 +10,66 @@ using System.Collections.Generic;
 
 [ApiController]
 [Route("api/[controller]")]
-public class IngredientsController : ControllerBase
+public class IngredientController : ControllerBase
 {
     private readonly IIngredientService _ingredientService;
-    private readonly IMapper _mapper;
-
-    public IngredientsController(IIngredientService ingredientService, IMapper mapper)
+    
+    public IngredientController(IIngredientService ingredientService)
     {
         _ingredientService = ingredientService;
-        _mapper = mapper;
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<List<IngredientDto>>> GetAllIngredients()
+    {
+        var ingredients = await _ingredientService.GetAllIngredientsAsync();
+        return Ok(ingredients);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetIngredient(Guid id)
+    public async Task<ActionResult<IngredientDto>> GetIngredientById(Guid id)
     {
-        var ingredient = _ingredientService.GetIngredientById(id);
+        var ingredient = await _ingredientService.GetIngredientByIdAsync(id);
 
+        //Expression is always false according to nullable reference types' annotations
         if (ingredient == null)
         {
-            return NotFound();
+            return NotFound(); // 404 Not Found
         }
 
-        var ingredientDto = _mapper.Map<IngredientDto>(ingredient);
-        return Ok(ingredientDto);
-    }
-
-    [HttpGet]
-    public IActionResult GetAllIngredients()
-    {
-        var ingredients = _ingredientService.GetAllIngredients();
-        var ingredientDtos = _mapper.Map<List<IngredientDto>>(ingredients);
-
-        return Ok(ingredientDtos);
+        return Ok(ingredient);
     }
 
     [HttpPost]
-    public IActionResult AddIngredient([FromBody] IngredientDto ingredientDto)
+    public async Task<ActionResult<Guid>> AddIngredient([FromBody] IngredientDto ingredientDto)
     {
-        if (ingredientDto == null)
-        {
-            return BadRequest("IngredientDto cannot be null");
-        }
-
-        _ingredientService.AddIngredient(ingredientDto);
-
-        return CreatedAtAction(nameof(GetIngredient), new { id = ingredientDto.IngredientID }, ingredientDto);
+        var newIngredientId = await _ingredientService.AddIngredientAsync(ingredientDto);
+        return CreatedAtAction(nameof(GetIngredientById), new { id = newIngredientId }, newIngredientId);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateIngredient(Guid id, [FromBody] IngredientDto ingredientDto)
+    public async Task<ActionResult> UpdateIngredient(Guid id, [FromBody] IngredientDto updatedIngredientDto)
     {
-        if (id != ingredientDto.IngredientID)
+        var result = await _ingredientService.UpdateIngredientAsync(id, updatedIngredientDto);
+
+        if (!result)
         {
-            return BadRequest("Mismatched IDs");
+            return NotFound(); // 404 Not Found
         }
 
-        _ingredientService.UpdateIngredient(ingredientDto);
-
-        return NoContent();
+        return NoContent(); // 204 No Content
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteIngredient(Guid id)
+    public async Task<ActionResult> DeleteIngredient(Guid id)
     {
-        _ingredientService.DeleteIngredient(id);
+        var result = await _ingredientService.DeleteIngredientAsync(id);
 
-        return NoContent();
+        if (!result)
+        {
+            return NotFound(); // 404 Not Found
+        }
+
+        return NoContent(); // 204 No Content
     }
 }

@@ -1,131 +1,127 @@
+
 using AutoMapper;
+using Business.Service;
 using Data.Repository;
 using Models;
 using Models.DTOs;
-using Service;
-using NUnit.Framework;
 using Moq;
+using NUnit.Framework;
+using Presentation;
+using Service;
 
 namespace CoffeeShopApiTests;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 
 [TestFixture]
 public class IngredientServiceTests
 {
-    private Mock<IIngredientRepository> mockIngredientRepository;
-    private Mock<IMapper> mockMapper;
-    private IIngredientService ingredientService;
+    private Mock<IIngredientRepository> _ingredientRepositoryMock;
+    private IMapper _mapper; 
+    private IIngredientService _ingredientService;
 
     [SetUp]
-    public void Setup()
+    public void SetUp()
     {
-        // Arrange
-        mockIngredientRepository = new Mock<IIngredientRepository>();
-        mockMapper = new Mock<IMapper>();
-
-        ingredientService = new IngredientService(mockMapper.Object, mockIngredientRepository.Object);
+        _ingredientRepositoryMock = new Mock<IIngredientRepository>();
+        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()));
+        _ingredientService = new IngredientService(_ingredientRepositoryMock.Object, _mapper);
     }
 
     [Test]
-    public void GetIngredientById_ShouldReturnCorrectIngredient()
+    public async Task GetAllIngredientsAsync_ShouldReturnListOfIngredients()
     {
-        // Arrange
-        Guid ingredientId = Guid.NewGuid();
-        var ingredientEntity = new Ingredient { IngredientId = ingredientId, Name = "Sugar", StockQuantity = 100 };
-        var ingredientDto = new IngredientDto { IngredientID = ingredientId, Name = "Sugar", QuantityInStock = 100 };
-
-        mockIngredientRepository.Setup(repo => repo.GetIngredientById(ingredientId)).Returns(ingredientEntity);
-        mockMapper.Setup(mapper => mapper.Map<IngredientDto>(ingredientEntity)).Returns(ingredientDto);
-
-        // Act
-        var result = ingredientService.GetIngredientById(ingredientId);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(ingredientDto.IngredientID, result.IngredientID);
-        Assert.AreEqual(ingredientDto.Name, result.Name);
-        Assert.AreEqual(ingredientDto.QuantityInStock, result.QuantityInStock);
-    }
-
-    [Test]
-    public void GetAllIngredients_ShouldReturnAllIngredients()
-    {
-        // Arrange
-        var ingredientEntities = new List<Ingredient>
+        var ingredientsFromRepository = new List<Ingredient>
         {
-            new Ingredient { IngredientId = Guid.NewGuid(), Name = "Coffee Beans", StockQuantity = 200 },
-            new Ingredient { IngredientId = Guid.NewGuid(), Name = "Milk", StockQuantity = 50 }
+            new Ingredient { IngredientId = Guid.NewGuid(), Name = "Ingredient1" },
+            new Ingredient { IngredientId = Guid.NewGuid(), Name = "Ingredient2" },
         };
 
-        var ingredientDtos = new List<IngredientDto>
+        _ingredientRepositoryMock.Setup(repo => repo.GetAllIngredientsAsync())
+            .ReturnsAsync(ingredientsFromRepository);
+
+        var result = await _ingredientService.GetAllIngredientsAsync();
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(ingredientsFromRepository.Count, result.Count);
+    }
+
+    [Test]
+    public async Task GetIngredientByIdAsync_WithValidId_ShouldReturnIngredientDto()
+    {
+        var existingIngredientId = Guid.NewGuid();
+        var existingIngredient = new Ingredient { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
+
+        _ingredientRepositoryMock.Setup(repo => repo.GetIngredientByIdAsync(existingIngredientId))
+            .ReturnsAsync(existingIngredient);
+
+        var result = await _ingredientService.GetIngredientByIdAsync(existingIngredientId);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(existingIngredientId, result.IngredientId);
+    }
+
+        [Test]
+    public async Task AddIngredientAsync_ShouldReturnNewIngredientId()
+    {
+        var newIngredientDto = new IngredientDto
         {
-            new IngredientDto
-                { IngredientID = ingredientEntities[0].IngredientId, Name = "Coffee Beans", QuantityInStock = 200 },
-            new IngredientDto { IngredientID = ingredientEntities[1].IngredientId, Name = "Milk", QuantityInStock = 50 }
+            Name = "NewIngredient",
+            Price = 10.99m,
+            //StockQuantity = 50
         };
 
-        mockIngredientRepository.Setup(repo => repo.GetAllIngredients()).Returns(ingredientEntities);
-        mockMapper.Setup(mapper => mapper.Map<List<IngredientDto>>(ingredientEntities)).Returns(ingredientDtos);
+        var newIngredientId = Guid.NewGuid();
+        var newIngredient = new Ingredient { IngredientId = newIngredientId, Name = "NewIngredient" };
 
-        // Act
-        var result = ingredientService.GetAllIngredients();
+        _ingredientRepositoryMock.Setup(repo => repo.AddIngredientAsync(It.IsAny<Ingredient>()))
+            .ReturnsAsync(newIngredientId);
+        
 
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(ingredientDtos[0].IngredientID, result[0].IngredientID);
-        Assert.AreEqual(ingredientDtos[1].Name, result[1].Name);
-        Assert.AreEqual(ingredientDtos[1].QuantityInStock, result[1].QuantityInStock);
+        var result = await _ingredientService.AddIngredientAsync(newIngredientDto);
+
+        Assert.AreEqual(newIngredientId, result);
     }
 
     [Test]
-    public void AddIngredient_ShouldAddIngredient()
+    public async Task UpdateIngredientAsync_WithValidId_ShouldReturnTrue()
     {
-        // Arrange
-        var ingredientDto = new IngredientDto { Name = "New Ingredient", QuantityInStock = 75 };
-        var ingredientEntity = new Ingredient
-            { IngredientId = Guid.NewGuid(), Name = "New Ingredient", StockQuantity = 75 };
+        var existingIngredientId = Guid.NewGuid();
+        var existingIngredientDto = new IngredientDto { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
+        var existingIngredient = new Ingredient { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
 
-        mockMapper.Setup(mapper => mapper.Map<Ingredient>(ingredientDto)).Returns(ingredientEntity);
+        _ingredientRepositoryMock.Setup(repo => repo.GetIngredientByIdAsync(existingIngredientId))
+            .ReturnsAsync(existingIngredient);
 
-        // Act
-        ingredientService.AddIngredient(ingredientDto);
 
-        // Assert
-        mockIngredientRepository.Verify(repo => repo.AddIngredient(ingredientEntity), Times.Once);
+        _ingredientRepositoryMock.Setup(repo => repo.UpdateIngredientAsync(existingIngredient))
+            .ReturnsAsync(true);
+
+        var result = await _ingredientService.UpdateIngredientAsync(existingIngredientId, existingIngredientDto);
+
+        
+        Assert.IsTrue(result);
     }
 
     [Test]
-    public void UpdateIngredient_ShouldUpdateIngredient()
+    public async Task DeleteIngredientAsync_WithValidId_ShouldReturnTrue()
     {
-        // Arrange
-        Guid ingredientId = Guid.NewGuid();
-        var ingredientDto = new IngredientDto
-            { IngredientID = ingredientId, Name = "Updated Ingredient", QuantityInStock = 120 };
-        var ingredientEntity = new Ingredient
-            { IngredientId = ingredientId, Name = "Updated Ingredient", StockQuantity = 120 };
+        var existingIngredientId = Guid.NewGuid();
+        var existingIngredient = new Ingredient { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
 
-        mockMapper.Setup(mapper => mapper.Map<Ingredient>(ingredientDto)).Returns(ingredientEntity);
+        _ingredientRepositoryMock.Setup(repo => repo.GetIngredientByIdAsync(existingIngredientId))
+            .ReturnsAsync(existingIngredient);
 
-        // Act
-        ingredientService.UpdateIngredient(ingredientDto);
+        _ingredientRepositoryMock.Setup(repo => repo.DeleteIngredientAsync(existingIngredient))
+            .ReturnsAsync(true);
 
-        // Assert
-        mockIngredientRepository.Verify(repo => repo.UpdateIngredient(ingredientEntity), Times.Once);
+        var result = await _ingredientService.DeleteIngredientAsync(existingIngredientId);
+
+        Assert.IsTrue(result);
     }
-
-    [Test]
-    public void DeleteIngredient_ShouldDeleteIngredient()
-    {
-        // Arrange
-        Guid ingredientId = Guid.NewGuid();
-
-        // Act
-        ingredientService.DeleteIngredient(ingredientId);
-
-        // Assert
-        mockIngredientRepository.Verify(repo => repo.DeleteIngredient(ingredientId), Times.Once);
-    }
+    
+    
 }

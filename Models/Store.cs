@@ -18,5 +18,5 @@ public class Store
     // Navigation property
     public Brand Brand { get; set; }
     public List<Order> Orders { get; set; }
-    public List<Ingredient> Ingredients { get; set; }
+    //public List<Ingredient> Ingredients { get; set; }
 }

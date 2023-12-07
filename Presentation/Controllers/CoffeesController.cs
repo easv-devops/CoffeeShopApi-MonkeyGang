@@ -45,7 +45,7 @@ public class CoffeeCupController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult AddCoffeeCup([FromBody] CoffeeCupDto coffeeCupDto)
+    public async Task<IActionResult> AddCoffeeCup([FromBody] CoffeeCupDto coffeeCupDto)
     {
         if (coffeeCupDto == null)
         {
@@ -54,7 +54,7 @@ public class CoffeeCupController : ControllerBase
         
         
 
-        _coffeeCupService.AddCoffeeCup(coffeeCupDto);
+        await _coffeeCupService.AddCoffeeCupAsync(coffeeCupDto);
 
         return CreatedAtAction(nameof(GetCoffeeCup), new { id = coffeeCupDto.ItemId }, coffeeCupDto);
     }

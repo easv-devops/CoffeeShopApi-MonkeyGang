@@ -1,3 +1,4 @@
+using Data;
 using Data.Repository.Interfaces;
 using Models;
 using Models.DTOs;
@@ -28,7 +29,7 @@ public class CoffeeCupServiceTests
         mockItemRepository = new Mock<IItemRepository>();
         mockMapper = new Mock<IMapper>();
 
-        coffeeCupService = new CoffeeCupService(mockItemRepository.Object, mockCoffeeCupRepository.Object, mockMapper.Object);
+        coffeeCupService = new CoffeeCupService(mockItemRepository.Object, mockCoffeeCupRepository.Object, mockMapper.Object, new CoffeeShopDbContext());
     }
 
     [Test]

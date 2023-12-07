@@ -1,8 +1,9 @@
 using Data.Repository;
 using Models;
 using Models.DTOs;
+using Service;
 
-namespace Service;
+namespace Business.Service;
 
 using AutoMapper;
 using System;
@@ -10,41 +11,61 @@ using System.Collections.Generic;
 
 public class IngredientService : IIngredientService
 {
-    private readonly IMapper _mapper;
     private readonly IIngredientRepository _ingredientRepository;
+    private readonly IMapper _mapper;
 
-    public IngredientService(IMapper mapper, IIngredientRepository ingredientRepository)
+    public IngredientService(IIngredientRepository ingredientRepository, IMapper mapper)
     {
-        _mapper = mapper;
         _ingredientRepository = ingredientRepository;
+        _mapper = mapper;
     }
 
-    public IngredientDto GetIngredientById(Guid id)
+    public async Task<List<IngredientDto>> GetAllIngredientsAsync()
     {
-        var ingredient = _ingredientRepository.GetIngredientById(id);
-        return _mapper.Map<IngredientDto>(ingredient);
-    }
-
-    public List<IngredientDto> GetAllIngredients()
-    {
-        var ingredients = _ingredientRepository.GetAllIngredients();
+        var ingredients = await _ingredientRepository.GetAllIngredientsAsync();
         return _mapper.Map<List<IngredientDto>>(ingredients);
     }
 
-    public void AddIngredient(IngredientDto ingredientDto)
+    public async Task<IngredientDto> GetIngredientByIdAsync(Guid ingredientId)
     {
-        var ingredient = _mapper.Map<Ingredient>(ingredientDto);
-        _ingredientRepository.AddIngredient(ingredient);
+        var ingredient = await _ingredientRepository.GetIngredientByIdAsync(ingredientId);
+        return _mapper.Map<IngredientDto>(ingredient);
     }
 
-    public void UpdateIngredient(IngredientDto ingredientDto)
+    public async Task<Guid> AddIngredientAsync(IngredientDto ingredientDto)
     {
-        var ingredient = _mapper.Map<Ingredient>(ingredientDto);
-        _ingredientRepository.UpdateIngredient(ingredient);
+        var newIngredient = _mapper.Map<Ingredient>(ingredientDto);
+        var newIngredientId = await _ingredientRepository.AddIngredientAsync(newIngredient);
+        return newIngredientId;
     }
 
-    public void DeleteIngredient(Guid id)
+    public async Task<bool> UpdateIngredientAsync(Guid ingredientId, IngredientDto updatedIngredientDto)
     {
-        _ingredientRepository.DeleteIngredient(id);
+        var existingIngredient = await _ingredientRepository.GetIngredientByIdAsync(ingredientId);
+
+        if (existingIngredient == null)
+        {
+            return false; // Ingredient not found
+        }
+
+        _mapper.Map(updatedIngredientDto, existingIngredient);
+
+        var result = await _ingredientRepository.UpdateIngredientAsync(existingIngredient);
+
+        return result;
+    }
+
+    public async Task<bool> DeleteIngredientAsync(Guid ingredientId)
+    {
+        var existingIngredient = await _ingredientRepository.GetIngredientByIdAsync(ingredientId);
+
+        if (existingIngredient == null)
+        {
+            return false; // Ingredient not found
+        }
+
+        var result = await _ingredientRepository.DeleteIngredientAsync(existingIngredient);
+
+        return result;
     }
 }

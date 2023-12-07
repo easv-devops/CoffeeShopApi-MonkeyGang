@@ -5,9 +5,9 @@ namespace Service;
 
 public interface IIngredientService
 {
-    IngredientDto GetIngredientById(Guid id);
-    List<IngredientDto> GetAllIngredients();
-    void AddIngredient(IngredientDto ingredientDto);
-    void UpdateIngredient(IngredientDto ingredientDto);
-    void DeleteIngredient(Guid id);
+    Task<IngredientDto> GetIngredientByIdAsync(Guid id);
+    Task<List<IngredientDto>> GetAllIngredientsAsync();
+    Task<Guid> AddIngredientAsync(IngredientDto ingredientDto);
+    Task<bool> UpdateIngredientAsync(Guid ingredientId, IngredientDto updatedIngredientDto);
+    Task<bool> DeleteIngredientAsync(Guid id);
 }

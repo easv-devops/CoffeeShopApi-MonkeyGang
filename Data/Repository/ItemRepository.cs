@@ -30,10 +30,19 @@ public class ItemRepository : IItemRepository
             .ToListAsync();
     }
 
-    public async Task AddItemAsync(Item item)
+    public async Task<Guid> AddItemAsync(Item item)
     {
         await _dbContext.Items.AddAsync(item);
-        await _dbContext.SaveChangesAsync();
+        //await _dbContext.SaveChangesAsync();
+        
+        // Return the generated ID
+        Guid generatedItemId = item.ItemId;
+
+        // Detach the entity from the context
+        DetachEntity(item);
+
+        return generatedItemId;
+        
     }
 
     public async Task UpdateItemAsync(Item item)
@@ -51,4 +60,15 @@ public class ItemRepository : IItemRepository
             await _dbContext.SaveChangesAsync();
         }
     }
+    
+    
+    private void DetachEntity<T>(T entity) where T : class
+    {
+        var entry = _dbContext.Entry(entity);
+        if (entry.State != EntityState.Detached)
+        {
+            entry.State = EntityState.Detached;
+        }
+    }
+    
 }

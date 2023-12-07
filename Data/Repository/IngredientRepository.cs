@@ -1,33 +1,46 @@
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Data.Repository;
 
 public class IngredientRepository : IIngredientRepository
 {
-    private List<Ingredient> ingredients = new List<Ingredient>();
 
-    public Ingredient GetIngredientById(Guid ingredientId)
+    private readonly CoffeeShopDbContext _dbContext;
+
+    public IngredientRepository(CoffeeShopDbContext dbContext)
     {
-        return ingredients.FirstOrDefault(i => i.IngredientId == ingredientId);
+        _dbContext = dbContext;
     }
 
-    public IEnumerable<Ingredient> GetAllIngredients()
+    public async Task<Ingredient> GetIngredientByIdAsync(Guid ingredientId)
     {
-        return ingredients;
+        //Possible null reference return
+        return await _dbContext.Ingredients.FindAsync(ingredientId);
+        
     }
 
-    public void AddIngredient(Ingredient ingredient)
+    public async Task<List<Ingredient>> GetAllIngredientsAsync()
     {
-        ingredients.Add(ingredient);
+        return await _dbContext.Ingredients.ToListAsync();
+    }
+    
+    public async Task<Guid> AddIngredientAsync(Ingredient ingredient)
+    {
+        await _dbContext.Ingredients.AddAsync(ingredient);
+        await _dbContext.SaveChangesAsync();
+        return ingredient.IngredientId;
     }
 
-    public void UpdateIngredient(Ingredient ingredient)
+    public async Task<bool> UpdateIngredientAsync(Ingredient ingredient)
     {
-        // Implementation to update an ingredient in the database
+        _dbContext.Ingredients.Update(ingredient);
+        return await _dbContext.SaveChangesAsync() > 0;
     }
 
-    public void DeleteIngredient(Guid ingredientId)
+    public async Task<bool> DeleteIngredientAsync(Ingredient ingredient)
     {
-        ingredients.RemoveAll(i => i.IngredientId == ingredientId);
+        _dbContext.Ingredients.Remove(ingredient);
+        return await _dbContext.SaveChangesAsync() > 0;
     }
 }
