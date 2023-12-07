@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Models;
 using Models.DTOs;
+using Models.Utility;
 
 //using Models;
 
@@ -33,8 +34,18 @@ public class MappingProfile : Profile
         CreateMap<IngredientDto, Ingredient>();
         //???????????????
         //CreateMap(CoffeeCupIngredient, CoffeeCupIngredientDto>();
+
         CreateMap<Customer, CustomerDto>();
-        CreateMap<CustomerDto, Customer>();
+
+
+        CreateMap<CustomerDto, Customer>()
+            .ForMember(dest => dest.Password, opt => opt.MapFrom(new PasswordResolver()))
+            .ForMember(dest => dest.Orders, opt => opt.Ignore())
+            .ForMember(dest => dest.Posts, opt => opt.Ignore());
+
+        
+        
+        
         CreateMap<Order, OrderDto>();
         CreateMap<OrderDto, Order>();
         CreateMap<OrderDetail, OrderDetailDto>();

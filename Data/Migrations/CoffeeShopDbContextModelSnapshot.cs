@@ -143,9 +143,14 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ItemId");
 
-                    b.ToTable("Item");
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Items");
 
                     b.UseTptMappingStrategy();
                 });
@@ -284,12 +289,7 @@ namespace Data.Migrations
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("StoreId");
 
                     b.ToTable("CoffeeCups");
                 });
@@ -324,6 +324,17 @@ namespace Data.Migrations
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("Models.Item", b =>
+                {
+                    b.HasOne("Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.HasOne("Models.Customer", "Customer")
@@ -348,7 +359,7 @@ namespace Data.Migrations
                     b.HasOne("Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.Order", "Order")
@@ -424,15 +435,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Models.Brand", b =>

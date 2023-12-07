@@ -1,33 +1,46 @@
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Data.Repository;
 
 public class CustomerRepository : ICustomerRepository
 {
-    private List<Customer> customers = new List<Customer>();
+    private readonly CoffeeShopDbContext _dbContext;
 
-    public Customer GetCustomerById(Guid customerId)
+    public CustomerRepository(CoffeeShopDbContext dbContext)
     {
-        return customers.FirstOrDefault(c => c.CustomerId == customerId);
+        _dbContext = dbContext;
     }
 
-    public IEnumerable<Customer> GetAllCustomers()
+    public async Task<Customer> GetCustomerByIdAsync(Guid id)
     {
-        return customers;
+        return await _dbContext.Customers.FindAsync(id);
     }
 
-    public void AddCustomer(Customer customer)
+    public async Task<List<Customer>> GetAllCustomersAsync()
     {
-        customers.Add(customer);
+        return await _dbContext.Customers.ToListAsync();
     }
 
-    public void UpdateCustomer(Customer customer)
+    public async Task AddCustomerAsync(Customer customer)
     {
-        // Implementation to update a customer in the database
+        await _dbContext.Customers.AddAsync(customer);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public void DeleteCustomer(Guid customerId)
+    public async Task UpdateCustomerAsync(Customer customer)
     {
-        customers.RemoveAll(c => c.CustomerId == customerId);
+        _dbContext.Customers.Update(customer);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteCustomerAsync(Guid id)
+    {
+        var customer = await _dbContext.Customers.FindAsync(id);
+        if (customer != null)
+        {
+            _dbContext.Customers.Remove(customer);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

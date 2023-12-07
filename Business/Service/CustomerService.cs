@@ -10,38 +10,76 @@ public class CustomerService : ICustomerService
     private readonly IMapper _mapper;
     private readonly ICustomerRepository _customerRepository;
 
+    
+    //todo: add logging
     public CustomerService(IMapper mapper, ICustomerRepository customerRepository)
     {
-        _mapper = mapper;
-        _customerRepository = customerRepository;
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _customerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
     }
 
-    public CustomerDto GetCustomerById(Guid id)
+    public async Task<CustomerDto> GetCustomerByIdAsync(Guid id)
     {
-        var customer = _customerRepository.GetCustomerById(id);
-        return _mapper.Map<CustomerDto>(customer);
+        try
+        {
+            var customer = await _customerRepository.GetCustomerByIdAsync(id);
+            return _mapper.Map<CustomerDto>(customer);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
-    public List<CustomerDto> GetAllCustomers()
+    public async Task<List<CustomerDto>> GetAllCustomersAsync()
     {
-        var customers = _customerRepository.GetAllCustomers();
-        return _mapper.Map<List<CustomerDto>>(customers);
+        try
+        {
+            var customers = await _customerRepository.GetAllCustomersAsync();
+            return _mapper.Map<List<CustomerDto>>(customers);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
-    public void AddCustomer(CustomerDto customerDto)
+    public async Task AddCustomerAsync(CustomerDto customerDto)
     {
-        var customer = _mapper.Map<Customer>(customerDto);
-        _customerRepository.AddCustomer(customer);
+        try
+        {
+            var customer = _mapper.Map<CustomerDto, Customer>(customerDto);
+            await _customerRepository.AddCustomerAsync(customer);
+        }
+        catch (Exception ex)
+        {
+            // Handle or log the exception
+            throw;
+        }
     }
 
-    public void UpdateCustomer(CustomerDto customerDto)
+    public async Task UpdateCustomerAsync(CustomerDto customerDto)
     {
-        var customer = _mapper.Map<Customer>(customerDto);
-        _customerRepository.UpdateCustomer(customer);
+        try
+        {
+            var customer = _mapper.Map<Customer>(customerDto);
+            await _customerRepository.UpdateCustomerAsync(customer);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
-    public void DeleteCustomer(Guid id)
+    public async Task DeleteCustomerAsync(Guid id)
     {
-        _customerRepository.DeleteCustomer(id);
+        try
+        {
+            await _customerRepository.DeleteCustomerAsync(id);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 }

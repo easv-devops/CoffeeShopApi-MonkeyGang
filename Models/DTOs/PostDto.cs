@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace Models.DTOs;
 
 public class PostDto
 {
+    [JsonIgnore]
     public Guid PostId { get; set; }
     public string Text { get; set; }
 

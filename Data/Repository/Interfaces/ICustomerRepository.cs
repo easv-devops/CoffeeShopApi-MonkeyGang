@@ -4,9 +4,9 @@ namespace Data.Repository;
 
 public interface ICustomerRepository
 {
-    Customer GetCustomerById(Guid customerId);
-    IEnumerable<Customer> GetAllCustomers();
-    void AddCustomer(Customer customer);
-    void UpdateCustomer(Customer customer);
-    void DeleteCustomer(Guid customerId);
+    Task<Customer> GetCustomerByIdAsync(Guid id);
+    Task<List<Customer>> GetAllCustomersAsync();
+    Task AddCustomerAsync(Customer customer);
+    Task UpdateCustomerAsync(Customer customer);
+    Task DeleteCustomerAsync(Guid id);
 }

@@ -2,6 +2,12 @@ namespace Models;
 
 public class Customer
 {
+    
+    public Customer()
+    {
+        CustomerId = Guid.NewGuid();
+    }
+    
     public Guid CustomerId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }

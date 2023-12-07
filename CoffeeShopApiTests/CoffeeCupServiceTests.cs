@@ -1,3 +1,4 @@
+using Data.Repository.Interfaces;
 using Models;
 using Models.DTOs;
 using Repository;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 public class CoffeeCupServiceTests
 {
     private Mock<ICoffeeCupRepository> mockCoffeeCupRepository;
+    private Mock<IItemRepository> mockItemRepository;
     private Mock<IMapper> mockMapper;
     private ICoffeeCupService coffeeCupService;
 
@@ -23,9 +25,10 @@ public class CoffeeCupServiceTests
     {
         // Arrange
         mockCoffeeCupRepository = new Mock<ICoffeeCupRepository>();
+        mockItemRepository = new Mock<IItemRepository>();
         mockMapper = new Mock<IMapper>();
 
-        coffeeCupService = new CoffeeCupService(mockMapper.Object, mockCoffeeCupRepository.Object);
+        coffeeCupService = new CoffeeCupService(mockItemRepository.Object, mockCoffeeCupRepository.Object, mockMapper.Object);
     }
 
     [Test]

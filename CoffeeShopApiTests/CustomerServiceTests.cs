@@ -1,156 +1,144 @@
+using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repository;
 using Models;
 using Models.DTOs;
+using Moq;
+using NUnit.Framework;
+using Presentation;
 using Service;
 
-namespace CoffeeShopApiTests;
-
-using NUnit.Framework;
-using Moq;
-using System;
-using System.Collections.Generic;
-
-[TestFixture]
-public class CustomerServiceTests
+namespace CoffeeShopApiTests
 {
-    private Mock<ICustomerRepository> mockCustomerRepository;
-    private Mock<IMapper> mockMapper;
-    private ICustomerService customerService;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class CustomerServiceTests
     {
-        // Arrange
-        mockCustomerRepository = new Mock<ICustomerRepository>();
-        mockMapper = new Mock<IMapper>();
+        private Mock<ICustomerRepository> _customerRepositoryMock;
+        private IMapper _mapper;
+        private ICustomerService _customerService;
 
-        customerService = new CustomerService(mockMapper.Object, mockCustomerRepository.Object);
-    }
-
-    [Test]
-    public void GetCustomerById_ShouldReturnCorrectCustomer()
-    {
-        // Arrange
-        Guid customerId = Guid.NewGuid();
-        var customerEntity = new Customer
-            { CustomerId = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
-        var customerDto = new CustomerDto
-            { CustomerId = customerId, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" };
-
-        mockCustomerRepository.Setup(repo => repo.GetCustomerById(customerId)).Returns(customerEntity);
-        mockMapper.Setup(mapper => mapper.Map<CustomerDto>(customerEntity)).Returns(customerDto);
-
-        // Act
-        var result = customerService.GetCustomerById(customerId);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(customerDto.CustomerId, result.CustomerId);
-        Assert.AreEqual(customerDto.FirstName, result.FirstName);
-        Assert.AreEqual(customerDto.LastName, result.LastName);
-        Assert.AreEqual(customerDto.Email, result.Email);
-    }
-
-    [Test]
-    public void GetAllCustomers_ShouldReturnAllCustomers()
-    {
-        // Arrange
-        var customerEntities = new List<Customer>
+        [SetUp]
+        public void Setup()
         {
-            new Customer
+            // Setup AutoMapper
+            var mapperConfiguration = new MapperConfiguration(cfg =>
             {
-                CustomerId = Guid.NewGuid(), FirstName = "Alice", LastName = "Smith", Email = "alice.smith@example.com"
-            },
-            new Customer
+                cfg.AddProfile<MappingProfile>(); // Update with your actual AutoMapper profile
+            });
+
+            _mapper = mapperConfiguration.CreateMapper();
+
+            // Setup Mock Customer Repository
+            _customerRepositoryMock = new Mock<ICustomerRepository>();
+
+            // Inject Mock Repository and AutoMapper into CustomerService
+            _customerService = new CustomerService(_mapper, _customerRepositoryMock.Object);
+        }
+
+
+        [Test]
+        public async Task AddCustomerAsync_ValidCustomerDto_CallsRepositoryAddAsync()
+        {
+            // Arrange
+            var customerDto = new CustomerDto
             {
-                CustomerId = Guid.NewGuid(), FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com"
-            }
-        };
+                CustomerId = Guid.NewGuid(),
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                Phone = "123456789",
+                Address = "123 Main St",
+                Password = "securepassword"
+            };
+            var expectedCustomer = _mapper.Map<Customer>(customerDto);
 
-        var customerDtos = new List<CustomerDto>
+            // Act
+            await _customerService.AddCustomerAsync(customerDto);
+
+            // Assert
+            _customerRepositoryMock.Verify(repo => repo.AddCustomerAsync(It.IsAny<Customer>()), Times.Once);
+            _customerRepositoryMock.Verify(repo => repo.AddCustomerAsync(expectedCustomer), Times.Once);
+            _customerRepositoryMock.Verify(repo => repo.UpdateCustomerAsync(It.IsAny<Customer>()), Times.Never);
+        }
+
+        [Test]
+        public async Task UpdateCustomerAsync_ValidCustomerDto_CallsRepositoryUpdateAsync()
         {
-            new CustomerDto
+            // Arrange
+            var customerDto = new CustomerDto
             {
-                CustomerId = customerEntities[0].CustomerId, FirstName = "Alice", LastName = "Smith",
-                Email = "alice.smith@example.com"
-            },
-            new CustomerDto
+                CustomerId = Guid.NewGuid(),
+                FirstName = "UpdatedFirstName",
+                LastName = "UpdatedLastName",
+                Email = "updated.email@example.com",
+                Phone = "987654321",
+                Address = "456 Updated St",
+                Password = "updatedpassword"
+            };
+            var expectedCustomer = _mapper.Map<Customer>(customerDto);
+
+            // Act
+            await _customerService.UpdateCustomerAsync(customerDto);
+
+            // Assert
+            _customerRepositoryMock.Verify(repo => repo.UpdateCustomerAsync(It.IsAny<Customer>()), Times.Once);
+            _customerRepositoryMock.Verify(repo => repo.UpdateCustomerAsync(expectedCustomer), Times.Once);
+            _customerRepositoryMock.Verify(repo => repo.AddCustomerAsync(It.IsAny<Customer>()), Times.Never);
+        }
+
+        [Test]
+        public async Task DeleteCustomerAsync_ValidCustomerId_CallsRepositoryDeleteAsync()
+        {
+            // Arrange
+            var customerId = Guid.NewGuid();
+
+            // Act
+            await _customerService.DeleteCustomerAsync(customerId);
+
+            // Assert
+            _customerRepositoryMock.Verify(repo => repo.DeleteCustomerAsync(customerId), Times.Once);
+        }
+
+        [Test]
+        public async Task GetCustomerById_ValidCustomerId_ReturnsMappedCustomerDto()
+        {
+            // Arrange
+            var customerId = Guid.NewGuid();
+            var customer = new Customer { CustomerId = customerId, FirstName = "John", LastName = "Doe" };
+
+            _customerRepositoryMock.Setup(repo => repo.GetCustomerByIdAsync(customerId)).ReturnsAsync(customer);
+
+            // Act
+            var result = await _customerService.GetCustomerByIdAsync(customerId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.AreEqual(customerId, result.CustomerId);
+            Assert.AreEqual("John", result.FirstName);
+            Assert.AreEqual("Doe", result.LastName);
+        }
+
+        [Test]
+        public async Task GetAllCustomers_ReturnsMappedCustomerDtos()
+        {
+            // Arrange
+            var customers = new List<Customer>
             {
-                CustomerId = customerEntities[1].CustomerId, FirstName = "Bob", LastName = "Johnson",
-                Email = "bob.johnson@example.com"
-            }
-        };
+                new Customer { CustomerId = Guid.NewGuid(), FirstName = "John", LastName = "Doe" },
+                new Customer { CustomerId = Guid.NewGuid(), FirstName = "Jane", LastName = "Smith" }
+            };
 
-        mockCustomerRepository.Setup(repo => repo.GetAllCustomers()).Returns(customerEntities);
-        mockMapper.Setup(mapper => mapper.Map<List<CustomerDto>>(customerEntities)).Returns(customerDtos);
+            _customerRepositoryMock.Setup(repo => repo.GetAllCustomersAsync()).ReturnsAsync(customers);
 
-        // Act
-        var result = customerService.GetAllCustomers();
+            // Act
+            var result = await _customerService.GetAllCustomersAsync();
 
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(customerDtos[0].CustomerId, result[0].CustomerId);
-        Assert.AreEqual(customerDtos[1].FirstName, result[1].FirstName);
-        Assert.AreEqual(customerDtos[1].Email, result[1].Email);
-    }
-
-    [Test]
-    public void AddCustomer_ShouldAddCustomer()
-    {
-        // Arrange
-        var customerDto = new CustomerDto
-            { FirstName = "New", LastName = "Customer", Email = "new.customer@example.com" };
-        var customerEntity = new Customer
-        {
-            CustomerId = Guid.NewGuid(), FirstName = "New", LastName = "Customer", Email = "new.customer@example.com"
-        };
-
-        mockMapper.Setup(mapper => mapper.Map<Customer>(customerDto)).Returns(customerEntity);
-
-        // Act
-        customerService.AddCustomer(customerDto);
-
-        // Assert
-        mockCustomerRepository.Verify(repo => repo.AddCustomer(customerEntity), Times.Once);
-    }
-
-    [Test]
-    public void UpdateCustomer_ShouldUpdateCustomer()
-    {
-        // Arrange
-        Guid customerId = Guid.NewGuid();
-        var customerDto = new CustomerDto
-        {
-            CustomerId = customerId, FirstName = "Updated", LastName = "Customer",
-            Email = "updated.customer@example.com"
-        };
-        var customerEntity = new Customer
-        {
-            CustomerId = customerId, FirstName = "Updated", LastName = "Customer",
-            Email = "updated.customer@example.com"
-        };
-
-        mockMapper.Setup(mapper => mapper.Map<Customer>(customerDto)).Returns(customerEntity);
-
-        // Act
-        customerService.UpdateCustomer(customerDto);
-
-        // Assert
-        mockCustomerRepository.Verify(repo => repo.UpdateCustomer(customerEntity), Times.Once);
-    }
-
-    [Test]
-    public void DeleteCustomer_ShouldDeleteCustomer()
-    {
-        // Arrange
-        Guid customerId = Guid.NewGuid();
-
-        // Act
-        customerService.DeleteCustomer(customerId);
-
-        // Assert
-        mockCustomerRepository.Verify(repo => repo.DeleteCustomer(customerId), Times.Once);
+            // Assert
+            Assert.NotNull(result);
+            Assert.AreEqual(2, result.Count); // Adjust based on your actual data
+        }
     }
 }
+
+// ... (Other tests)

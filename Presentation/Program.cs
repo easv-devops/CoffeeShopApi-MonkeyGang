@@ -4,6 +4,7 @@ using Data.Repository.Interfaces;
 using Repository;
 using Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 
 namespace Presentation;
@@ -57,6 +58,12 @@ public class Program
 
     public static void ConfigureServices(IServiceCollection services)
     {
+        
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeShopApi", Version = "v1" });
+        });
+        
         // Add repositories
         services.AddScoped<ICoffeeCupRepository, CoffeeCupRepository>();
         services.AddScoped<IIngredientRepository, IngredientRepository>();
@@ -66,6 +73,10 @@ public class Program
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 
+        services.AddScoped<IBrandRepository, BrandRepository>();
+        services.AddScoped<IStoreRepository, StoreRepository>();
+        services.AddScoped<IItemRepository, ItemRepository>();
+        
         // Add services
         services.AddScoped<ICoffeeCupService, CoffeeCupService>();
         services.AddScoped<IIngredientService, IngredientService>();
@@ -74,6 +85,10 @@ public class Program
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderDetailService, OrderDetailService>();
+        
+        services.AddScoped<IBrandService, BrandService>();
+        services.AddScoped<IStoreService, StoreService>();
+        services.AddScoped<IItemService, ItemService>();
 
         services.AddAutoMapper(typeof(Program));
     }

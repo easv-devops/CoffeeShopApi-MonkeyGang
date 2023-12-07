@@ -9,72 +9,99 @@ using System;
 using System.Collections.Generic;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/customers")]
 public class CustomerController : ControllerBase
 {
     private readonly ICustomerService _customerService;
-    private readonly IMapper _mapper;
 
-    public CustomerController(ICustomerService customerService, IMapper mapper)
+    public CustomerController(ICustomerService customerService)
     {
-        _customerService = customerService;
-        _mapper = mapper;
+        _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetCustomer(Guid id)
+    public async Task<ActionResult<CustomerDto>> GetCustomerById(Guid id)
     {
-        var customer = _customerService.GetCustomerById(id);
-
-        if (customer == null)
+        try
         {
-            return NotFound();
+            var customerDto = await _customerService.GetCustomerByIdAsync(id);
+            if (customerDto == null)
+            {
+                return NotFound();
+            }
+            return Ok(customerDto);
         }
-
-        var customerDto = _mapper.Map<CustomerDto>(customer);
-        return Ok(customerDto);
+        catch (Exception ex)
+        {
+            // Log the exception or return a specific error response
+            return StatusCode(500, "Internal Server Error");
+        }
     }
 
     [HttpGet]
-    public IActionResult GetAllCustomers()
+    public async Task<ActionResult<List<CustomerDto>>> GetAllCustomers()
     {
-        var customers = _customerService.GetAllCustomers();
-        var customerDtos = _mapper.Map<List<CustomerDto>>(customers);
-
-        return Ok(customerDtos);
+        try
+        {
+            var customersDto = await _customerService.GetAllCustomersAsync();
+            return Ok(customersDto);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception or return a specific error response
+            return StatusCode(500, "Internal Server Error");
+        }
     }
 
+    
+    // this works now!!!!
     [HttpPost]
-    public IActionResult AddCustomer([FromBody] CustomerDto customerDto)
+    public async Task<ActionResult> AddCustomer([FromBody] CustomerDto customerDto)
     {
-        if (customerDto == null)
+        try
         {
-            return BadRequest("CustomerDto cannot be null");
+            await _customerService.AddCustomerAsync(customerDto);
+            return CreatedAtAction(nameof(GetCustomerById), new { id = customerDto.CustomerId }, customerDto);
         }
-
-        _customerService.AddCustomer(customerDto);
-
-        return CreatedAtAction(nameof(GetCustomer), new { id = customerDto.CustomerId }, customerDto);
+        catch (Exception ex)
+        {
+            // Log the exception or return a specific error response
+            return StatusCode(500, "Internal Server Error: " + ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateCustomer(Guid id, [FromBody] CustomerDto customerDto)
+    public async Task<ActionResult> UpdateCustomer(Guid id, [FromBody] CustomerDto customerDto)
     {
-        if (id != customerDto.CustomerId)
+        try
         {
-            return BadRequest("Mismatched IDs");
+            if (id != customerDto.CustomerId)
+            {
+                return BadRequest("Mismatched customer ID");
+            }
+
+            await _customerService.UpdateCustomerAsync(customerDto);
+            return NoContent();
         }
-
-        _customerService.UpdateCustomer(customerDto);
-
-        return NoContent();
+        catch (Exception ex)
+        {
+            // Log the exception or return a specific error response
+            return StatusCode(500, "Internal Server Error");
+        }
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteCustomer(Guid id)
+    public async Task<ActionResult> DeleteCustomer(Guid id)
     {
-        _customerService.DeleteCustomer(id);
-
-        return NoContent();
+        try
+        {
+            await _customerService.DeleteCustomerAsync(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception or return a specific error response
+            return StatusCode(500, "Internal Server Error");
+        }
     }
 }

@@ -2,6 +2,9 @@ namespace Models.DTOs;
 
 public class CoffeeBeanDto
 {
+    
+    //why the fuck do we have item properties in here?
+    
     public Guid ItemId { get; set; }
     public ItemType ItemType { get; set; }
     public string Name { get; set; }

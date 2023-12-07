@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace Models.DTOs;
 
 public class OrderDto
 {
+    [JsonIgnore]
     public Guid OrderID { get; set; }
     public DateTime OrderDate { get; set; }
     public Guid CustomerID { get; set; }

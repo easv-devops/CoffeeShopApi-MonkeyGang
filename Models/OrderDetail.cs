@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
 public class OrderDetail
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid OrderDetailId { get; set; }
 
     public Guid OrderId { get; set; }

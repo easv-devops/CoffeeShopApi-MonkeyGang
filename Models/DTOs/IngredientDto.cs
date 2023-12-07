@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace Models.DTOs;
 
 public class IngredientDto
 {
+    [JsonIgnore]
     public Guid IngredientID { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }

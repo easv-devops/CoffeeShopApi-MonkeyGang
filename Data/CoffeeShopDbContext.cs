@@ -7,7 +7,8 @@ public class CoffeeShopDbContext : DbContext
 {
     
     
-    // ordered by date of creation (oldest first)
+    // ordered by date of creation (oldest first) for debugging purposes
+    // at cleanup, sort alphabetically
     public DbSet<CoffeeCup> CoffeeCups { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
 
@@ -27,9 +28,11 @@ public class CoffeeShopDbContext : DbContext
     public DbSet<Brand> Brands { get; set; }
     public DbSet<CoffeeBean> CoffeeBeans { get; set; }
 
+    public DbSet<Item> Items { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder.Entity<OrderDetail>()
             .HasKey(od => od.OrderDetailId);
 
@@ -38,6 +41,11 @@ public class CoffeeShopDbContext : DbContext
             .WithMany()
             .HasForeignKey(od => od.ItemId);
 
+        modelBuilder.Entity<OrderDetail>()
+            .HasOne(od => od.Item)
+            .WithMany()  // Assuming Items have a collection of OrderDetails
+            .HasForeignKey(od => od.ItemId)
+            .OnDelete(DeleteBehavior.Restrict); 
 
 /*
         modelBuilder.Entity<CoffeeCup>()

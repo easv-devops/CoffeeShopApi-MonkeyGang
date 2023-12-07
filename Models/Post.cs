@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
 public class Post
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid PostId { get; set; }
     //Todo: research how this exactly works
     DateTime CreatedAt { get; set; } = DateTime.Now;

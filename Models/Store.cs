@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
 public class Store
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid StoreId { get; set; }
 
     [Required]
