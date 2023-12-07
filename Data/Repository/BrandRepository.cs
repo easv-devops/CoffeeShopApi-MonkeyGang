@@ -44,7 +44,6 @@ public class BrandRepository : IBrandRepository
         }
     }
 
-    // Implementation of the new method to retrieve a brand by name
     public async Task<Brand> GetByNameAsync(string name)
     {
         return await _dbContext.Brands.FirstOrDefaultAsync(b => b.Name == name);

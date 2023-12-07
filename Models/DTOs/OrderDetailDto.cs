@@ -4,8 +4,7 @@ namespace Models.DTOs;
 
 public class OrderDetailDto
 {
-    [JsonIgnore]
-    public Guid OrderDetailId { get; set; }
+    [JsonIgnore] public Guid OrderDetailId { get; set; }
     public Guid OrderId { get; set; }
     public int Quantity { get; set; }
     public decimal Subtotal { get; set; }

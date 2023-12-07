@@ -4,5 +4,4 @@ public enum MeasurementUnit
 {
     Grams,
     Milliliters,
-        
 }

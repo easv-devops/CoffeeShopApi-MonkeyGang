@@ -24,18 +24,17 @@ public class CoffeeCupServiceTests
     [SetUp]
     public void Setup()
     {
-        // Arrange
         mockCoffeeCupRepository = new Mock<ICoffeeCupRepository>();
         mockItemRepository = new Mock<IItemRepository>();
         mockMapper = new Mock<IMapper>();
 
-        coffeeCupService = new CoffeeCupService(mockItemRepository.Object, mockCoffeeCupRepository.Object, mockMapper.Object, new CoffeeShopDbContext());
+        coffeeCupService = new CoffeeCupService(mockItemRepository.Object, mockCoffeeCupRepository.Object,
+            mockMapper.Object, new CoffeeShopDbContext());
     }
 
     [Test]
     public void GetCoffeeCupById_ShouldReturnCorrectCoffeeCup()
     {
-        // Arrange
         Guid coffeeCupId = Guid.NewGuid();
         var coffeeCupEntity = new CoffeeCup { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
         var coffeeCupDto = new CoffeeCupDto { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
@@ -43,10 +42,8 @@ public class CoffeeCupServiceTests
         mockCoffeeCupRepository.Setup(repo => repo.GetCoffeeCupById(coffeeCupId)).Returns(coffeeCupEntity);
         mockMapper.Setup(mapper => mapper.Map<CoffeeCupDto>(coffeeCupEntity)).Returns(coffeeCupDto);
 
-        // Act
         var result = coffeeCupService.GetCoffeeCupById(coffeeCupId);
 
-        // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(coffeeCupDto.ItemId, result.ItemId);
         Assert.AreEqual(coffeeCupDto.Name, result.Name);
@@ -56,7 +53,6 @@ public class CoffeeCupServiceTests
     [Test]
     public void GetAllCoffeeCups_ShouldReturnAllCoffeeCups()
     {
-        // Arrange
         var coffeeCupEntities = new List<CoffeeCup>
         {
             new CoffeeCup { ItemId = Guid.NewGuid(), Name = "Latte", Price = 4.99m },
@@ -72,16 +68,12 @@ public class CoffeeCupServiceTests
         mockCoffeeCupRepository.Setup(repo => repo.GetAllCoffeeCups()).Returns(coffeeCupEntities);
         mockMapper.Setup(mapper => mapper.Map<List<CoffeeCupDto>>(coffeeCupEntities)).Returns(coffeeCupDtos);
 
-        // Act
         var result = coffeeCupService.GetAllCoffeeCups();
 
-        // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
         Assert.AreEqual(coffeeCupDtos[0].ItemId, result[0].ItemId);
         Assert.AreEqual(coffeeCupDtos[1].Name, result[1].Name);
         Assert.AreEqual(coffeeCupDtos[1].Price, result[1].Price);
     }
-
-    // Add tests for AddCoffeeCup, UpdateCoffeeCup, and DeleteCoffeeCup methods as needed
 }

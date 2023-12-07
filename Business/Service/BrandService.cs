@@ -23,10 +23,9 @@ public class BrandService : IBrandService
     }
 
     // husk at lave validation
-    
+
     public async Task AddBrandAsync(Brand brand)
     {
-        
         if (string.IsNullOrEmpty(brand.Name))
         {
             throw new ArgumentException("Brand name cannot be null or empty.", nameof(brand));
@@ -44,8 +43,8 @@ public class BrandService : IBrandService
         {
             throw new InvalidOperationException("Brand with the same name already exists.");
         }
-        
-        
+
+
         await _brandRepository.AddAsync(brand);
     }
 

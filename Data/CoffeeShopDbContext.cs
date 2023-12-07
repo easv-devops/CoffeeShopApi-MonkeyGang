@@ -5,8 +5,6 @@ using Models;
 
 public class CoffeeShopDbContext : DbContext
 {
-    
-    
     // ordered by date of creation (oldest first) for debugging purposes
     // at cleanup, sort alphabetically
     public DbSet<CoffeeCup> CoffeeCups { get; set; }
@@ -32,7 +30,6 @@ public class CoffeeShopDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
         modelBuilder.Entity<OrderDetail>()
             .HasKey(od => od.OrderDetailId);
 
@@ -43,9 +40,9 @@ public class CoffeeShopDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>()
             .HasOne(od => od.Item)
-            .WithMany()  // Assuming Items have a collection of OrderDetails
+            .WithMany() // Assuming Items have a collection of OrderDetails
             .HasForeignKey(od => od.ItemId)
-            .OnDelete(DeleteBehavior.Restrict); 
+            .OnDelete(DeleteBehavior.Restrict);
 
 /*
         modelBuilder.Entity<CoffeeCup>()
@@ -70,12 +67,12 @@ public class CoffeeShopDbContext : DbContext
             .WithMany(i => i.CoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
 
-        
+
         /*
          * INGREDIENT - STORE DISABLED
          */
-        
-        
+
+
         // one-to-many: Store-Ingredient
         // to avoid cycles in the object graph, we need to disable cascading deletes
         /*
@@ -84,7 +81,7 @@ public class CoffeeShopDbContext : DbContext
             .WithMany(s => s.Ingredients)
             .OnDelete(DeleteBehavior.Restrict);
             */
-        
+
         /*
         // to avoid cycles in the object graph, we need to disable cascading deletes
         modelBuilder.Entity<Post>()

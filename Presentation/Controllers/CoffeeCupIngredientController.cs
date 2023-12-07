@@ -84,7 +84,8 @@ namespace Presentation.Controllers
                 return BadRequest("CoffeeCupIngredientDto cannot be null");
             }
 
-            if (coffeeCupId != coffeeCupIngredientDto.CoffeeCupId || ingredientId != coffeeCupIngredientDto.IngredientId)
+            if (coffeeCupId != coffeeCupIngredientDto.CoffeeCupId ||
+                ingredientId != coffeeCupIngredientDto.IngredientId)
             {
                 return BadRequest("Mismatched IDs");
             }

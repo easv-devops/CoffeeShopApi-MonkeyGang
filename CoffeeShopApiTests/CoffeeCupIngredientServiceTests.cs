@@ -18,7 +18,6 @@ public class CoffeeCupIngredientServiceTests
     [SetUp]
     public void Setup()
     {
-        // Arrange
         mockCoffeeCupIngredientRepository = new Mock<ICoffeeCupIngredientRepository>();
         coffeeCupIngredientService = new CoffeeCupIngredientService(mockCoffeeCupIngredientRepository.Object);
     }
@@ -26,7 +25,6 @@ public class CoffeeCupIngredientServiceTests
     [Test]
     public void GetCoffeeCupIngredient_ShouldReturnCorrectCoffeeCupIngredient()
     {
-        // Arrange
         Guid coffeeCupId = Guid.NewGuid();
         Guid ingredientId = Guid.NewGuid();
 
@@ -40,10 +38,8 @@ public class CoffeeCupIngredientServiceTests
         mockCoffeeCupIngredientRepository.Setup(repo =>
             repo.GetCoffeeCupIngredient(coffeeCupId, ingredientId)).Returns(expectedCoffeeCupIngredient);
 
-        // Act
         var result = coffeeCupIngredientService.GetCoffeeCupIngredient(coffeeCupId, ingredientId);
 
-        // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(expectedCoffeeCupIngredient, result);
     }
@@ -51,7 +47,6 @@ public class CoffeeCupIngredientServiceTests
     [Test]
     public void GetCoffeeCupIngredients_ShouldReturnCorrectCoffeeCupIngredients()
     {
-        // Arrange
         Guid coffeeCupId = Guid.NewGuid();
 
         var expectedCoffeeCupIngredients = new List<CoffeeCupIngredient>
@@ -63,10 +58,8 @@ public class CoffeeCupIngredientServiceTests
         mockCoffeeCupIngredientRepository.Setup(repo =>
             repo.GetCoffeeCupIngredients(coffeeCupId)).Returns(expectedCoffeeCupIngredients);
 
-        // Act
         var result = coffeeCupIngredientService.GetCoffeeCupIngredients(coffeeCupId);
 
-        // Assert
         Assert.IsNotNull(result);
         CollectionAssert.AreEqual(expectedCoffeeCupIngredients, result);
     }
@@ -74,7 +67,6 @@ public class CoffeeCupIngredientServiceTests
     [Test]
     public void AddCoffeeCupIngredient_ShouldAddCoffeeCupIngredient()
     {
-        // Arrange
         var coffeeCupIngredientToAdd = new CoffeeCupIngredient
         {
             CoffeeCupId = Guid.NewGuid(),
@@ -82,10 +74,8 @@ public class CoffeeCupIngredientServiceTests
             Quantity = 2
         };
 
-        // Act
         coffeeCupIngredientService.AddCoffeeCupIngredient(coffeeCupIngredientToAdd);
 
-        // Assert
         mockCoffeeCupIngredientRepository.Verify(repo => repo.AddCoffeeCupIngredient(coffeeCupIngredientToAdd),
             Times.Once);
     }
@@ -93,7 +83,6 @@ public class CoffeeCupIngredientServiceTests
     [Test]
     public void UpdateCoffeeCupIngredient_ShouldUpdateCoffeeCupIngredient()
     {
-        // Arrange
         var coffeeCupIngredientToUpdate = new CoffeeCupIngredient
         {
             CoffeeCupId = Guid.NewGuid(),
@@ -101,10 +90,8 @@ public class CoffeeCupIngredientServiceTests
             Quantity = 3
         };
 
-        // Act
         coffeeCupIngredientService.UpdateCoffeeCupIngredient(coffeeCupIngredientToUpdate);
 
-        // Assert
         mockCoffeeCupIngredientRepository.Verify(repo => repo.UpdateCoffeeCupIngredient(coffeeCupIngredientToUpdate),
             Times.Once);
     }
@@ -112,14 +99,11 @@ public class CoffeeCupIngredientServiceTests
     [Test]
     public void DeleteCoffeeCupIngredient_ShouldDeleteCoffeeCupIngredient()
     {
-        // Arrange
         Guid coffeeCupId = Guid.NewGuid();
         Guid ingredientId = Guid.NewGuid();
 
-        // Act
         coffeeCupIngredientService.DeleteCoffeeCupIngredient(coffeeCupId, ingredientId);
 
-        // Assert
         mockCoffeeCupIngredientRepository.Verify(repo => repo.DeleteCoffeeCupIngredient(coffeeCupId, ingredientId),
             Times.Once);
     }

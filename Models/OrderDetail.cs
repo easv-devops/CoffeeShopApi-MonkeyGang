@@ -13,11 +13,10 @@ public class OrderDetail
     public Order Order { get; set; }
     public int Quantity { get; set; }
     public decimal Subtotal { get; set; }
-    
+
     // Foreign key property
     public Guid ItemId { get; set; }
 
     // Navigation property
     public Item Item { get; set; }
-    
 }

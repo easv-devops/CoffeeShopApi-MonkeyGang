@@ -8,7 +8,6 @@ public class CoffeeBean : Item
     public string Origin { get; set; }
     public string RoastLevel { get; set; }
 
-    // Additional properties specific to CoffeeBean
 
     public CoffeeBean()
     {

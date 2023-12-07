@@ -13,12 +13,12 @@ using System.Collections.Generic;
 public class IngredientController : ControllerBase
 {
     private readonly IIngredientService _ingredientService;
-    
+
     public IngredientController(IIngredientService ingredientService)
     {
         _ingredientService = ingredientService;
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<List<IngredientDto>>> GetAllIngredients()
     {

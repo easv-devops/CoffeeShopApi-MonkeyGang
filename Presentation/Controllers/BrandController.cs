@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
@@ -44,7 +43,6 @@ public class BrandController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddBrand([FromBody] Brand brand)
     {
-        
         if (brand == null)
         {
             return BadRequest("Brand object is null");

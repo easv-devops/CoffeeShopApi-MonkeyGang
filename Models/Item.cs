@@ -5,10 +5,10 @@ namespace Models;
 
 public class Item
 {
-    
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid ItemId { get; set; }
+
     public ItemType ItemType { get; set; } // Enum representing the type of item
     // Common properties for all items...
 
@@ -19,6 +19,4 @@ public class Item
 
     public Store Store { get; set; }
     public Guid StoreId { get; set; }
-
-
 }

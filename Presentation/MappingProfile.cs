@@ -43,9 +43,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Orders, opt => opt.Ignore())
             .ForMember(dest => dest.Posts, opt => opt.Ignore());
 
-        
-        
-        
+
         CreateMap<Order, OrderDto>();
         CreateMap<OrderDto, Order>();
         CreateMap<OrderDetail, OrderDetailDto>();

@@ -29,6 +29,7 @@ public class CustomerController : ControllerBase
             {
                 return NotFound();
             }
+
             return Ok(customerDto);
         }
         catch (Exception ex)
@@ -53,7 +54,7 @@ public class CustomerController : ControllerBase
         }
     }
 
-    
+
     // this works now!!!!
     [HttpPost]
     public async Task<ActionResult> AddCustomer([FromBody] CustomerDto customerDto)

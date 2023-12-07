@@ -2,12 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace Models.DTOs;
 
-using System.ComponentModel.DataAnnotations;
-
 public class ItemDto
 {
-    [JsonIgnore]
-    public Guid ItemId { get; set; }
+    [JsonIgnore] public Guid ItemId { get; set; }
     public ItemType ItemType { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }

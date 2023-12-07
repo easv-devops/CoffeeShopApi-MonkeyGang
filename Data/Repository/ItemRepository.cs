@@ -34,7 +34,7 @@ public class ItemRepository : IItemRepository
     {
         await _dbContext.Items.AddAsync(item);
         //await _dbContext.SaveChangesAsync();
-        
+
         // Return the generated ID
         Guid generatedItemId = item.ItemId;
 
@@ -42,7 +42,6 @@ public class ItemRepository : IItemRepository
         DetachEntity(item);
 
         return generatedItemId;
-        
     }
 
     public async Task UpdateItemAsync(Item item)
@@ -60,8 +59,8 @@ public class ItemRepository : IItemRepository
             await _dbContext.SaveChangesAsync();
         }
     }
-    
-    
+
+
     private void DetachEntity<T>(T entity) where T : class
     {
         var entry = _dbContext.Entry(entity);
@@ -70,5 +69,4 @@ public class ItemRepository : IItemRepository
             entry.State = EntityState.Detached;
         }
     }
-    
 }

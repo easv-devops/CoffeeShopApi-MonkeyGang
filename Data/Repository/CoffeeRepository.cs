@@ -19,7 +19,7 @@ public class CoffeeCupRepository : ICoffeeCupRepository
     public CoffeeCup GetCoffeeCupById(Guid id)
     {
         return _context.CoffeeCups
-            .Include(c => ((Item)c).Description)  
+            .Include(c => ((Item)c).Description)
             .FirstOrDefault(c => c.ItemId == id);
     }
 
@@ -49,5 +49,4 @@ public class CoffeeCupRepository : ICoffeeCupRepository
             _context.SaveChanges();
         }
     }
-
 }

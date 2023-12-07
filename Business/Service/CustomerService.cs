@@ -10,7 +10,7 @@ public class CustomerService : ICustomerService
     private readonly IMapper _mapper;
     private readonly ICustomerRepository _customerRepository;
 
-    
+
     //todo: add logging
     public CustomerService(IMapper mapper, ICustomerRepository customerRepository)
     {

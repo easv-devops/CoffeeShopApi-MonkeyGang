@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using Business.Service;
 using Data.Repository;
@@ -15,12 +14,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
 [TestFixture]
 public class IngredientServiceTests
 {
     private Mock<IIngredientRepository> _ingredientRepositoryMock;
-    private IMapper _mapper; 
+    private IMapper _mapper;
     private IIngredientService _ingredientService;
 
     [SetUp]
@@ -64,7 +62,7 @@ public class IngredientServiceTests
         Assert.AreEqual(existingIngredientId, result.IngredientId);
     }
 
-        [Test]
+    [Test]
     public async Task AddIngredientAsync_ShouldReturnNewIngredientId()
     {
         var newIngredientDto = new IngredientDto
@@ -79,7 +77,7 @@ public class IngredientServiceTests
 
         _ingredientRepositoryMock.Setup(repo => repo.AddIngredientAsync(It.IsAny<Ingredient>()))
             .ReturnsAsync(newIngredientId);
-        
+
 
         var result = await _ingredientService.AddIngredientAsync(newIngredientDto);
 
@@ -90,7 +88,8 @@ public class IngredientServiceTests
     public async Task UpdateIngredientAsync_WithValidId_ShouldReturnTrue()
     {
         var existingIngredientId = Guid.NewGuid();
-        var existingIngredientDto = new IngredientDto { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
+        var existingIngredientDto = new IngredientDto
+            { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
         var existingIngredient = new Ingredient { IngredientId = existingIngredientId, Name = "ExistingIngredient" };
 
         _ingredientRepositoryMock.Setup(repo => repo.GetIngredientByIdAsync(existingIngredientId))
@@ -102,7 +101,7 @@ public class IngredientServiceTests
 
         var result = await _ingredientService.UpdateIngredientAsync(existingIngredientId, existingIngredientDto);
 
-        
+
         Assert.IsTrue(result);
     }
 
@@ -122,6 +121,4 @@ public class IngredientServiceTests
 
         Assert.IsTrue(result);
     }
-    
-    
 }

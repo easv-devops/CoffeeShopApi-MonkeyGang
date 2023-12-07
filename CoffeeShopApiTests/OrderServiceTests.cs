@@ -21,7 +21,6 @@ public class OrderServiceTests
     [SetUp]
     public void Setup()
     {
-        // Arrange
         mockOrderRepository = new Mock<IOrderRepository>();
         mockMapper = new Mock<IMapper>();
 
@@ -31,7 +30,6 @@ public class OrderServiceTests
     [Test]
     public void GetOrderById_ShouldReturnCorrectOrder()
     {
-        // Arrange
         Guid orderId = Guid.NewGuid();
         var orderEntity = new Order
             { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 45.99m };
@@ -44,10 +42,8 @@ public class OrderServiceTests
         mockOrderRepository.Setup(repo => repo.GetOrderById(orderId)).Returns(orderEntity);
         mockMapper.Setup(mapper => mapper.Map<OrderDto>(orderEntity)).Returns(orderDto);
 
-        // Act
         var result = orderService.GetOrderById(orderId);
 
-        // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(orderDto.OrderID, result.OrderID);
         Assert.AreEqual(orderDto.CustomerID, result.CustomerID);
@@ -58,7 +54,6 @@ public class OrderServiceTests
     [Test]
     public void GetAllOrders_ShouldReturnAllOrders()
     {
-        // Arrange
         var orderEntities = new List<Order>
         {
             new Order
@@ -88,10 +83,8 @@ public class OrderServiceTests
         mockOrderRepository.Setup(repo => repo.GetAllOrders()).Returns(orderEntities);
         mockMapper.Setup(mapper => mapper.Map<List<OrderDto>>(orderEntities)).Returns(orderDtos);
 
-        // Act
         var result = orderService.GetAllOrders();
 
-        // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
         Assert.AreEqual(orderDtos[0].OrderID, result[0].OrderID);
@@ -102,7 +95,6 @@ public class OrderServiceTests
     [Test]
     public void AddOrder_ShouldAddOrder()
     {
-        // Arrange
         var orderDto = new OrderDto { CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 19.99m };
         var orderEntity = new Order
         {
@@ -112,17 +104,14 @@ public class OrderServiceTests
 
         mockMapper.Setup(mapper => mapper.Map<Order>(orderDto)).Returns(orderEntity);
 
-        // Act
         orderService.AddOrder(orderDto);
 
-        // Assert
         mockOrderRepository.Verify(repo => repo.AddOrder(orderEntity), Times.Once);
     }
 
     [Test]
     public void UpdateOrder_ShouldUpdateOrder()
     {
-        // Arrange
         Guid orderId = Guid.NewGuid();
         var orderDto = new OrderDto
             { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 29.99m };
@@ -133,23 +122,18 @@ public class OrderServiceTests
 
         mockMapper.Setup(mapper => mapper.Map<Order>(orderDto)).Returns(orderEntity);
 
-        // Act
         orderService.UpdateOrder(orderDto);
 
-        // Assert
         mockOrderRepository.Verify(repo => repo.UpdateOrder(orderEntity), Times.Once);
     }
 
     [Test]
     public void DeleteOrder_ShouldDeleteOrder()
     {
-        // Arrange
         Guid orderId = Guid.NewGuid();
 
-        // Act
         orderService.DeleteOrder(orderId);
 
-        // Assert
         mockOrderRepository.Verify(repo => repo.DeleteOrder(orderId), Times.Once);
     }
 }

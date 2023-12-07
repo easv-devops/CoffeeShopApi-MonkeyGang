@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
+
 [Table("Cakes")]
 public class Cake : Item
 {
@@ -8,9 +9,6 @@ public class Cake : Item
     {
         ItemType = ItemType.Cake;
     }
-    
+
     //public Guid CakeId { get; set; }
-    
-    
-    
 }

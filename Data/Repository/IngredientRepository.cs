@@ -5,7 +5,6 @@ namespace Data.Repository;
 
 public class IngredientRepository : IIngredientRepository
 {
-
     private readonly CoffeeShopDbContext _dbContext;
 
     public IngredientRepository(CoffeeShopDbContext dbContext)
@@ -17,14 +16,13 @@ public class IngredientRepository : IIngredientRepository
     {
         //Possible null reference return
         return await _dbContext.Ingredients.FindAsync(ingredientId);
-        
     }
 
     public async Task<List<Ingredient>> GetAllIngredientsAsync()
     {
         return await _dbContext.Ingredients.ToListAsync();
     }
-    
+
     public async Task<Guid> AddIngredientAsync(Ingredient ingredient)
     {
         await _dbContext.Ingredients.AddAsync(ingredient);

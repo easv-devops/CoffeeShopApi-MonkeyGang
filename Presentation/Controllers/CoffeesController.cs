@@ -51,8 +51,7 @@ public class CoffeeCupController : ControllerBase
         {
             return BadRequest("CoffeeCupDto cannot be null");
         }
-        
-        
+
 
         await _coffeeCupService.AddCoffeeCupAsync(coffeeCupDto);
 
