@@ -4,9 +4,10 @@ namespace Service;
 
 public interface ICoffeeCupIngredientService
 {
-    CoffeeCupIngredient GetCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId);
-    List<CoffeeCupIngredient> GetCoffeeCupIngredients(Guid coffeeCupId);
-    void AddCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient);
-    void UpdateCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient);
-    void DeleteCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId);
+    Task<CoffeeCupIngredient> GetCoffeeCupIngredientByIdAsync(Guid coffeeCupId, Guid ingredientId);
+    Task<IEnumerable<CoffeeCupIngredient>> GetAllCoffeeCupIngredientsAsync(Guid coffeeCupId);
+    Task AddCoffeeCupIngredientAsync(CoffeeCupIngredient coffeeCupIngredient);
+    Task AddRangeCoffeeCupIngredientsAsync(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients);
+    Task UpdateCoffeeCupIngredientAsync(CoffeeCupIngredient coffeeCupIngredient);
+    Task<bool> DeleteCoffeeCupIngredientAsync(Guid coffeeCupId, Guid ingredientId);
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Models;
 using Models.DTOs;
+using Models.DTOs.Create;
+using Models.DTOs.Response;
 using Models.Utility;
 
 //using Models;
@@ -21,6 +23,19 @@ public class MappingProfile : Profile
             // Map other properties...
             .IncludeBase<Item, ItemDto>(); // Include base class mapping
 
+        
+        CreateMap<CreateCoffeeCupDto, CoffeeCup>()
+            .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+            // Map other properties...
+            .IncludeBase<ItemDto, Item>(); // Include base class mapping
+        
+        CreateMap<CoffeeCup, CreateCoffeeCupDto>();
+
+        CreateMap<CoffeeCup,CoffeeCupResponseDto>();
+        CreateMap<CoffeeCupResponseDto, CoffeeCup>();
+        
+        
+        
         CreateMap<ItemDto, Item>();
         CreateMap<Item, ItemDto>();
 

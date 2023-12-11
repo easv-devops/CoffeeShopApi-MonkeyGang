@@ -4,7 +4,7 @@ namespace Models.DTOs;
 
 public class CustomerDto
 {
-    [JsonIgnore] public Guid CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -13,7 +13,6 @@ public class CustomerDto
 
     public string Password { get; set; }
 
-    // er det her en god ide
-    //public List<Order> Orders { get; set; }
-    //public List<Post> Posts { get; set; }
+    public List<Order> Orders { get; set; }
+    public List<Post> Posts { get; set; }
 }

@@ -264,8 +264,6 @@ namespace Data.Migrations
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
-                    b.HasIndex("CustomerId");
-
                     b.ToTable("CoffeeCups");
                 });
 
@@ -376,19 +374,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
-                    b.HasOne("Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Item", null)
                         .WithOne()
                         .HasForeignKey("Models.CoffeeCup", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Models.Customer", b =>

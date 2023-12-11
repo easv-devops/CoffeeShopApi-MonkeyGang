@@ -1,79 +1,67 @@
-using Data;
-using Data.Repository.Interfaces;
+
+
 using Models;
-using Models.DTOs;
-using Repository;
-using Service;
-
-namespace CoffeeShopApiTests;
-
-using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+using Repository;
 
-[TestFixture]
-public class CoffeeCupServiceTests
+namespace YourProject.Tests.Services
 {
-    private Mock<ICoffeeCupRepository> mockCoffeeCupRepository;
-    private Mock<IItemRepository> mockItemRepository;
-    private Mock<IMapper> mockMapper;
-    private ICoffeeCupService coffeeCupService;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class CoffeeCupServiceTests
     {
-        mockCoffeeCupRepository = new Mock<ICoffeeCupRepository>();
-        mockItemRepository = new Mock<IItemRepository>();
-        mockMapper = new Mock<IMapper>();
-
-        coffeeCupService = new CoffeeCupService(mockItemRepository.Object, mockCoffeeCupRepository.Object,
-            mockMapper.Object, new CoffeeShopDbContext());
-    }
-
-    [Test]
-    public void GetCoffeeCupById_ShouldReturnCorrectCoffeeCup()
-    {
-        Guid coffeeCupId = Guid.NewGuid();
-        var coffeeCupEntity = new CoffeeCup { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
-        var coffeeCupDto = new CoffeeCupDto { ItemId = coffeeCupId, Name = "Americano", Price = 3.99m };
-
-        mockCoffeeCupRepository.Setup(repo => repo.GetCoffeeCupById(coffeeCupId)).Returns(coffeeCupEntity);
-        mockMapper.Setup(mapper => mapper.Map<CoffeeCupDto>(coffeeCupEntity)).Returns(coffeeCupDto);
-
-        var result = coffeeCupService.GetCoffeeCupById(coffeeCupId);
-
-        Assert.IsNotNull(result);
-        Assert.AreEqual(coffeeCupDto.ItemId, result.ItemId);
-        Assert.AreEqual(coffeeCupDto.Name, result.Name);
-        Assert.AreEqual(coffeeCupDto.Price, result.Price);
-    }
-
-    [Test]
-    public void GetAllCoffeeCups_ShouldReturnAllCoffeeCups()
-    {
-        var coffeeCupEntities = new List<CoffeeCup>
+        [Test]
+        public async Task GetCoffeeCupByIdAsync_ExistingId_ReturnsCoffeeCup()
         {
-            new CoffeeCup { ItemId = Guid.NewGuid(), Name = "Latte", Price = 4.99m },
-            new CoffeeCup { ItemId = Guid.NewGuid(), Name = "Cappuccino", Price = 5.99m }
-        };
+            var coffeeCupId = Guid.NewGuid();
+            var expectedCoffeeCup = new CoffeeCup { ItemId = coffeeCupId, /* other properties */ };
+            
+            var coffeeCupRepositoryMock = new Mock<ICoffeeCupRepository>();
+            coffeeCupRepositoryMock.Setup(repo => repo.GetByIdAsync(coffeeCupId)).ReturnsAsync(expectedCoffeeCup);
 
-        var coffeeCupDtos = new List<CoffeeCupDto>
+            var coffeeCupService = new CoffeeCupService(coffeeCupRepositoryMock.Object);
+
+            var result = await coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedCoffeeCup, result);
+        }
+
+        [Test]
+        public async Task GetCoffeeCupByIdAsync_NonExistentId_ReturnsNull()
         {
-            new CoffeeCupDto { ItemId = coffeeCupEntities[0].ItemId, Name = "Latte", Price = 4.99m },
-            new CoffeeCupDto { ItemId = coffeeCupEntities[1].ItemId, Name = "Cappuccino", Price = 5.99m }
-        };
+            var coffeeCupId = Guid.NewGuid();
+            
+            var coffeeCupRepositoryMock = new Mock<ICoffeeCupRepository>();
+            coffeeCupRepositoryMock.Setup(repo => repo.GetByIdAsync(coffeeCupId)).ReturnsAsync((CoffeeCup)null);
 
-        mockCoffeeCupRepository.Setup(repo => repo.GetAllCoffeeCups()).Returns(coffeeCupEntities);
-        mockMapper.Setup(mapper => mapper.Map<List<CoffeeCupDto>>(coffeeCupEntities)).Returns(coffeeCupDtos);
+            var coffeeCupService = new CoffeeCupService(coffeeCupRepositoryMock.Object);
 
-        var result = coffeeCupService.GetAllCoffeeCups();
+            var result = await coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
 
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(coffeeCupDtos[0].ItemId, result[0].ItemId);
-        Assert.AreEqual(coffeeCupDtos[1].Name, result[1].Name);
-        Assert.AreEqual(coffeeCupDtos[1].Price, result[1].Price);
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public async Task GetAllCoffeeCupsAsync_ReturnsListOfCoffeeCups()
+        {
+            var expectedCoffeeCups = new List<CoffeeCup>
+            {
+                new CoffeeCup { ItemId = Guid.NewGuid()},
+                new CoffeeCup { ItemId = Guid.NewGuid()},
+            };
+            
+            var coffeeCupRepositoryMock = new Mock<ICoffeeCupRepository>();
+            coffeeCupRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(expectedCoffeeCups);
+
+            var coffeeCupService = new CoffeeCupService(coffeeCupRepositoryMock.Object);
+
+            var result = await coffeeCupService.GetAllCoffeeCupsAsync();
+
+            Assert.IsNotNull(result);
+            CollectionAssert.AreEquivalent(expectedCoffeeCups, result);
+        }
+
+        // Add more tests for AddCoffeeCupAsync, UpdateCoffeeCupAsync, and DeleteCoffeeCupAsync as needed
     }
 }

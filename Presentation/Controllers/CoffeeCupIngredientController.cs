@@ -10,7 +10,7 @@ namespace Presentation.Controllers
     [Route("api/[controller]")]
     public class CoffeeCupIngredientController : ControllerBase
     {
-        private readonly ICoffeeCupIngredientService _coffeeCupIngredientService;
+                private readonly ICoffeeCupIngredientService _coffeeCupIngredientService;
 
         public CoffeeCupIngredientController(ICoffeeCupIngredientService coffeeCupIngredientService)
         {
@@ -18,96 +18,54 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{coffeeCupId}/{ingredientId}")]
-        public IActionResult GetCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
+        public async Task<IActionResult> GetCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
         {
-            var coffeeCupIngredient = _coffeeCupIngredientService.GetCoffeeCupIngredient(coffeeCupId, ingredientId);
+            var coffeeCupIngredient = await _coffeeCupIngredientService.GetCoffeeCupIngredientByIdAsync(coffeeCupId, ingredientId);
 
             if (coffeeCupIngredient == null)
             {
                 return NotFound();
             }
 
-            var coffeeCupIngredientDto = new CoffeeCupIngredientDto
-            {
-                CoffeeCupId = coffeeCupIngredient.CoffeeCupId,
-                IngredientId = coffeeCupIngredient.IngredientId,
-                Quantity = coffeeCupIngredient.Quantity
-            };
-
-            return Ok(coffeeCupIngredientDto);
+            return Ok(coffeeCupIngredient);
         }
 
         [HttpGet("{coffeeCupId}")]
-        public IActionResult GetCoffeeCupIngredients(Guid coffeeCupId)
+        public async Task<IActionResult> GetAllCoffeeCupIngredients(Guid coffeeCupId)
         {
-            var coffeeCupIngredients = _coffeeCupIngredientService.GetCoffeeCupIngredients(coffeeCupId);
-
-            var coffeeCupIngredientDtos = coffeeCupIngredients.ConvertAll(cci =>
-                new CoffeeCupIngredientDto
-                {
-                    CoffeeCupId = cci.CoffeeCupId,
-                    IngredientId = cci.IngredientId,
-                    Quantity = cci.Quantity
-                });
-
-            return Ok(coffeeCupIngredientDtos);
+            var coffeeCupIngredients = await _coffeeCupIngredientService.GetAllCoffeeCupIngredientsAsync(coffeeCupId);
+            return Ok(coffeeCupIngredients);
         }
 
         [HttpPost]
-        public IActionResult AddCoffeeCupIngredient([FromBody] CoffeeCupIngredientDto coffeeCupIngredientDto)
+        public async Task<IActionResult> AddCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient)
         {
-            if (coffeeCupIngredientDto == null)
-            {
-                return BadRequest("CoffeeCupIngredientDto cannot be null");
-            }
-
-            var coffeeCupIngredient = new CoffeeCupIngredient
-            {
-                CoffeeCupId = coffeeCupIngredientDto.CoffeeCupId,
-                IngredientId = coffeeCupIngredientDto.IngredientId,
-                Quantity = coffeeCupIngredientDto.Quantity
-            };
-
-            _coffeeCupIngredientService.AddCoffeeCupIngredient(coffeeCupIngredient);
-
-            return CreatedAtAction(nameof(GetCoffeeCupIngredient),
-                new { coffeeCupId = coffeeCupIngredient.CoffeeCupId, ingredientId = coffeeCupIngredient.IngredientId },
-                coffeeCupIngredientDto);
+            await _coffeeCupIngredientService.AddCoffeeCupIngredientAsync(coffeeCupIngredient);
+            return CreatedAtAction(nameof(GetCoffeeCupIngredient), new { coffeeCupId = coffeeCupIngredient.CoffeeCupId, ingredientId = coffeeCupIngredient.IngredientId }, coffeeCupIngredient);
         }
 
-        [HttpPut("{coffeeCupId}/{ingredientId}")]
-        public IActionResult UpdateCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId,
-            [FromBody] CoffeeCupIngredientDto coffeeCupIngredientDto)
+        [HttpPost("addrange")]
+        public async Task<IActionResult> AddRangeCoffeeCupIngredients(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients)
         {
-            if (coffeeCupIngredientDto == null)
-            {
-                return BadRequest("CoffeeCupIngredientDto cannot be null");
-            }
+            await _coffeeCupIngredientService.AddRangeCoffeeCupIngredientsAsync(coffeeCupIngredients);
+            return CreatedAtAction(nameof(GetAllCoffeeCupIngredients), new { coffeeCupId = coffeeCupIngredients.First().CoffeeCupId }, coffeeCupIngredients);
+        }
 
-            if (coffeeCupId != coffeeCupIngredientDto.CoffeeCupId ||
-                ingredientId != coffeeCupIngredientDto.IngredientId)
-            {
-                return BadRequest("Mismatched IDs");
-            }
-
-            var coffeeCupIngredient = new CoffeeCupIngredient
-            {
-                CoffeeCupId = coffeeCupId,
-                IngredientId = ingredientId,
-                Quantity = coffeeCupIngredientDto.Quantity
-            };
-
-            _coffeeCupIngredientService.UpdateCoffeeCupIngredient(coffeeCupIngredient);
-
-            return NoContent();
+        [HttpPut]
+        public async Task<IActionResult> UpdateCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient)
+        {
+            await _coffeeCupIngredientService.UpdateCoffeeCupIngredientAsync(coffeeCupIngredient);
+            return Ok();
         }
 
         [HttpDelete("{coffeeCupId}/{ingredientId}")]
-        public IActionResult DeleteCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
+        public async Task<IActionResult> DeleteCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
         {
-            _coffeeCupIngredientService.DeleteCoffeeCupIngredient(coffeeCupId, ingredientId);
+            await _coffeeCupIngredientService.DeleteCoffeeCupIngredientAsync(coffeeCupId, ingredientId);
 
-            return NoContent();
+            
+                return NotFound();
+            
         }
     }
 }

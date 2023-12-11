@@ -46,13 +46,15 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(od => od.ItemId)
             .OnDelete(DeleteBehavior.Restrict);
 
-/*
+
         modelBuilder.Entity<CoffeeCup>()
-            .HasKey(cc => cc.ItemId);
+            .Property(cc => cc.ItemId)
+            .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Cake>()
-            .HasKey(c => c.ItemId);
-    */
+            .Property(cc => cc.ItemId)
+            .ValueGeneratedOnAdd();
+    
 
 
         // many-to-many: CoffeeCupIngredient

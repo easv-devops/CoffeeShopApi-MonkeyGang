@@ -1,51 +1,49 @@
+using Data;
 using Data.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Models;
-
-namespace Data.Repository;
 
 public class CoffeeCupIngredientRepository : ICoffeeCupIngredientRepository
 {
-    private readonly CoffeeShopDbContext _context;
+    private readonly CoffeeShopDbContext _dbContext; // Use your actual DbContext
 
-    public CoffeeCupIngredientRepository(CoffeeShopDbContext context)
+    public CoffeeCupIngredientRepository(CoffeeShopDbContext dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
 
-    public CoffeeCupIngredient GetCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
+    public async Task<CoffeeCupIngredient> GetByIdAsync(Guid coffeeCupId, Guid ingredientId)
     {
-        return _context.CoffeeCupIngredients
-            .SingleOrDefault(cci => cci.CoffeeCupId == coffeeCupId && cci.IngredientId == ingredientId);
+        return await _dbContext.CoffeeCupIngredients.FindAsync(coffeeCupId, ingredientId);
     }
 
-    public List<CoffeeCupIngredient> GetCoffeeCupIngredients(Guid coffeeCupId)
+    public async Task<IEnumerable<CoffeeCupIngredient>> GetAllAsync(Guid coffeeCupId)
     {
-        return _context.CoffeeCupIngredients
-            .Where(cci => cci.CoffeeCupId == coffeeCupId)
-            .ToList();
+        return await _dbContext.CoffeeCupIngredients.Where(ci => ci.CoffeeCupId == coffeeCupId).ToListAsync();
     }
 
-    public void AddCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient)
+    public async Task AddAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        _context.CoffeeCupIngredients.Add(coffeeCupIngredient);
-        _context.SaveChanges();
+        _dbContext.CoffeeCupIngredients.Add(coffeeCupIngredient);
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    public async Task AddRangeAsync(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients)
+    {
+        _dbContext.CoffeeCupIngredients.AddRange(coffeeCupIngredients);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public void UpdateCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient)
+    public async Task UpdateAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        _context.CoffeeCupIngredients.Update(coffeeCupIngredient);
-        _context.SaveChanges();
+        _dbContext.Entry(coffeeCupIngredient).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
     }
 
-    public void DeleteCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
+    public async Task DeleteAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        var coffeeCupIngredient = _context.CoffeeCupIngredients
-            .SingleOrDefault(cci => cci.CoffeeCupId == coffeeCupId && cci.IngredientId == ingredientId);
-
-        if (coffeeCupIngredient != null)
-        {
-            _context.CoffeeCupIngredients.Remove(coffeeCupIngredient);
-            _context.SaveChanges();
-        }
+        _dbContext.CoffeeCupIngredients.Remove(coffeeCupIngredient);
+        await _dbContext.SaveChangesAsync();
     }
+
 }

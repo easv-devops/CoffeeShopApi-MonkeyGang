@@ -1,101 +1,58 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Data;
-using Data.Repository;
 using Data.Repository.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.DTOs;
+using Models.DTOs.Create;
 using Repository;
-
-namespace Service;
+using Service;
 
 public class CoffeeCupService : ICoffeeCupService
 {
-    // det her er en dårlig ide
-
-    private readonly IItemRepository _itemRepository;
     private readonly ICoffeeCupRepository _coffeeCupRepository;
 
-    private readonly IMapper _mapper;
-
-    //janky
-    private readonly CoffeeShopDbContext _dbContext;
-
-    public CoffeeCupService(IItemRepository itemRepository, ICoffeeCupRepository coffeeCupRepository, IMapper mapper,
-        CoffeeShopDbContext dbContext)
+    public CoffeeCupService(ICoffeeCupRepository coffeeCupRepository)
     {
-        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
-        _coffeeCupRepository = coffeeCupRepository ?? throw new ArgumentNullException(nameof(coffeeCupRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        //janky
-        _dbContext = dbContext;
+        _coffeeCupRepository = coffeeCupRepository;
     }
 
-    public void CreateCoffeeCupWithItem(CoffeeCupDto coffeeCupDto)
+    public async Task<CoffeeCup> GetCoffeeCupByIdAsync(Guid coffeeCupId)
     {
-        // Map the DTO to the domain models
-        var newItem = _mapper.Map<Item>(coffeeCupDto);
-        var newCoffeeCup = _mapper.Map<CoffeeCup>(coffeeCupDto);
-
-        // Set the ItemId in CoffeeCup to reference the new Item
-        newCoffeeCup.ItemId = newItem.ItemId;
-
-        // Save the new Item and CoffeeCup
-        _itemRepository.AddItemAsync(newItem);
-        _coffeeCupRepository.AddCoffeeCup(newCoffeeCup);
+        return await _coffeeCupRepository.GetByIdAsync(coffeeCupId);
     }
 
-
-    public CoffeeCupDto GetCoffeeCupById(Guid coffeeCupId)
+    public async Task<IEnumerable<CoffeeCup>> GetAllCoffeeCupsAsync()
     {
-        var coffeeCupEntity = _coffeeCupRepository.GetCoffeeCupById(coffeeCupId);
-        return _mapper.Map<CoffeeCupDto>(coffeeCupEntity);
+        return await _coffeeCupRepository.GetAllAsync();
     }
 
-    public List<CoffeeCupDto> GetAllCoffeeCups()
+    public async Task<Guid> AddCoffeeCupAsync(CoffeeCup coffeeCup)
     {
-        var coffeeCupEntities = _coffeeCupRepository.GetAllCoffeeCups();
-        return _mapper.Map<List<CoffeeCupDto>>(coffeeCupEntities);
+        // Add coffee cup to the database
+        await _coffeeCupRepository.AddAsync(coffeeCup);
+
+        // Return the generated ID
+        return coffeeCup.ItemId;
     }
 
-    public async Task<CoffeeCupDto> AddCoffeeCupAsync(CoffeeCupDto coffeeCupDto)
+    public async Task UpdateCoffeeCupAsync(CoffeeCup coffeeCup)
     {
-        var newItem = new Item
+        // Add any business logic/validation as needed before calling the repository
+        await _coffeeCupRepository.UpdateAsync(coffeeCup);
+    }
+
+    public async Task<bool> DeleteCoffeeCupAsync(Guid coffeeCupId)
+    {
+        var coffeeCup = await _coffeeCupRepository.GetByIdAsync(coffeeCupId);
+
+        if (coffeeCup != null)
         {
-            ItemId = coffeeCupDto.ItemId,
-            ItemType = coffeeCupDto.ItemType,
-            Name = coffeeCupDto.Name,
-            Price = coffeeCupDto.Price,
-            Description = coffeeCupDto.Description,
-            Image = coffeeCupDto.Image,
+            // Add any business logic/validation as needed before calling the repository
+            await _coffeeCupRepository.DeleteAsync(coffeeCup);
+            return true; // Deletion successful
+        }
 
-            StoreId = coffeeCupDto.StoreId
-        };
-
-        Console.WriteLine("Adding item to db");
-        Guid id = await _itemRepository.AddItemAsync(newItem);
-
-        Console.WriteLine("Item added to db");
-        Console.WriteLine("Getting new item id: " + newItem.ItemId);
-
-        Guid generatedItemId = id;
-
-
-        CoffeeCup coffeeCupEntity = _mapper.Map<CoffeeCup>(coffeeCupDto);
-        coffeeCupEntity.ItemId = generatedItemId;
-        _coffeeCupRepository.AddCoffeeCup(coffeeCupEntity);
-
-        return _mapper.Map<CoffeeCupDto>(coffeeCupEntity);
-    }
-
-    public void UpdateCoffeeCup(CoffeeCupDto coffeeCupDto)
-    {
-        var coffeeCupEntity = _mapper.Map<CoffeeCup>(coffeeCupDto);
-        _coffeeCupRepository.UpdateCoffeeCup(coffeeCupEntity);
-    }
-
-    public void DeleteCoffeeCup(Guid coffeeCupId)
-    {
-        _coffeeCupRepository.DeleteCoffeeCup(coffeeCupId);
+        return false; // CoffeeCup not found
     }
 }

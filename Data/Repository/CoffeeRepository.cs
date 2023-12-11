@@ -9,44 +9,38 @@ using Repository;
 
 public class CoffeeCupRepository : ICoffeeCupRepository
 {
-    private readonly CoffeeShopDbContext _context;
+    private readonly CoffeeShopDbContext _dbContext;
 
     public CoffeeCupRepository(CoffeeShopDbContext context)
     {
-        _context = context;
+        _dbContext = context;
     }
 
-    public CoffeeCup GetCoffeeCupById(Guid id)
+    public async Task<CoffeeCup> GetByIdAsync(Guid id)
     {
-        return _context.CoffeeCups
-            .Include(c => ((Item)c).Description)
-            .FirstOrDefault(c => c.ItemId == id);
+        return await _dbContext.CoffeeCups.FindAsync(id);
     }
 
-    public IEnumerable<CoffeeCup> GetAllCoffeeCups()
+    public async Task<IEnumerable<CoffeeCup>> GetAllAsync()
     {
-        return _context.CoffeeCups.ToList();
+        return await _dbContext.CoffeeCups.ToListAsync();
     }
 
-    public void AddCoffeeCup(CoffeeCup coffeeCup)
+    public async Task AddAsync(CoffeeCup coffeeCup)
     {
-        _context.CoffeeCups.Add(coffeeCup);
-        _context.SaveChanges();
+        await _dbContext.CoffeeCups.AddAsync(coffeeCup);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public void UpdateCoffeeCup(CoffeeCup coffeeCup)
+    public async Task UpdateAsync(CoffeeCup coffeeCup)
     {
-        _context.Entry(coffeeCup).State = EntityState.Modified;
-        _context.SaveChanges();
+        _dbContext.CoffeeCups.Update(coffeeCup);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public void DeleteCoffeeCup(Guid id)
+    public async Task DeleteAsync(CoffeeCup coffeeCup)
     {
-        var coffeeCupToDelete = _context.CoffeeCups.Find(id);
-        if (coffeeCupToDelete != null)
-        {
-            _context.CoffeeCups.Remove(coffeeCupToDelete);
-            _context.SaveChanges();
-        }
+        _dbContext.CoffeeCups.Remove(coffeeCup);
+        await _dbContext.SaveChangesAsync();
     }
 }

@@ -7,7 +7,6 @@ public class CoffeeCup : Item
 {
     public int Size { get; set; }
 
-    public Customer? Customer { get; set; }
 
     public Guid CustomerId { get; set; }
 

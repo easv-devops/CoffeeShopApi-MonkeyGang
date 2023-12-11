@@ -4,9 +4,10 @@ namespace Data.Repository.Interfaces;
 
 public interface ICoffeeCupIngredientRepository
 {
-    CoffeeCupIngredient GetCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId);
-    List<CoffeeCupIngredient> GetCoffeeCupIngredients(Guid coffeeCupId);
-    void AddCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient);
-    void UpdateCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient);
-    void DeleteCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId);
+    Task<CoffeeCupIngredient> GetByIdAsync(Guid coffeeCupId, Guid ingredientId);
+    Task<IEnumerable<CoffeeCupIngredient>> GetAllAsync(Guid coffeeCupId);
+    Task AddAsync(CoffeeCupIngredient coffeeCupIngredient);
+    Task AddRangeAsync(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients);
+    Task UpdateAsync(CoffeeCupIngredient coffeeCupIngredient);
+    Task DeleteAsync(CoffeeCupIngredient coffeeCupIngredient);
 }

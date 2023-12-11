@@ -4,9 +4,9 @@ namespace Repository;
 
 public interface ICoffeeCupRepository
 {
-    CoffeeCup GetCoffeeCupById(Guid cupId);
-    IEnumerable<CoffeeCup> GetAllCoffeeCups();
-    void AddCoffeeCup(CoffeeCup coffeeCup);
-    void UpdateCoffeeCup(CoffeeCup coffeeCup);
-    void DeleteCoffeeCup(Guid cupId);
+    Task<CoffeeCup> GetByIdAsync(Guid cupId);
+    Task<IEnumerable<CoffeeCup>> GetAllAsync();
+    Task AddAsync(CoffeeCup coffeeCup);
+    Task UpdateAsync(CoffeeCup coffeeCup);
+    Task DeleteAsync(CoffeeCup coffeeCup);
 }

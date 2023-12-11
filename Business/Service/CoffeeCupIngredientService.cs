@@ -1,7 +1,6 @@
 using Data.Repository.Interfaces;
 using Models;
-
-namespace Service;
+using Service;
 
 public class CoffeeCupIngredientService : ICoffeeCupIngredientService
 {
@@ -12,28 +11,45 @@ public class CoffeeCupIngredientService : ICoffeeCupIngredientService
         _coffeeCupIngredientRepository = coffeeCupIngredientRepository;
     }
 
-    public CoffeeCupIngredient GetCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
+    public async Task<CoffeeCupIngredient> GetCoffeeCupIngredientByIdAsync(Guid coffeeCupId, Guid ingredientId)
     {
-        return _coffeeCupIngredientRepository.GetCoffeeCupIngredient(coffeeCupId, ingredientId);
+        return await _coffeeCupIngredientRepository.GetByIdAsync(coffeeCupId, ingredientId);
     }
 
-    public List<CoffeeCupIngredient> GetCoffeeCupIngredients(Guid coffeeCupId)
+    public async Task<IEnumerable<CoffeeCupIngredient>> GetAllCoffeeCupIngredientsAsync(Guid coffeeCupId)
     {
-        return _coffeeCupIngredientRepository.GetCoffeeCupIngredients(coffeeCupId);
+        return await _coffeeCupIngredientRepository.GetAllAsync(coffeeCupId);
     }
 
-    public void AddCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient)
+    public async Task AddCoffeeCupIngredientAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        _coffeeCupIngredientRepository.AddCoffeeCupIngredient(coffeeCupIngredient);
+        // Add any business logic/validation as needed before calling the repository
+        await _coffeeCupIngredientRepository.AddAsync(coffeeCupIngredient);
     }
 
-    public void UpdateCoffeeCupIngredient(CoffeeCupIngredient coffeeCupIngredient)
+    public async Task AddRangeCoffeeCupIngredientsAsync(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients)
     {
-        _coffeeCupIngredientRepository.UpdateCoffeeCupIngredient(coffeeCupIngredient);
+        // Add any business logic/validation as needed before calling the repository
+        await _coffeeCupIngredientRepository.AddRangeAsync(coffeeCupIngredients);
     }
 
-    public void DeleteCoffeeCupIngredient(Guid coffeeCupId, Guid ingredientId)
+    public async Task UpdateCoffeeCupIngredientAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        _coffeeCupIngredientRepository.DeleteCoffeeCupIngredient(coffeeCupId, ingredientId);
+        // Add any business logic/validation as needed before calling the repository
+        await _coffeeCupIngredientRepository.UpdateAsync(coffeeCupIngredient);
+    }
+
+    public async Task<bool> DeleteCoffeeCupIngredientAsync(Guid coffeeCupId, Guid ingredientId)
+    {
+        var coffeeCupIngredient = await _coffeeCupIngredientRepository.GetByIdAsync(coffeeCupId, ingredientId);
+
+        if (coffeeCupIngredient != null)
+        {
+            // Add any business logic/validation as needed before calling the repository
+            await _coffeeCupIngredientRepository.DeleteAsync(coffeeCupIngredient);
+            return true; // Deletion successful
+        }
+
+        return false; // CoffeeCupIngredient not found
     }
 }
