@@ -57,9 +57,7 @@ public class MappingProfile : Profile
 
         CreateMap<Store, StoreDto>();
         CreateMap<StoreDto, Store>();
-
-        CreateMap<Brand, BrandDto>();
-        CreateMap<BrandDto, Brand>();
+        
 
         CreateMap<Post, PostDto>();
         CreateMap<PostDto, Post>();

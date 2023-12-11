@@ -22,21 +22,6 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Models.Brand", b =>
-                {
-                    b.Property<Guid>("BrandId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BrandId");
-
-                    b.ToTable("Brands");
-                });
-
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
                 {
                     b.Property<Guid>("CoffeeCupId")
@@ -244,8 +229,6 @@ namespace Data.Migrations
 
                     b.HasKey("StoreId");
 
-                    b.HasIndex("BrandId");
-
                     b.ToTable("Stores");
                 });
 
@@ -373,17 +356,6 @@ namespace Data.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Models.Store", b =>
-                {
-                    b.HasOne("Models.Brand", "Brand")
-                        .WithMany("Stores")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-                });
-
             modelBuilder.Entity("Models.Cake", b =>
                 {
                     b.HasOne("Models.Item", null)
@@ -417,11 +389,6 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Models.Brand", b =>
-                {
-                    b.Navigation("Stores");
                 });
 
             modelBuilder.Entity("Models.Customer", b =>

@@ -73,7 +73,6 @@ public class Program
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 
-        services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<IStoreRepository, StoreRepository>();
         services.AddScoped<IItemRepository, ItemRepository>();
 
@@ -86,7 +85,6 @@ public class Program
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderDetailService, OrderDetailService>();
 
-        services.AddScoped<IBrandService, BrandService>();
         services.AddScoped<IStoreService, StoreService>();
         services.AddScoped<IItemService, ItemService>();
 

@@ -19,7 +19,7 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<List<Customer>> GetAllCustomersAsync()
     {
-        return await _dbContext.Customers.ToListAsync();
+        return await _dbContext.Customers.Include(ex => ex.Orders).ToListAsync();
     }
 
     public async Task AddCustomerAsync(Customer customer)

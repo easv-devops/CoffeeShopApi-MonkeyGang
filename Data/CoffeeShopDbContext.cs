@@ -23,11 +23,13 @@ public class CoffeeShopDbContext : DbContext
     public DbSet<Post> Posts { get; set; }
 
     public DbSet<Store> Stores { get; set; }
-    public DbSet<Brand> Brands { get; set; }
     public DbSet<CoffeeBean> CoffeeBeans { get; set; }
 
     public DbSet<Item> Items { get; set; }
 
+    
+
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderDetail>()
@@ -100,11 +102,15 @@ public class CoffeeShopDbContext : DbContext
         String userName = "CSe2022t_t_2";
         String password = "CSe2022tT2#";
 
+        
 
         String connectionString =
             "Server=EASV-DB4,1433;Database=CSe2022t_t_2_CoffeeShop;User Id=CSe2022t_t_2;Password=CSe2022tT2#;TrustServerCertificate=True;";
 
 
         optionsBuilder.UseSqlServer(connectionString);
+        
+        optionsBuilder.UseLazyLoadingProxies(false); // Disable lazy loading
+        
     }
 }
