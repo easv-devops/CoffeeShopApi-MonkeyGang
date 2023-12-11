@@ -55,7 +55,9 @@ public class CoffeeShopDbContext : DbContext
             .Property(cc => cc.ItemId)
             .ValueGeneratedOnAdd();
     
-
+        modelBuilder.Entity<Customer>()
+            .Property(cc => cc.CustomerId)
+            .ValueGeneratedOnAdd();
 
         // many-to-many: CoffeeCupIngredient
         modelBuilder.Entity<CoffeeCupIngredient>()

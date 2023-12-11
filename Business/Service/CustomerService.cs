@@ -18,7 +18,7 @@ public class CustomerService : ICustomerService
         _customerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
     }
 
-    public async Task<CustomerDto> GetCustomerByIdAsync(Guid id)
+    public async Task<CustomerDto> GetCustomerAsync(Guid id)
     {
         try
         {
@@ -44,18 +44,10 @@ public class CustomerService : ICustomerService
         }
     }
 
-    public async Task AddCustomerAsync(CustomerDto customerDto)
+    public async Task<Guid> AddCustomerAsync(Customer customer)
     {
-        try
-        {
-            var customer = _mapper.Map<CustomerDto, Customer>(customerDto);
-            await _customerRepository.AddCustomerAsync(customer);
-        }
-        catch (Exception ex)
-        {
-            // Handle or log the exception
-            throw;
-        }
+        await _customerRepository.AddCustomerAsync(customer);
+        return customer.CustomerId;
     }
 
     public async Task UpdateCustomerAsync(CustomerDto customerDto)

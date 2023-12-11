@@ -5,9 +5,9 @@ namespace Service;
 
 public interface ICustomerService
 {
-    Task<CustomerDto> GetCustomerByIdAsync(Guid id);
+    Task<CustomerDto> GetCustomerAsync(Guid id);
     Task<List<CustomerDto>> GetAllCustomersAsync();
-    Task AddCustomerAsync(CustomerDto customerDto);
+    Task<Guid> AddCustomerAsync(Customer customer);
     Task UpdateCustomerAsync(CustomerDto customerDto);
     Task DeleteCustomerAsync(Guid id);
 }

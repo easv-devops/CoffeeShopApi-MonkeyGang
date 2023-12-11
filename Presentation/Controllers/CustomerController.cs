@@ -1,6 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.DTOs;
+using Models.DTOs.Create;
+using Models.DTOs.Response;
 using Service;
 
 namespace Presentation.Controllers;
@@ -12,30 +15,39 @@ using System.Collections.Generic;
 [Route("api/customers")]
 public class CustomerController : ControllerBase
 {
+    private readonly IMapper _mapper;
     private readonly ICustomerService _customerService;
 
-    public CustomerController(ICustomerService customerService)
+    public CustomerController(IMapper mapper ,ICustomerService customerService)
     {
+        _mapper = mapper;   
         _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<CustomerDto>> GetCustomerById(Guid id)
+    [HttpGet("{customerId}")] // This route should match the route used in CreatedAtAction
+    public async Task<IActionResult> GetCustomer(Guid customerId)
     {
         try
         {
-            var customerDto = await _customerService.GetCustomerByIdAsync(id);
-            if (customerDto == null)
+            // Retrieve the customer by ID using the service
+            var customer = await _customerService.GetCustomerAsync(customerId);
+
+            // Check if the customer exists
+            if (customer == null)
             {
-                return NotFound();
+                return NotFound("Customer not found.");
             }
 
-            return Ok(customerDto);
+            // Map the customer to the response DTO using AutoMapper
+            var responseDto = _mapper.Map<CustomerResponseDto>(customer);
+
+            // Return the customer response
+            return Ok(responseDto);
         }
         catch (Exception ex)
         {
-            // Log the exception or return a specific error response
-            return StatusCode(500, "Internal Server Error");
+            // Log the exception or handle it appropriately
+            return BadRequest("Failed to retrieve customer.");
         }
     }
 
@@ -55,19 +67,28 @@ public class CustomerController : ControllerBase
     }
 
 
-    // this works now!!!!
-    [HttpPost]
-    public async Task<ActionResult> AddCustomer([FromBody] CustomerDto customerDto)
+    [HttpPost("add")]
+    public async Task<IActionResult> AddCustomer([FromBody] CreateCustomerDto createCustomerDto)
     {
         try
         {
-            await _customerService.AddCustomerAsync(customerDto);
-            return CreatedAtAction(nameof(GetCustomerById), new { id = customerDto.CustomerId }, customerDto);
+            // Map CreateCustomerDto to Customer entity using AutoMapper
+            var customer = _mapper.Map<Customer>(createCustomerDto);
+
+            // Add customer to the database and get the generated ID
+            var generatedId = await _customerService.AddCustomerAsync(customer);
+
+            // Map the created customer to a response DTO using AutoMapper
+            var responseDto = _mapper.Map<CustomerResponseDto>(customer);
+            responseDto.CustomerId = generatedId;
+
+            // Return the created customer response
+            return CreatedAtAction(nameof(GetCustomer), new { customerId = generatedId }, responseDto);
         }
         catch (Exception ex)
         {
-            // Log the exception or return a specific error response
-            return StatusCode(500, "Internal Server Error: " + ex.Message);
+            // Log the exception or handle it appropriately
+            return BadRequest("Failed to create customer.");
         }
     }
 

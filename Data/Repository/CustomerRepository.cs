@@ -22,10 +22,11 @@ public class CustomerRepository : ICustomerRepository
         return await _dbContext.Customers.Include(ex => ex.Orders).ToListAsync();
     }
 
-    public async Task AddCustomerAsync(Customer customer)
+    public async Task<Guid> AddCustomerAsync(Customer customer)    
     {
-        await _dbContext.Customers.AddAsync(customer);
+        _dbContext.Customers.Add(customer);
         await _dbContext.SaveChangesAsync();
+        return customer.CustomerId; // Assuming CustomerId is the generated ID
     }
 
     public async Task UpdateCustomerAsync(Customer customer)
