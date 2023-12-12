@@ -8,6 +8,8 @@ using NUnit.Framework;
 using Presentation;
 using Service;
 
+namespace CoffeeShopApiTests;
+
 [TestFixture]
 public class CustomerServiceTests
 {
