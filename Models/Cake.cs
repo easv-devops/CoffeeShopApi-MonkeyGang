@@ -10,5 +10,6 @@ public class Cake : Item
         ItemType = ItemType.Cake;
     }
 
-    //public Guid CakeId { get; set; }
+    public Guid CoffeeCupId { get; set; }
+    public CoffeeCup CoffeeCup { get; set; }
 }

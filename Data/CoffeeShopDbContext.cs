@@ -58,6 +58,25 @@ public class CoffeeShopDbContext : DbContext
         modelBuilder.Entity<Cake>()
             .Property(cc => cc.ItemId)
             .ValueGeneratedOnAdd();
+        
+        
+        modelBuilder.Entity<Cake>()
+            .HasOne(cake => cake.CoffeeCup)
+            .WithMany(cup => cup.Cakes)
+            .HasForeignKey(cake => cake.CoffeeCupId)
+            .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate behavior
+
+        modelBuilder.Entity<CoffeeCup>()
+            .HasMany(cup => cup.Cakes)
+            .WithOne(cake => cake.CoffeeCup)
+            .HasForeignKey(cake => cake.CoffeeCupId)
+            .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate behavior
+
+        
+        
+        
+        
+        
     
         modelBuilder.Entity<Customer>()
             .Property(cc => cc.CustomerId)

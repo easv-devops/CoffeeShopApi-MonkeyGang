@@ -15,6 +15,8 @@ public class CoffeeCup : Item
     public List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
     public List<CoffeeCupStore> CoffeeCupStores { get; set; }
 
+    public List<Cake> Cakes { get; set; }
+    
     public CoffeeCup()
     {
         ItemType = ItemType.CoffeeCup;

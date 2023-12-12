@@ -126,4 +126,25 @@ public class CustomerController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
+    
+    
+    [HttpPost("checkpassword")]
+    public IActionResult CheckPassword([FromBody] Customer customer, string password)
+    {
+        // Call a service or repository method to check the password
+        bool isPasswordCorrect = customer.IsPasswordCorrect(password);
+
+        if (isPasswordCorrect)
+        {
+            return Ok("Password is correct.");
+        }
+        else
+        {
+            return BadRequest("Password is incorrect.");
+        }
+    }
+
+    
+    
+    
 }

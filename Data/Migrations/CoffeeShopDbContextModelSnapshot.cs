@@ -259,6 +259,11 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Models.Item");
 
+                    b.Property<Guid>("CoffeeCupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("CoffeeCupId");
+
                     b.ToTable("Cakes");
                 });
 
@@ -401,11 +406,19 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Cake", b =>
                 {
+                    b.HasOne("Models.CoffeeCup", "CoffeeCup")
+                        .WithMany("Cakes")
+                        .HasForeignKey("CoffeeCupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Models.Item", null)
                         .WithOne()
                         .HasForeignKey("Models.Cake", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CoffeeCup");
                 });
 
             modelBuilder.Entity("Models.CoffeeBean", b =>
@@ -457,6 +470,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
+                    b.Navigation("Cakes");
+
                     b.Navigation("CoffeeCupIngredients");
 
                     b.Navigation("CoffeeCupStores");
