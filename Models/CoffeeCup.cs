@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Models;
 
@@ -11,9 +12,10 @@ public class CoffeeCup : Item
     public Guid CustomerId { get; set; }
 
     //todo: update this in other files
-
-    public List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
-    public List<CoffeeCupStore> CoffeeCupStores { get; set; }
+    [JsonIgnore]
+    public virtual List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
+    [JsonIgnore]
+    public virtual List<CoffeeCupStore> CoffeeCupStores { get; set; }
 
     public List<Cake> Cakes { get; set; }
     

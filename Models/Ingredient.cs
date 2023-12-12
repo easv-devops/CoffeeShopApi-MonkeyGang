@@ -17,5 +17,5 @@ public class Ingredient
 
     public MeasurementUnit MeasurementUnit { get; set; }
 
-    public List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
+    public virtual List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
 }

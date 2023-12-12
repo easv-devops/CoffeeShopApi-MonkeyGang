@@ -16,6 +16,7 @@ namespace YourProject.Controllers
         private readonly IMapper _mapper;
         private readonly ICoffeeCupService _coffeeCupService;
 
+        
         public CoffeeCupController(IMapper mapper, ICoffeeCupService coffeeCupService)
         {
             _mapper = mapper;
@@ -25,14 +26,16 @@ namespace YourProject.Controllers
         [HttpGet("{coffeeCupId}")]
         public async Task<IActionResult> GetCoffeeCup(Guid coffeeCupId)
         {
-            var coffeeCup = await _coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
+            CoffeeCup coffeeCup = await _coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
 
             if (coffeeCup == null)
             {
                 return NotFound();
             }
 
-            return Ok(coffeeCup);
+            var coffeeCupDto = _mapper.Map<CoffeeCupResponseDto>(coffeeCup);
+            
+            return Ok(coffeeCupDto);
         }
 
         [HttpGet]

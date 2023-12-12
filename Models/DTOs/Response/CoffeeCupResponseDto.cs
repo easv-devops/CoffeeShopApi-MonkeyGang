@@ -9,4 +9,8 @@ public class CoffeeCupResponseDto
     public string Image { get; set; }
     public int Size { get; set; }
     public Guid StoreId { get; set; }
+    
+    
+    public List<IngredientResponseDto> Ingredients { get; set; }
+    
 }

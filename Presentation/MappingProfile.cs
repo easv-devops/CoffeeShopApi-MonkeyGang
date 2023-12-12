@@ -20,8 +20,9 @@ public class MappingProfile : Profile
 
         CreateMap<CoffeeCup, CoffeeCupDto>()
             .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
-            // Map other properties...
+            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)))
             .IncludeBase<Item, ItemDto>(); // Include base class mapping
+        
 
         
         CreateMap<CreateCoffeeCupDto, CoffeeCup>()
@@ -29,11 +30,16 @@ public class MappingProfile : Profile
             // Map other properties...
             .IncludeBase<ItemDto, Item>(); // Include base class mapping
         
-        CreateMap<CoffeeCup, CreateCoffeeCupDto>();
+        //CreateMap<CoffeeCup, CreateCoffeeCupDto>();
 
-        CreateMap<CoffeeCup,CoffeeCupResponseDto>();
+        CreateMap<CoffeeCup, CoffeeCupResponseDto>()
+            .ForMember(dest => dest.Ingredients,
+                opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
+            
         CreateMap<CoffeeCupResponseDto, CoffeeCup>();
-        
+
+        CreateMap<IngredientResponseDto, Ingredient>();
+        CreateMap<Ingredient, IngredientResponseDto>();
         
         
         CreateMap<ItemDto, Item>();
