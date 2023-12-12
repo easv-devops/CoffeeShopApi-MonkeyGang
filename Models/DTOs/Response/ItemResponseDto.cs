@@ -9,6 +9,10 @@ public class ItemResponseDto
 {
     [JsonProperty(Order = 1)]
     public Guid ItemId { get; set; }
+    
+    [JsonProperty(Order = 3)]
+    public ItemType ItemType { get; set; } // Enum representing the type of item
+    
     [JsonProperty(Order = 2)]
     public string Name { get; set; }
     [JsonProperty(Order = 4)]

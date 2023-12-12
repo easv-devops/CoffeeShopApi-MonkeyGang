@@ -46,7 +46,7 @@ public class CustomerController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception or handle it appropriately
+            Console.Error.WriteLine(ex.Message);
             return BadRequest("Failed to retrieve customer.");
         }
     }
@@ -61,7 +61,7 @@ public class CustomerController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception or return a specific error response
+            Console.Error.WriteLine(ex.Message);
             return StatusCode(500, "Internal Server Error");
         }
     }
@@ -87,7 +87,7 @@ public class CustomerController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception or handle it appropriately
+            Console.Error.WriteLine(ex.Message);
             return BadRequest("Failed to create customer.");
         }
     }
@@ -107,7 +107,7 @@ public class CustomerController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception or return a specific error response
+            Console.Error.WriteLine(ex.Message);
             return StatusCode(500, "Internal Server Error");
         }
     }
@@ -122,7 +122,7 @@ public class CustomerController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log the exception or return a specific error response
+            Console.Error.WriteLine(ex.Message);
             return StatusCode(500, "Internal Server Error");
         }
     }

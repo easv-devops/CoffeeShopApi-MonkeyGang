@@ -7,8 +7,6 @@ namespace Models;
 [Table("CoffeeCups")]
 public class CoffeeCup : Item
 {
-    public int Size { get; set; }
-
     
     //todo: update this in other files
     [JsonIgnore]

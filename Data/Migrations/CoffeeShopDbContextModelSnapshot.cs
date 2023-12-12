@@ -235,9 +235,6 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BrandId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -277,9 +274,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Models.CoffeeCup", b =>
                 {
                     b.HasBaseType("Models.Item");
-
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
 
                     b.ToTable("CoffeeCups");
                 });
