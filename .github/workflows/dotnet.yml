@@ -9,6 +9,14 @@ on:
   pull_request:
     branches: [ "master" ]
 
+
+permissions:
+  statuses: write
+  checks: write
+  contents: write
+  pull-requests: write
+
+
 jobs:
   build:
 
@@ -29,10 +37,7 @@ jobs:
       run: dotnet test --logger "trx;LogFileName=test-results.trx" || true
       
     - name: Test Report
-        permissions:
-        id-token: write
-        contents: read
-        checks: write
+
       uses: dorny/test-reporter@v1
       if: always()
       with:
