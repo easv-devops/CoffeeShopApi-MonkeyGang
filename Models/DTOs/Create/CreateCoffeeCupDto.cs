@@ -2,10 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace Models.DTOs.Create;
 
-public class CreateCoffeeCupDto : ItemDto
+public class CreateCoffeeCupDto : CreateItemDto
 {
     // Item properties
-    [JsonIgnore]
     public ItemType ItemType => ItemType.CoffeeCup;
     
     

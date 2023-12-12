@@ -1,16 +1,13 @@
+using Models.DTOs.Create;
+using Newtonsoft.Json;
+
 namespace Models.DTOs.Response;
 
-public class CoffeeCupResponseDto
+public class CoffeeCupResponseDto : ItemResponseDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-    public string Description { get; set; }
-    public string Image { get; set; }
+    [JsonProperty(Order = 3)]
     public int Size { get; set; }
-    public Guid StoreId { get; set; }
-    
-    
+    [JsonProperty(Order = 8)]
     public List<IngredientResponseDto> Ingredients { get; set; }
     
 }

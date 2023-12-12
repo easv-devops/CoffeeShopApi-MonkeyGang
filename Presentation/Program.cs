@@ -87,6 +87,10 @@ public class Program
 
         services.AddScoped<IStoreService, StoreService>();
         services.AddScoped<IItemService, ItemService>();
+        
+        
+        services.AddControllers().AddNewtonsoftJson();
+        
 
         services.AddAutoMapper(typeof(Program));
     }

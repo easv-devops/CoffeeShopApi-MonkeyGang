@@ -48,17 +48,9 @@ namespace Data.Migrations
                     b.Property<Guid>("StoreId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CoffeeCupStoreCoffeeCupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CoffeeCupStoreStoreId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("CoffeeCupId", "StoreId");
 
                     b.HasIndex("StoreId");
-
-                    b.HasIndex("CoffeeCupStoreCoffeeCupId", "CoffeeCupStoreStoreId");
 
                     b.ToTable("CoffeeCupStores");
                 });
@@ -286,9 +278,6 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Models.Item");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
@@ -326,10 +315,6 @@ namespace Data.Migrations
                         .WithMany("CoffeeCupStores")
                         .HasForeignKey("StoreId")
                         .IsRequired();
-
-                    b.HasOne("Models.CoffeeCupStore", null)
-                        .WithMany("CoffeeCupStores")
-                        .HasForeignKey("CoffeeCupStoreCoffeeCupId", "CoffeeCupStoreStoreId");
 
                     b.Navigation("CoffeeCup");
 
@@ -437,11 +422,6 @@ namespace Data.Migrations
                         .HasForeignKey("Models.CoffeeCup", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.CoffeeCupStore", b =>
-                {
-                    b.Navigation("CoffeeCupStores");
                 });
 
             modelBuilder.Entity("Models.Customer", b =>

@@ -13,26 +13,41 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        
+        CreateMap<Item, ItemResponseDto>(); // Map the base class
+        CreateMap<ItemDto, Item>();
+        CreateMap<CreateItemDto, Item>();
+        CreateMap<Item, ItemDto>();
+        
+        
         CreateMap<CoffeeCupDto, CoffeeCup>()
             .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
             // Map other properties...
             .IncludeBase<ItemDto, Item>(); // Include base class mapping
 
         CreateMap<CoffeeCup, CoffeeCupDto>()
-            .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
-            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)))
-            .IncludeBase<Item, ItemDto>(); // Include base class mapping
-        
+            .IncludeBase<Item, ItemDto>() // Include the base class mapping
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
+            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
+
+
+        CreateMap<CoffeeCup, CoffeeCupResponseDto>()
+            .IncludeBase<Item, ItemResponseDto>() // Include the base class mapping
+            
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
+            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
+
 
         
         CreateMap<CreateCoffeeCupDto, CoffeeCup>()
             .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
             // Map other properties...
-            .IncludeBase<ItemDto, Item>(); // Include base class mapping
+            .IncludeBase<CreateItemDto, Item>(); // Include base class mapping
         
         //CreateMap<CoffeeCup, CreateCoffeeCupDto>();
 
         CreateMap<CoffeeCup, CoffeeCupResponseDto>()
+            .IncludeBase<Item, ItemResponseDto>()
             .ForMember(dest => dest.Ingredients,
                 opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
             
@@ -41,9 +56,7 @@ public class MappingProfile : Profile
         CreateMap<IngredientResponseDto, Ingredient>();
         CreateMap<Ingredient, IngredientResponseDto>();
         
-        
-        CreateMap<ItemDto, Item>();
-        CreateMap<Item, ItemDto>();
+
 
         CreateMap<CoffeeCupIngredientDto, CoffeeCupIngredient>()
             .ForMember(dest => dest.CoffeeCupId, opt => opt.MapFrom(src => src.CoffeeCupId))

@@ -1,23 +1,25 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace Models;
+namespace Models.DTOs.Response;
 
-public class Item
+public class ItemResponseDto
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [JsonProperty(Order = 1)]
     public Guid ItemId { get; set; }
-
-    public ItemType ItemType { get; set; } // Enum representing the type of item
-    // Common properties for all items...
-
+    [JsonProperty(Order = 2)]
     public string Name { get; set; }
-    public decimal Price { get; set; }
+    [JsonProperty(Order = 4)]
     public string Description { get; set; }
+    [JsonProperty(Order = 5)]
+    public decimal Price { get; set; }
+  
+    [JsonProperty(Order = 6)]
     public string Image { get; set; }
-
-    public Store Store { get; set; }
+    [JsonProperty(Order = 7)]
     public Guid StoreId { get; set; }
+    
+    
 }

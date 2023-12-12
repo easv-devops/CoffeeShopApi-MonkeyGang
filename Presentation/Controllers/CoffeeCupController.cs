@@ -41,8 +41,23 @@ namespace YourProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCoffeeCups()
         {
-            var coffeeCups = await _coffeeCupService.GetAllCoffeeCupsAsync();
-            return Ok(coffeeCups);
+            IEnumerable<CoffeeCup> coffeeCups = await _coffeeCupService.GetAllCoffeeCupsAsync();
+
+            foreach (var coffeeCup in coffeeCups)
+            {
+                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+
+            }
+            
+            
+            IEnumerable<CoffeeCupResponseDto> coffeeCupDtos = coffeeCups.Select(coffeeCup => _mapper.Map<CoffeeCupResponseDto>(coffeeCup));
+            
+            return Ok(coffeeCupDtos);
         }
 
         
@@ -59,7 +74,7 @@ namespace YourProject.Controllers
 
                 // Map the created coffee cup to a response DTO using AutoMapper
                 var responseDto = _mapper.Map<CoffeeCupResponseDto>(coffeeCup);
-                responseDto.Id = generatedId;
+                responseDto.ItemId = generatedId;
 
                 // Return the created coffee cup response
                 return CreatedAtAction(nameof(GetCoffeeCup), new { coffeeCupId = generatedId }, responseDto);
