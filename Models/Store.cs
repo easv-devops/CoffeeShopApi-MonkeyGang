@@ -16,5 +16,7 @@ public class Store
 
 
     public List<Order> Orders { get; set; }
+
+    public IEnumerable<CoffeeCupStore>? CoffeeCupStores { get; set; }
     //public List<Ingredient> Ingredients { get; set; }
 }

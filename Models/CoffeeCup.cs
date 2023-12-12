@@ -13,6 +13,7 @@ public class CoffeeCup : Item
     //todo: update this in other files
 
     public List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
+    public List<CoffeeCupStore> CoffeeCupStores { get; set; }
 
     public CoffeeCup()
     {

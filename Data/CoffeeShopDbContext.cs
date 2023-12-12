@@ -28,6 +28,8 @@ public class CoffeeShopDbContext : DbContext
     public DbSet<Item> Items { get; set; }
 
     
+    public DbSet<CoffeeCupStore> CoffeeCupStores { get; set; }
+    
 
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,7 +44,7 @@ public class CoffeeShopDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>()
             .HasOne(od => od.Item)
-            .WithMany() // Assuming Items have a collection of OrderDetails
+            .WithMany() 
             .HasForeignKey(od => od.ItemId)
             .OnDelete(DeleteBehavior.Restrict);
 
@@ -50,6 +52,8 @@ public class CoffeeShopDbContext : DbContext
         modelBuilder.Entity<CoffeeCup>()
             .Property(cc => cc.ItemId)
             .ValueGeneratedOnAdd();
+        
+      
 
         modelBuilder.Entity<Cake>()
             .Property(cc => cc.ItemId)
@@ -73,6 +77,30 @@ public class CoffeeShopDbContext : DbContext
             .WithMany(i => i.CoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
 
+        
+        
+        
+        modelBuilder.Entity<CoffeeCupStore>()
+            .HasKey(ccs => new { ccs.CoffeeCupId, ccs.StoreId });
+
+        modelBuilder.Entity<CoffeeCupStore>()
+            .HasOne(ccs => ccs.CoffeeCup)
+            .WithMany(cc => cc.CoffeeCupStores)
+            .HasForeignKey(ccs => ccs.CoffeeCupId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<CoffeeCupStore>()
+            .HasOne(ccs => ccs.Store)
+            .WithMany(s => s.CoffeeCupStores)
+            .HasForeignKey(ccs => ccs.StoreId)
+            .OnDelete(DeleteBehavior.ClientSetNull); // Breaks the cascade path
+
+        // other configurations
+        
+        
+        
+        
+        
 
         /*
          * INGREDIENT - STORE DISABLED
