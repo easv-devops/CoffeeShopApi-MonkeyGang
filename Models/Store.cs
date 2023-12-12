@@ -10,10 +10,7 @@ public class Store
     public Guid StoreId { get; set; }
 
     [Required] public string Name { get; set; }
-
-    // Foreign key property
-    public Guid BrandId { get; set; }
-
+    
 
     public List<Order> Orders { get; set; }
 

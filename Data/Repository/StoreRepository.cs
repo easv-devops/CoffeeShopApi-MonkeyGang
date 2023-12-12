@@ -22,13 +22,7 @@ public class StoreRepository : IStoreRepository
     {
         return await _dbContext.Stores.FindAsync(id);
     }
-
-    public async Task<IEnumerable<Store>> GetStoresByBrandIdAsync(Guid brandId)
-    {
-        return await _dbContext.Stores
-            .Where(store => store.BrandId == brandId)
-            .ToListAsync();
-    }
+    
 
     public async Task AddAsync(Store store)
     {

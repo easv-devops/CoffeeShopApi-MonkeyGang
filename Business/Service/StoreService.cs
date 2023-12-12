@@ -22,10 +22,6 @@ public class StoreService : IStoreService
         return await _storeRepository.GetByIdAsync(id);
     }
 
-    public async Task<IEnumerable<Store>> GetStoresByBrandIdAsync(Guid brandId)
-    {
-        return await _storeRepository.GetStoresByBrandIdAsync(brandId);
-    }
 
     public async Task AddStoreAsync(Store store)
     {

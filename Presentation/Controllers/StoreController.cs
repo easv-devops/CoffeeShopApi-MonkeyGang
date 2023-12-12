@@ -35,12 +35,6 @@ public class StoreController : ControllerBase
         return Ok(store);
     }
 
-    [HttpGet("by-brand/{brandId}")]
-    public async Task<IActionResult> GetStoresByBrandId(Guid brandId)
-    {
-        var stores = await _storeService.GetStoresByBrandIdAsync(brandId);
-        return Ok(stores);
-    }
 
     [HttpPost]
     public async Task<IActionResult> AddStore([FromBody] Store store)
