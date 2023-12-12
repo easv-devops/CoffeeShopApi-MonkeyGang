@@ -76,8 +76,10 @@ public class CustomerController : ControllerBase
             var customer = _mapper.Map<Customer>(createCustomerDto);
 
             // Add customer to the database and get the generated ID
-            var generatedId = await _customerService.AddCustomerAsync(customer);
+            await _customerService.AddCustomerAsync(customer);
 
+            Guid generatedId = customer.CustomerId;
+            
             // Map the created customer to a response DTO using AutoMapper
             var responseDto = _mapper.Map<CustomerResponseDto>(customer);
             responseDto.CustomerId = generatedId;

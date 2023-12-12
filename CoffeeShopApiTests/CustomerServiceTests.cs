@@ -2,6 +2,7 @@
 using AutoMapper;
 using Data.Repository;
 using Models;
+using Models.DTOs;
 using Moq;
 using NUnit.Framework;
 using Presentation;
@@ -31,18 +32,19 @@ public class CustomerServiceTests
         // Arrange
         var customer = new Customer
         {
-            
+            // Set other properties if needed...
         };
 
         var expectedId = Guid.NewGuid();
+        customer.CustomerId = expectedId; // Set the expectedId in the customer object
         _customerRepositoryMock.Setup(repo => repo.AddCustomerAsync(customer))
-            .ReturnsAsync(expectedId);
+            .ReturnsAsync(customer);
 
         // Act
-        var result = await _customerService.AddCustomerAsync(customer);
+        CustomerDto dto = await _customerService.AddCustomerAsync(customer);
 
         // Assert
-        Assert.AreEqual(expectedId, result);
+        Assert.AreEqual(expectedId, dto.CustomerId);
     }
 
 

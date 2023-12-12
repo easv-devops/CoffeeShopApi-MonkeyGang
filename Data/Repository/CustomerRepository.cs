@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTOs.Create;
 
 namespace Data.Repository;
 
@@ -22,11 +23,12 @@ public class CustomerRepository : ICustomerRepository
         return await _dbContext.Customers.Include(ex => ex.Orders).ToListAsync();
     }
 
-    public async Task<Guid> AddCustomerAsync(Customer customer)    
+    public async Task<Customer> AddCustomerAsync(Customer customer)    
     {
         _dbContext.Customers.Add(customer);
         await _dbContext.SaveChangesAsync();
-        return customer.CustomerId; // Assuming CustomerId is the generated ID
+        
+        return customer;
     }
 
     public async Task UpdateCustomerAsync(Customer customer)

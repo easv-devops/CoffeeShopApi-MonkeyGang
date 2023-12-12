@@ -2,6 +2,8 @@ using AutoMapper;
 using Data.Repository;
 using Models;
 using Models.DTOs;
+using Models.DTOs.Create;
+using Models.DTOs.Response;
 
 namespace Service;
 
@@ -44,10 +46,12 @@ public class CustomerService : ICustomerService
         }
     }
 
-    public async Task<Guid> AddCustomerAsync(Customer customer)
+    public async Task<CustomerDto> AddCustomerAsync(Customer customer)
     {
         await _customerRepository.AddCustomerAsync(customer);
-        return customer.CustomerId;
+        
+        return _mapper.Map<CustomerDto>(customer);
+
     }
 
     public async Task UpdateCustomerAsync(CustomerDto customerDto)
