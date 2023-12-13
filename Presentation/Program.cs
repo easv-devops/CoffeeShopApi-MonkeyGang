@@ -12,11 +12,28 @@ namespace Presentation;
 
 public class Program
 {
+    
+    // ┬┴┬┴┤ ͜ʖ ͡°) ├┬┴┬┴
+    
     public static void Main(string[] args)
     {
+        
+        Console.WriteLine( @"
+<-. (`-')             <-. (`-')_ <-.(`-')  (`-')  _                      (`-')  _ <-. (`-')_            
+   \(OO )_      .->      \( OO) ) __( OO)  ( OO).-/     .->       .->    (OO ).-/    \( OO) )    .->    
+,--./  ,-.)(`-')----. ,--./ ,--/ '-'. ,--.(,------. ,--.'  ,-. ,---(`-') / ,---.  ,--./ ,--/  ,---(`-') 
+|   `.'   |( OO).-.  '|   \ |  | |  .'   / |  .---'(`-')'.'  /'  .-(OO ) | \ /`.\ |   \ |  | '  .-(OO ) 
+|  |'.'|  |( _) | |  ||  . '|  |)|      /)(|  '--. (OO \    / |  | .-, \ '-'|_.' ||  . '|  |)|  | .-, \ 
+|  |   |  | \|  |)|  ||  |\    | |  .   '  |  .--'  |  /   /) |  | '.(_/(|  .-.  ||  |\    | |  | '.(_/ 
+|  |   |  |  '  '-'  '|  | \   | |  |\   \ |  `---. `-/   /`  |  '-'  |  |  | |  ||  | \   | |  '-'  |  
+`--'   `--'   `-----' `--'  `--' `--' '--' `------'   `--'     `-----'   `--' `--'`--'  `--'  `-----'"
+            );
+        
+        
+        
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+        // Add services to the container. 
         // vi sætter både vores connection string her og i CoffeeShopDbContext.cs
         builder.Services.AddDbContext<CoffeeShopDbContext>();
 

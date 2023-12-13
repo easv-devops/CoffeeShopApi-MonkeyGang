@@ -1,5 +1,6 @@
 
 using AutoMapper;
+using Data;
 using Data.Repository;
 using Models;
 using Models.DTOs;
@@ -13,6 +14,7 @@ namespace CoffeeShopApiTests;
 [TestFixture]
 public class CustomerServiceTests
 {
+    private Mock<CoffeeShopDbContext> _dbContextMock;
     IMapper _mapper;
     private Mock<ICustomerRepository> _customerRepositoryMock;
     private ICustomerService _customerService;
@@ -26,6 +28,7 @@ public class CustomerServiceTests
         }).CreateMapper();
         _customerRepositoryMock = new Mock<ICustomerRepository>();
         _customerService = new CustomerService(_mapper, _customerRepositoryMock.Object);
+        _dbContextMock = new Mock<CoffeeShopDbContext>();
     }
 
     [Test]
@@ -87,4 +90,37 @@ public class CustomerServiceTests
         // Assert
         Assert.IsNull(result);
     }
+    
+    [Test]
+    public async Task CanHashAndVerifyPasswordAsync()
+    {
+        // Arrange
+        string email = "test@example.com";
+        string password = "secretpassword";
+
+        // Set up mock behavior for RegisterUserAsync
+        _customerRepositoryMock.Setup(repo => repo.AddCustomerAsync(It.IsAny<Customer>()))
+            .ReturnsAsync((Customer)null); // Adjust the return value based on your implementation
+
+        // Set up mock behavior for IsCorrectPasswordAsync
+        _customerRepositoryMock.Setup(repo => repo.GetCustomerByEmailAsync(email))
+            .ReturnsAsync(new Customer() { Email = email, Password = BCrypt.Net.BCrypt.HashPassword(password) });
+
+        // Act
+        CustomerDto registrationResult = await _customerService.AddCustomerAsync(new Customer() { Email = email, Password = password });
+        bool verificationResult = _customerService.VerifyPasswordAsync(email, password);
+
+        
+        if (registrationResult == null)
+        {
+            Assert.Fail("User registration should succeed.");
+        }
+        
+        Assert.IsTrue(verificationResult, "Password verification should succeed.");
+
+        _customerRepositoryMock.Verify(repo => repo.AddCustomerAsync(It.IsAny<Customer>()), Times.Once);
+        _customerRepositoryMock.Verify(repo => repo.GetCustomerByEmailAsync(It.IsAny<string>()), Times.Once);
+    }
+    
+    
 }

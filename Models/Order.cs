@@ -16,7 +16,7 @@ public class Order
     public virtual Store Store { get; set; }
 
 
-    //hvorfor har vi både CustomerID og Customer????
+    //hvorfor har vi både CustomerID og Customer???? (ノಠ益ಠ)ノ彡┻━┻
     public Guid CustomerID { get; set; }
     public virtual Customer Customer { get; set; }
     public decimal TotalAmount { get; set; }

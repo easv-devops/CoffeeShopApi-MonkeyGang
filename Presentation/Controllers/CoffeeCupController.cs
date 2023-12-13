@@ -76,7 +76,7 @@ namespace YourProject.Controllers
                 var responseDto = _mapper.Map<CoffeeCupResponseDto>(coffeeCup);
                 responseDto.ItemId = generatedId;
 
-                // Return the created coffee cup response
+                // Return the created coffee cup response with a 201 status code ʕ•ᴥ•ʔ
                 return CreatedAtAction(nameof(GetCoffeeCup), new { coffeeCupId = generatedId }, responseDto);
             }
             catch (Exception ex)

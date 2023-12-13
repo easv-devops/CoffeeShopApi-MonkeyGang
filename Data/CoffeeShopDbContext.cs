@@ -6,7 +6,7 @@ using Models;
 public class CoffeeShopDbContext : DbContext
 {
     // ordered by date of creation (oldest first) for debugging purposes
-    // at cleanup, sort alphabetically
+    // at cleanup, sort alphabetically (for readability) ｡◕‿◕｡
     public DbSet<CoffeeCup> CoffeeCups { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
 
@@ -156,6 +156,8 @@ public class CoffeeShopDbContext : DbContext
 
         optionsBuilder.UseSqlServer(connectionString);
         
+        //no idea what this does
+        //but I'm afraid to delete it ಠ╭╮ಠ
         optionsBuilder.UseLazyLoadingProxies(); // Disable lazy loading
         
     }

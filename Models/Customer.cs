@@ -18,13 +18,7 @@ public class Customer
     private string _passwordHash;
 
     //BCrypt gemmer salten for os
-    public string Password
-    {
-        get => _passwordHash;
-        set => _passwordHash =
-            BCrypt.Net.BCrypt.HashPassword(value,
-                BCrypt.Net.BCrypt.GenerateSalt(12)); //hvis programmet er langsomt kan vi sætte workFactor ned
-    }
+    public string Password { get; set; }
 
 
     // Navigation property for the one-to-many relationship

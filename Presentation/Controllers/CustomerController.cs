@@ -4,6 +4,7 @@ using Models;
 using Models.DTOs;
 using Models.DTOs.Create;
 using Models.DTOs.Response;
+using Models.Utility;
 using Service;
 
 namespace Presentation.Controllers;
@@ -130,19 +131,23 @@ public class CustomerController : ControllerBase
     }
     
     
-    [HttpPost("checkpassword")]
-    public IActionResult CheckPassword([FromBody] Customer customer, string password)
+    [HttpPost("verify-password")]
+    public IActionResult VerifyPassword([FromBody] PasswordVerificationRequest request)
     {
-        // Call a service or repository method to check the password
-        bool isPasswordCorrect = customer.IsPasswordCorrect(password);
+        if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+        {
+            return BadRequest("Email and password are required.");
+        }
 
-        if (isPasswordCorrect)
+        bool isCorrectPassword = _customerService.VerifyPasswordAsync(request.Email, request.Password);
+
+        if (isCorrectPassword)
         {
             return Ok("Password is correct.");
         }
         else
         {
-            return BadRequest("Password is incorrect.");
+            return Unauthorized("Invalid email or password.");
         }
     }
 

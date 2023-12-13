@@ -48,6 +48,7 @@ public class CustomerService : ICustomerService
 
     public async Task<CustomerDto> AddCustomerAsync(Customer customer)
     {
+        
         await _customerRepository.AddCustomerAsync(customer);
         
         return _mapper.Map<CustomerDto>(customer);
@@ -78,4 +79,32 @@ public class CustomerService : ICustomerService
             throw;
         }
     }
+    
+    public async Task<CustomerDto> GetCustomerByEmailAsync(string email)
+    {
+        try
+        {
+            var customer = await _customerRepository.GetCustomerByEmailAsync(email);
+            return _mapper.Map<CustomerDto>(customer);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    
+    public bool VerifyPasswordAsync(string email, string password)
+    {
+        // Retrieve user by email
+        Customer user = _customerRepository.GetCustomerByEmailAsync(email).Result;
+        
+        // Check if user exists i don't know how to do this ¯\_(ツ)_/¯
+
+        // Verify the password
+        
+        
+        return BCrypt.Net.BCrypt.Verify(password, user.Password);
+    }
+    
+    
 }

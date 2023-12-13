@@ -13,7 +13,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        
+        // (╯°□°）╯︵ ┻━┻
         CreateMap<Item, ItemResponseDto>(); // Map the base class
         CreateMap<ItemDto, Item>();
         CreateMap<CreateItemDto, Item>();
