@@ -12,7 +12,7 @@ public class Store
     [Required] public string Name { get; set; }
     
 
-    public List<Order> Orders { get; set; }
-    public List<StoreItem> StoreItems { get; set; }
+    public virtual List<Order> Orders { get; set; }
+    public virtual List<StoreItem> StoreItems { get; set; }
     //public List<Ingredient> Ingredients { get; set; }
 }

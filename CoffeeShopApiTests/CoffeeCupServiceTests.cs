@@ -5,7 +5,7 @@ using Moq;
 using NUnit.Framework;
 using Repository;
 
-namespace YourProject.Tests.Services
+namespace CoffeeShopApiTests
 {
     [TestFixture]
     public class CoffeeCupServiceTests

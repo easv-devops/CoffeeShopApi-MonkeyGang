@@ -12,7 +12,7 @@ public class CoffeeCup : Item
     [JsonIgnore]
     public virtual ICollection<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
 
-    public List<Cake> Cakes { get; set; }
+    public virtual List<Cake> Cakes { get; set; }
     
     public CoffeeCup()
     {

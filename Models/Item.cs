@@ -18,7 +18,7 @@ public class Item
     public string Description { get; set; }
     public string Image { get; set; }
 
-    public List<StoreItem> StoreItems { get; set; }
+    public virtual List<StoreItem> StoreItems { get; set; }
     
 
 }

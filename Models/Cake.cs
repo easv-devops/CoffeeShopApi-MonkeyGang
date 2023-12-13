@@ -11,5 +11,5 @@ public class Cake : Item
     }
 
     public Guid CoffeeCupId { get; set; }
-    public CoffeeCup CoffeeCup { get; set; }
+    public virtual CoffeeCup CoffeeCup { get; set; }
 }

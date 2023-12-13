@@ -4,6 +4,7 @@ using Models;
 using Moq;
 using NUnit.Framework;
 
+namespace CoffeeShopApiTests;
 
 
 [TestFixture]

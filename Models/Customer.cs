@@ -28,8 +28,8 @@ public class Customer
 
 
     // Navigation property for the one-to-many relationship
-    public List<Order> Orders { get; set; }
-    public List<Post> Posts { get; set; }
+    public virtual List<Order> Orders { get; set; }
+    public virtual List<Post> Posts { get; set; }
 
     public bool IsPasswordCorrect(string enteredPassword)
     {

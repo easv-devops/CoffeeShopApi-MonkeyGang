@@ -23,7 +23,7 @@ public class ItemResponseDto
     [JsonProperty(Order = 6)]
     public string Image { get; set; }
     [JsonProperty(Order = 7)]
-    public Guid StoreId { get; set; }
+    public List<Guid> StoreIds { get; set; }
     
     
 }

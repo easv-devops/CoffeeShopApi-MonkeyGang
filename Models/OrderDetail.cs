@@ -10,7 +10,7 @@ public class OrderDetail
     public Guid OrderDetailId { get; set; }
 
     public Guid OrderId { get; set; }
-    public Order Order { get; set; }
+    public virtual Order Order { get; set; }
     public int Quantity { get; set; }
     public decimal Subtotal { get; set; }
 
@@ -18,5 +18,5 @@ public class OrderDetail
     public Guid ItemId { get; set; }
 
     // Navigation property
-    public Item Item { get; set; }
+    public virtual Item Item { get; set; }
 }

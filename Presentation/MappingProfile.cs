@@ -32,11 +32,11 @@ public class MappingProfile : Profile
 
         CreateMap<CoffeeCup, CoffeeCupResponseDto>()
             .IncludeBase<Item, ItemResponseDto>() // Include the base class mapping
-            
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
-            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
-
-
+            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)))
+            .ForMember(dest => dest.StoreIds, opt => opt.MapFrom(src => src.StoreItems.Select(si => si.StoreId).ToList()));
+        
+        
         
         CreateMap<CreateCoffeeCupDto, CoffeeCup>()
             // Map other properties...
@@ -44,11 +44,7 @@ public class MappingProfile : Profile
         
         //CreateMap<CoffeeCup, CreateCoffeeCupDto>();
 
-        CreateMap<CoffeeCup, CoffeeCupResponseDto>()
-            .IncludeBase<Item, ItemResponseDto>()
-            .ForMember(dest => dest.Ingredients,
-                opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
-            
+
         CreateMap<CoffeeCupResponseDto, CoffeeCup>();
 
         CreateMap<IngredientResponseDto, Ingredient>();

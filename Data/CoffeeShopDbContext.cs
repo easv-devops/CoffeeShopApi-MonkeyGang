@@ -156,7 +156,7 @@ public class CoffeeShopDbContext : DbContext
 
         optionsBuilder.UseSqlServer(connectionString);
         
-        optionsBuilder.UseLazyLoadingProxies(false); // Disable lazy loading
+        optionsBuilder.UseLazyLoadingProxies(); // Disable lazy loading
         
     }
 }
