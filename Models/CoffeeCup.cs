@@ -11,8 +11,6 @@ public class CoffeeCup : Item
     //todo: update this in other files
     [JsonIgnore]
     public virtual ICollection<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
-    [JsonIgnore]
-    public virtual ICollection<CoffeeCupStore> CoffeeCupStores { get; set; }
 
     public List<Cake> Cakes { get; set; }
     

@@ -34,13 +34,7 @@ public class ItemController : ControllerBase
 
         return Ok(item);
     }
-
-    [HttpGet("by-store/{storeId}")]
-    public async Task<IActionResult> GetItemsByStoreId(Guid storeId)
-    {
-        var items = await _itemService.GetItemsByStoreIdAsync(storeId);
-        return Ok(items);
-    }
+    
 
     [HttpPost]
     public async Task<IActionResult> AddItem([FromBody] Item item)

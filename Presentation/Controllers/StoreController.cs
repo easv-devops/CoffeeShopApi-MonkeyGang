@@ -81,4 +81,13 @@ public class StoreController : ControllerBase
 
         return NoContent();
     }
+    
+    [HttpGet("{storeId}/items")]
+    public IActionResult GetItemsByStoreId(Guid storeId)
+    {
+        var items = _storeService.GetItemsByStoreId(storeId);
+        return Ok(items);
+    }
+    
+    
 }

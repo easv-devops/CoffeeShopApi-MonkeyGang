@@ -40,21 +40,6 @@ namespace Data.Migrations
                     b.ToTable("CoffeeCupIngredients");
                 });
 
-            modelBuilder.Entity("Models.CoffeeCupStore", b =>
-                {
-                    b.Property<Guid>("CoffeeCupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CoffeeCupId", "StoreId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("CoffeeCupStores");
-                });
-
             modelBuilder.Entity("Models.Customer", b =>
                 {
                     b.Property<Guid>("CustomerId")
@@ -135,12 +120,7 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ItemId");
-
-                    b.HasIndex("StoreId");
 
                     b.ToTable("Items");
 
@@ -244,6 +224,21 @@ namespace Data.Migrations
                     b.ToTable("Stores");
                 });
 
+            modelBuilder.Entity("Models.StoreItem", b =>
+                {
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("StoreId", "ItemId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("StoreItems");
+                });
+
             modelBuilder.Entity("Models.Cake", b =>
                 {
                     b.HasBaseType("Models.Item");
@@ -295,35 +290,6 @@ namespace Data.Migrations
                     b.Navigation("CoffeeCup");
 
                     b.Navigation("Ingredient");
-                });
-
-            modelBuilder.Entity("Models.CoffeeCupStore", b =>
-                {
-                    b.HasOne("Models.CoffeeCup", "CoffeeCup")
-                        .WithMany("CoffeeCupStores")
-                        .HasForeignKey("CoffeeCupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Store", "Store")
-                        .WithMany("CoffeeCupStores")
-                        .HasForeignKey("StoreId")
-                        .IsRequired();
-
-                    b.Navigation("CoffeeCup");
-
-                    b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("Models.Item", b =>
-                {
-                    b.HasOne("Models.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Models.Order", b =>
@@ -383,6 +349,25 @@ namespace Data.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("Models.StoreItem", b =>
+                {
+                    b.HasOne("Models.Item", "Item")
+                        .WithMany("StoreItems")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Store", "Store")
+                        .WithMany("StoreItems")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Store");
+                });
+
             modelBuilder.Entity("Models.Cake", b =>
                 {
                     b.HasOne("Models.CoffeeCup", "CoffeeCup")
@@ -430,6 +415,11 @@ namespace Data.Migrations
                     b.Navigation("CoffeeCupIngredients");
                 });
 
+            modelBuilder.Entity("Models.Item", b =>
+                {
+                    b.Navigation("StoreItems");
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
@@ -437,9 +427,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Store", b =>
                 {
-                    b.Navigation("CoffeeCupStores");
-
                     b.Navigation("Orders");
+
+                    b.Navigation("StoreItems");
                 });
 
             modelBuilder.Entity("Models.CoffeeCup", b =>
@@ -447,8 +437,6 @@ namespace Data.Migrations
                     b.Navigation("Cakes");
 
                     b.Navigation("CoffeeCupIngredients");
-
-                    b.Navigation("CoffeeCupStores");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,11 +21,7 @@ public class ItemService : IItemService
     {
         return await _itemRepository.GetItemByIdAsync(id);
     }
-
-    public async Task<IEnumerable<Item>> GetItemsByStoreIdAsync(Guid storeId)
-    {
-        return await _itemRepository.GetItemsByStoreIdAsync(storeId);
-    }
+    
 
     public async Task AddItemAsync(Item item)
     {

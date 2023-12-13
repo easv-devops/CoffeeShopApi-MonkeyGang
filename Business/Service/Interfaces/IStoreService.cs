@@ -9,4 +9,7 @@ public interface IStoreService
     Task AddStoreAsync(Store store);
     Task UpdateStoreAsync(Store store);
     Task DeleteStoreAsync(Guid id);
+    
+    IEnumerable<Item> GetItemsByStoreId(Guid storeId);
+    
 }

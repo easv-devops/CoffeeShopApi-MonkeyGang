@@ -28,8 +28,7 @@ public class CoffeeShopDbContext : DbContext
     public DbSet<Item> Items { get; set; }
 
     
-    public DbSet<CoffeeCupStore> CoffeeCupStores { get; set; }
-    
+    public DbSet<StoreItem> StoreItems { get; set; }
 
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -95,24 +94,20 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(cci => cci.Ingredient)
             .WithMany(i => i.CoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
-
         
         
-        
-        modelBuilder.Entity<CoffeeCupStore>()
-            .HasKey(ccs => new { ccs.CoffeeCupId, ccs.StoreId });
+        modelBuilder.Entity<StoreItem>()
+            .HasKey(si => new { si.StoreId, si.ItemId });
 
-        modelBuilder.Entity<CoffeeCupStore>()
-            .HasOne(ccs => ccs.CoffeeCup)
-            .WithMany(cc => cc.CoffeeCupStores)
-            .HasForeignKey(ccs => ccs.CoffeeCupId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<StoreItem>()
+            .HasOne(si => si.Store)
+            .WithMany(s => s.StoreItems)
+            .HasForeignKey(si => si.StoreId);
 
-        modelBuilder.Entity<CoffeeCupStore>()
-            .HasOne(ccs => ccs.Store)
-            .WithMany(s => s.CoffeeCupStores)
-            .HasForeignKey(ccs => ccs.StoreId)
-            .OnDelete(DeleteBehavior.ClientSetNull); // Breaks the cascade path
+        modelBuilder.Entity<StoreItem>()
+            .HasOne(si => si.Item)
+            .WithMany(i => i.StoreItems)
+            .HasForeignKey(si => si.ItemId);
 
         // other configurations
         

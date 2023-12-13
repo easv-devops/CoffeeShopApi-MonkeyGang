@@ -22,13 +22,8 @@ public class ItemRepository : IItemRepository
     {
         return await _dbContext.Items.FindAsync(id);
     }
-
-    public async Task<IEnumerable<Item>> GetItemsByStoreIdAsync(Guid storeId)
-    {
-        return await _dbContext.Items
-            .Where(item => item.StoreId == storeId)
-            .ToListAsync();
-    }
+    
+    
 
     public async Task<Guid> AddItemAsync(Item item)
     {

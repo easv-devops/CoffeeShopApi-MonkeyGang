@@ -6,10 +6,11 @@ namespace Service;
 public class StoreService : IStoreService
 {
     private readonly IStoreRepository _storeRepository;
-
-    public StoreService(IStoreRepository storeRepository)
+    private readonly IStoreItemRepository _storeItemRepository;
+    public StoreService(IStoreRepository storeRepository, IStoreItemRepository storeItemRepository)
     {
         _storeRepository = storeRepository;
+        _storeItemRepository = storeItemRepository;
     }
 
     public async Task<IEnumerable<Store>> GetAllStoresAsync()
@@ -40,4 +41,12 @@ public class StoreService : IStoreService
         // Perform any business logic or validation before deleting
         await _storeRepository.DeleteAsync(id);
     }
+    
+ 
+
+    public IEnumerable<Item> GetItemsByStoreId(Guid storeId)
+    {
+        return _storeItemRepository.GetItemsByStoreId(storeId);
+    }
+    
 }

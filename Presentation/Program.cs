@@ -75,6 +75,8 @@ public class Program
 
         services.AddScoped<IStoreRepository, StoreRepository>();
         services.AddScoped<IItemRepository, ItemRepository>();
+        
+        services.AddScoped<IStoreItemRepository, StoreItemRepository>();
 
         // Add services
         services.AddScoped<ICoffeeCupService, CoffeeCupService>();
@@ -87,6 +89,8 @@ public class Program
 
         services.AddScoped<IStoreService, StoreService>();
         services.AddScoped<IItemService, ItemService>();
+        
+        //services.AddScoped<IStoreItemService, StoreItemService>();
         
         
         services.AddControllers().AddNewtonsoftJson();
