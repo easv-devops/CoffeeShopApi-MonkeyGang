@@ -110,8 +110,11 @@ public class Program
         //services.AddScoped<IStoreItemService, StoreItemService>();
         
         
-        services.AddControllers().AddNewtonsoftJson();
-        
+        services.AddControllers()
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
 
         services.AddAutoMapper(typeof(Program));
     }
