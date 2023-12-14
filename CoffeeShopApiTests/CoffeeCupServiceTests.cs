@@ -3,6 +3,7 @@
 using Models;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Repository;
 
 namespace CoffeeShopApiTests
@@ -23,8 +24,8 @@ namespace CoffeeShopApiTests
 
             var result = await coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedCoffeeCup, result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(expectedCoffeeCup, Is.EqualTo(result));
         }
 
         [Test]
@@ -39,8 +40,7 @@ namespace CoffeeShopApiTests
 
             var result = await coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
 
-            Assert.IsNull(result);
-        }
+            Assert.That(result, Is.Null);        }
 
         [Test]
         public async Task GetAllCoffeeCupsAsync_ReturnsListOfCoffeeCups()
@@ -58,7 +58,8 @@ namespace CoffeeShopApiTests
 
             var result = await coffeeCupService.GetAllCoffeeCupsAsync();
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
+            //why do we use  nunit legacy here?
             CollectionAssert.AreEquivalent(expectedCoffeeCups, result);
         }
 

@@ -10,41 +10,49 @@ using System.Collections.Generic;
 
 public class OrderService : IOrderService
 {
-    private readonly IMapper _mapper;
     private readonly IOrderRepository _orderRepository;
 
-    public OrderService(IMapper mapper, IOrderRepository orderRepository)
+    public OrderService(IOrderRepository orderRepository)
     {
-        _mapper = mapper;
         _orderRepository = orderRepository;
     }
 
-    public OrderDto GetOrderById(Guid id)
+    public async Task<List<Order>> GetAllOrdersAsync()
     {
-        var order = _orderRepository.GetOrderById(id);
-        return _mapper.Map<OrderDto>(order);
+        return await _orderRepository.GetAllOrdersAsync();
     }
 
-    public List<OrderDto> GetAllOrders()
+    public async Task<Order> GetOrderByIdAsync(Guid orderId)
     {
-        var orders = _orderRepository.GetAllOrders();
-        return _mapper.Map<List<OrderDto>>(orders);
+        return await _orderRepository.GetOrderByIdAsync(orderId);
     }
 
-    public void AddOrder(OrderDto orderDto)
+    public async Task AddOrderAsync(Order order)
     {
-        var order = _mapper.Map<Order>(orderDto);
-        _orderRepository.AddOrder(order);
+        await _orderRepository.AddOrderAsync(order);
     }
 
-    public void UpdateOrder(OrderDto orderDto)
+    public async Task UpdateOrderAsync(Order order)
     {
-        var order = _mapper.Map<Order>(orderDto);
-        _orderRepository.UpdateOrder(order);
+        //check if guid is empty
+        if (order.OrderId == Guid.Empty)
+        {
+            throw new ArgumentException("Order Id cannot be empty");
+        }
+        
+        //check if order exists
+        var existingOrder = await _orderRepository.GetOrderByIdAsync(order.OrderId);
+        if (existingOrder == null)
+        {
+            throw new ArgumentException($"Order with id {order.OrderId} does not exist");
+        }
+        
+        
+        await _orderRepository.UpdateOrderAsync(order);
     }
 
-    public void DeleteOrder(Guid id)
+    public async Task DeleteOrderAsync(Guid orderId)
     {
-        _orderRepository.DeleteOrder(id);
+        await _orderRepository.DeleteOrderAsync(orderId);
     }
 }

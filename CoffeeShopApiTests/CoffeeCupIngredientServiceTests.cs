@@ -27,7 +27,7 @@ public class CoffeeCupIngredientServiceTests
         var result = await coffeeCupIngredientService.GetCoffeeCupIngredientByIdAsync(coffeeCupId, ingredientId);
 
         // Assert
-        Assert.AreEqual(expectedCoffeeCupIngredient, result);
+        Assert.That(expectedCoffeeCupIngredient, Is.EqualTo(result));
     }
 
     [Test]
@@ -51,7 +51,9 @@ public class CoffeeCupIngredientServiceTests
         var result = await coffeeCupIngredientService.GetAllCoffeeCupIngredientsAsync(coffeeCupId);
 
         // Assert
-        CollectionAssert.AreEqual(expectedCoffeeCupIngredients, result.ToList());
+        
+        Assert.That(expectedCoffeeCupIngredients, Is.EqualTo(result.ToList()));
+        
     }
 
     [Test]

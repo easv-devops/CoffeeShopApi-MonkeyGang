@@ -1,33 +1,47 @@
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Data.Repository;
 
 public class OrderRepository : IOrderRepository
 {
-    private List<Order> orders = new List<Order>();
+    private readonly CoffeeShopDbContext _dbContext;
 
-    public Order GetOrderById(Guid orderId)
+    public OrderRepository(CoffeeShopDbContext dbContext)
     {
-        return orders.FirstOrDefault(o => o.OrderID == orderId);
+        _dbContext = dbContext;
     }
 
-    public IEnumerable<Order> GetAllOrders()
+    public async Task<List<Order>> GetAllOrdersAsync()
     {
-        return orders;
+        return await _dbContext.Orders.ToListAsync();
     }
 
-    public void AddOrder(Order order)
+    public async Task<Order> GetOrderByIdAsync(Guid orderId)
     {
-        orders.Add(order);
+        return await _dbContext.Orders.FindAsync(orderId);
     }
 
-    public void UpdateOrder(Order order)
+    public async Task AddOrderAsync(Order order)
     {
-        // Implementation to update an order in the database
+        _dbContext.Orders.Add(order);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public void DeleteOrder(Guid orderId)
+    public async Task UpdateOrderAsync(Order order)
     {
-        orders.RemoveAll(o => o.OrderID == orderId);
+        _dbContext.Entry(order).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteOrderAsync(Guid orderId)
+    {
+        var orderToDelete = await _dbContext.Orders.FindAsync(orderId);
+
+        if (orderToDelete != null)
+        {
+            _dbContext.Orders.Remove(orderToDelete);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

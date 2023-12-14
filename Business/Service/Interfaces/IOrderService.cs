@@ -5,9 +5,9 @@ namespace Service;
 
 public interface IOrderService
 {
-    OrderDto GetOrderById(Guid id);
-    List<OrderDto> GetAllOrders();
-    void AddOrder(OrderDto orderDto);
-    void UpdateOrder(OrderDto orderDto);
-    void DeleteOrder(Guid id);
+    Task<List<Order>> GetAllOrdersAsync();
+    Task<Order> GetOrderByIdAsync(Guid orderId);
+    Task AddOrderAsync(Order order);
+    Task UpdateOrderAsync(Order order);
+    Task DeleteOrderAsync(Guid orderId);
 }

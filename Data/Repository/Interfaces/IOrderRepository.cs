@@ -4,9 +4,9 @@ namespace Data.Repository;
 
 public interface IOrderRepository
 {
-    Order GetOrderById(Guid orderId);
-    IEnumerable<Order> GetAllOrders();
-    void AddOrder(Order order);
-    void UpdateOrder(Order order);
-    void DeleteOrder(Guid orderId);
+    Task<List<Order>> GetAllOrdersAsync();
+    Task<Order> GetOrderByIdAsync(Guid orderId);
+    Task AddOrderAsync(Order order);
+    Task UpdateOrderAsync(Order order);
+    Task DeleteOrderAsync(Guid orderId);
 }

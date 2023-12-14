@@ -43,8 +43,8 @@ public class IngredientServiceTests
 
         var result = await _ingredientService.GetAllIngredientsAsync();
 
-        Assert.IsNotNull(result);
-        Assert.AreEqual(ingredientsFromRepository.Count, result.Count);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(ingredientsFromRepository.Count, Is.EqualTo(result.Count));
     }
 
     [Test]
@@ -58,8 +58,8 @@ public class IngredientServiceTests
 
         var result = await _ingredientService.GetIngredientByIdAsync(existingIngredientId);
 
-        Assert.IsNotNull(result);
-        Assert.AreEqual(existingIngredientId, result.IngredientId);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(existingIngredientId, Is.EqualTo(result.IngredientId));
     }
 
     [Test]
@@ -81,7 +81,7 @@ public class IngredientServiceTests
 
         var result = await _ingredientService.AddIngredientAsync(newIngredientDto);
 
-        Assert.AreEqual(newIngredientId, result);
+        Assert.That(newIngredientId, Is.EqualTo(result));
     }
 
     [Test]
@@ -102,7 +102,8 @@ public class IngredientServiceTests
         var result = await _ingredientService.UpdateIngredientAsync(existingIngredientId, existingIngredientDto);
 
 
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
+        
     }
 
     [Test]
@@ -119,6 +120,7 @@ public class IngredientServiceTests
 
         var result = await _ingredientService.DeleteIngredientAsync(existingIngredientId);
 
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
+        
     }
 }

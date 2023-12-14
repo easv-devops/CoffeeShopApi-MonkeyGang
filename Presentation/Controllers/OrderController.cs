@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.DTOs;
 using Service;
 
@@ -9,71 +10,80 @@ using System;
 using System.Collections.Generic;
 
 [ApiController]
-[Route("api/[controller]")]
-public class OrdersController : ControllerBase
+[Route("api/orders")]
+public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
-    private readonly IMapper _mapper;
 
-    public OrdersController(IOrderService orderService, IMapper mapper)
+    public OrderController(IOrderService orderService)
     {
         _orderService = orderService;
-        _mapper = mapper;
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetOrder(Guid id)
+    [HttpGet]
+    public async Task<IActionResult> GetAllOrders()
     {
-        var order = _orderService.GetOrderById(id);
+        var orders = await _orderService.GetAllOrdersAsync();
+        return Ok(orders);
+    }
+
+    [HttpGet("{orderId}")]
+    public async Task<IActionResult> GetOrderById(Guid orderId)
+    {
+        var order = await _orderService.GetOrderByIdAsync(orderId);
 
         if (order == null)
         {
             return NotFound();
         }
 
-        var orderDto = _mapper.Map<OrderDto>(order);
-        return Ok(orderDto);
-    }
-
-    [HttpGet]
-    public IActionResult GetAllOrders()
-    {
-        var orders = _orderService.GetAllOrders();
-        var orderDtos = _mapper.Map<List<OrderDto>>(orders);
-
-        return Ok(orderDtos);
+        return Ok(order);
     }
 
     [HttpPost]
-    public IActionResult AddOrder([FromBody] OrderDto orderDto)
+    public async Task<IActionResult> AddOrder([FromBody] Order order)
     {
-        if (orderDto == null)
+        if (order == null)
         {
-            return BadRequest("OrderDto cannot be null");
+            return BadRequest("Invalid order data");
         }
 
-        _orderService.AddOrder(orderDto);
+        await _orderService.AddOrderAsync(order);
 
-        return CreatedAtAction(nameof(GetOrder), new { id = orderDto.OrderID }, orderDto);
+        return CreatedAtAction(nameof(GetOrderById), new { orderId = order.OrderId }, order);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult UpdateOrder(Guid id, [FromBody] OrderDto orderDto)
+    [HttpPut("{orderId}")]
+    public async Task<IActionResult> UpdateOrder(Guid orderId, [FromBody] Order updatedOrder)
     {
-        if (id != orderDto.OrderID)
+        if (updatedOrder == null || orderId != updatedOrder.OrderId)
         {
-            return BadRequest("Mismatched IDs");
+            return BadRequest("Invalid order data");
         }
 
-        _orderService.UpdateOrder(orderDto);
+        var existingOrder = await _orderService.GetOrderByIdAsync(orderId);
+
+        if (existingOrder == null)
+        {
+            return NotFound();
+        }
+
+        await _orderService.UpdateOrderAsync(updatedOrder);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteOrder(Guid id)
+    [HttpDelete("{orderId}")]
+    public async Task<IActionResult> DeleteOrder(Guid orderId)
     {
-        _orderService.DeleteOrder(id);
+        var existingOrder = await _orderService.GetOrderByIdAsync(orderId);
+
+        if (existingOrder == null)
+        {
+            return NotFound();
+        }
+
+        await _orderService.DeleteOrderAsync(orderId);
 
         return NoContent();
     }

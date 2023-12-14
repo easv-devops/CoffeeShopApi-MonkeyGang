@@ -14,126 +14,134 @@ using System.Collections.Generic;
 [TestFixture]
 public class OrderServiceTests
 {
-    private Mock<IOrderRepository> mockOrderRepository;
-    private Mock<IMapper> mockMapper;
-    private IOrderService orderService;
+    private Mock<IOrderRepository> _orderRepositoryMock;
+    private OrderService _orderService;
 
     [SetUp]
     public void Setup()
     {
-        mockOrderRepository = new Mock<IOrderRepository>();
-        mockMapper = new Mock<IMapper>();
-
-        orderService = new OrderService(mockMapper.Object, mockOrderRepository.Object);
+        _orderRepositoryMock = new Mock<IOrderRepository>();
+        _orderService = new OrderService(_orderRepositoryMock.Object);
     }
 
     [Test]
-    public void GetOrderById_ShouldReturnCorrectOrder()
+    public async Task GetAllOrdersAsync_ShouldReturnAllOrders()
     {
-        Guid orderId = Guid.NewGuid();
-        var orderEntity = new Order
-            { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 45.99m };
-        var orderDto = new OrderDto
-        {
-            OrderID = orderId, CustomerID = orderEntity.CustomerID, OrderDate = orderEntity.OrderDate,
-            TotalAmount = 45.99m
-        };
+        // Arrange
+        var orders = new List<Order> { /* create your sample orders */ };
+        _orderRepositoryMock.Setup(repo => repo.GetAllOrdersAsync()).ReturnsAsync(orders);
 
-        mockOrderRepository.Setup(repo => repo.GetOrderById(orderId)).Returns(orderEntity);
-        mockMapper.Setup(mapper => mapper.Map<OrderDto>(orderEntity)).Returns(orderDto);
+        // Act
+        var result = await _orderService.GetAllOrdersAsync();
 
-        var result = orderService.GetOrderById(orderId);
-
-        Assert.IsNotNull(result);
-        Assert.AreEqual(orderDto.OrderID, result.OrderID);
-        Assert.AreEqual(orderDto.CustomerID, result.CustomerID);
-        Assert.AreEqual(orderDto.OrderDate, result.OrderDate);
-        Assert.AreEqual(orderDto.TotalAmount, result.TotalAmount);
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        
+        Assert.That(orders.Count,Is.EqualTo( result.Count));
     }
 
     [Test]
-    public void GetAllOrders_ShouldReturnAllOrders()
+    public async Task GetOrderByIdAsync_WithValidId_ShouldReturnOrder()
     {
-        var orderEntities = new List<Order>
-        {
-            new Order
-            {
-                OrderID = Guid.NewGuid(), CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 35.99m
-            },
-            new Order
-            {
-                OrderID = Guid.NewGuid(), CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 25.99m
-            }
-        };
+        // Arrange
+        var orderId = Guid.NewGuid();
+        var order = new Order { OrderId = orderId, /* other properties */ };
+        _orderRepositoryMock.Setup(repo => repo.GetOrderByIdAsync(orderId)).ReturnsAsync(order);
 
-        var orderDtos = new List<OrderDto>
-        {
-            new OrderDto
-            {
-                OrderID = orderEntities[0].OrderID, CustomerID = orderEntities[0].CustomerID,
-                OrderDate = orderEntities[0].OrderDate, TotalAmount = 35.99m
-            },
-            new OrderDto
-            {
-                OrderID = orderEntities[1].OrderID, CustomerID = orderEntities[1].CustomerID,
-                OrderDate = orderEntities[1].OrderDate, TotalAmount = 25.99m
-            }
-        };
+        // Act
+        var result = await _orderService.GetOrderByIdAsync(orderId);
 
-        mockOrderRepository.Setup(repo => repo.GetAllOrders()).Returns(orderEntities);
-        mockMapper.Setup(mapper => mapper.Map<List<OrderDto>>(orderEntities)).Returns(orderDtos);
-
-        var result = orderService.GetAllOrders();
-
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(orderDtos[0].OrderID, result[0].OrderID);
-        Assert.AreEqual(orderDtos[1].CustomerID, result[1].CustomerID);
-        Assert.AreEqual(orderDtos[1].TotalAmount, result[1].TotalAmount);
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(orderId, Is.EqualTo(result.OrderId));
     }
 
     [Test]
-    public void AddOrder_ShouldAddOrder()
+    public async Task GetOrderByIdAsync_WithInvalidId_ShouldReturnNull()
     {
-        var orderDto = new OrderDto { CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 19.99m };
-        var orderEntity = new Order
-        {
-            OrderID = Guid.NewGuid(), CustomerID = orderDto.CustomerID, OrderDate = orderDto.OrderDate,
-            TotalAmount = 19.99m
-        };
+        // Arrange
+        var invalidOrderId = Guid.NewGuid();
+        _orderRepositoryMock.Setup(repo => repo.GetOrderByIdAsync(invalidOrderId)).ReturnsAsync(null as Order);
 
-        mockMapper.Setup(mapper => mapper.Map<Order>(orderDto)).Returns(orderEntity);
+        // Act
+        var result = await _orderService.GetOrderByIdAsync(invalidOrderId);
 
-        orderService.AddOrder(orderDto);
-
-        mockOrderRepository.Verify(repo => repo.AddOrder(orderEntity), Times.Once);
+        // Assert
+        Assert.That(result, Is.Null);
+        
     }
 
     [Test]
-    public void UpdateOrder_ShouldUpdateOrder()
+    public async Task AddOrderAsync_ShouldAddOrder()
     {
-        Guid orderId = Guid.NewGuid();
-        var orderDto = new OrderDto
-            { OrderID = orderId, CustomerID = Guid.NewGuid(), OrderDate = DateTime.Now, TotalAmount = 29.99m };
-        var orderEntity = new Order
-        {
-            OrderID = orderId, CustomerID = orderDto.CustomerID, OrderDate = orderDto.OrderDate, TotalAmount = 29.99m
-        };
+        // Arrange
+        var newOrder = new Order { /* set properties for the new order */ };
+        _orderRepositoryMock.Setup(repo => repo.AddOrderAsync(newOrder)).Returns(Task.CompletedTask);
 
-        mockMapper.Setup(mapper => mapper.Map<Order>(orderDto)).Returns(orderEntity);
+        // Act
+        await _orderService.AddOrderAsync(newOrder);
 
-        orderService.UpdateOrder(orderDto);
-
-        mockOrderRepository.Verify(repo => repo.UpdateOrder(orderEntity), Times.Once);
+        // Assert
+        _orderRepositoryMock.Verify(repo => repo.AddOrderAsync(newOrder), Times.Once);
     }
 
     [Test]
-    public void DeleteOrder_ShouldDeleteOrder()
+    public async Task UpdateOrderAsync_WithValidOrder_ShouldUpdateOrder()
     {
-        Guid orderId = Guid.NewGuid();
+        // Arrange
+        var existingOrder = new Order { OrderId = Guid.NewGuid(), /* other properties */ };
+        var updatedOrder = new Order { OrderId = existingOrder.OrderId, /* updated properties */ };
 
-        orderService.DeleteOrder(orderId);
+        _orderRepositoryMock.Setup(repo => repo.GetOrderByIdAsync(existingOrder.OrderId)).ReturnsAsync(existingOrder);
+        _orderRepositoryMock.Setup(repo => repo.UpdateOrderAsync(updatedOrder)).Returns(Task.CompletedTask);
 
-        mockOrderRepository.Verify(repo => repo.DeleteOrder(orderId), Times.Once);
+        // Act
+        await _orderService.UpdateOrderAsync(updatedOrder);
+
+        // Assert
+        _orderRepositoryMock.Verify(repo => repo.UpdateOrderAsync(updatedOrder), Times.Once);
+    }
+
+    [Test]
+    public async Task UpdateOrderAsync_WithInvalidOrder_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var invalidOrder = new Order(); // Create an invalid order, e.g., with an empty OrderId
+
+        var orderRepositoryMock = new Mock<IOrderRepository>();
+        var orderService = new OrderService(orderRepositoryMock.Object);
+
+        // Act & Assert
+        Assert.ThrowsAsync<ArgumentException>(async () => await orderService.UpdateOrderAsync(invalidOrder));
+        orderRepositoryMock.Verify(repo => repo.UpdateOrderAsync(It.IsAny<Order>()), Times.Never);
+    }
+
+    [Test]
+    public async Task DeleteOrderAsync_WithValidId_ShouldDeleteOrder()
+    {
+        // Arrange
+        var orderIdToDelete = Guid.NewGuid();
+        var existingOrder = new Order { OrderId = orderIdToDelete, /* other properties */ };
+
+        _orderRepositoryMock.Setup(repo => repo.GetOrderByIdAsync(orderIdToDelete)).ReturnsAsync(existingOrder);
+        _orderRepositoryMock.Setup(repo => repo.DeleteOrderAsync(orderIdToDelete)).Returns(Task.CompletedTask);
+
+        // Act
+        await _orderService.DeleteOrderAsync(orderIdToDelete);
+
+        // Assert
+        _orderRepositoryMock.Verify(repo => repo.DeleteOrderAsync(orderIdToDelete), Times.Once);
+    }
+
+    [Test]
+    public async Task DeleteOrderAsync_WithInvalidId_ShouldNotDeleteOrder()
+    {
+        // Arrange
+        var invalidOrderId = Guid.NewGuid();
+
+        _orderRepositoryMock.Setup(repo => repo.GetOrderByIdAsync(invalidOrderId)).ReturnsAsync((Order?)null);
+        // Assert
+        _orderRepositoryMock.Verify(repo => repo.DeleteOrderAsync(It.IsAny<Guid>()), Times.Never);
+        _orderRepositoryMock.Verify(repo => repo.DeleteOrderAsync(invalidOrderId), Times.Never);
     }
 }

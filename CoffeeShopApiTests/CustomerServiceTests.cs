@@ -49,7 +49,7 @@ public class CustomerServiceTests
         CustomerDto dto = await _customerService.AddCustomerAsync(customer);
 
         // Assert
-        Assert.AreEqual(expectedId, dto.CustomerId);
+        Assert.That(expectedId, Is.EqualTo(dto.CustomerId));
     }
 
 
@@ -71,8 +71,8 @@ public class CustomerServiceTests
         var result = await _customerService.GetCustomerAsync(customerId);
 
         // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(customerId, result.CustomerId);
+        Assert.That(result, Is.Not.Null);        
+        Assert.That(customerId, Is.EqualTo(result.CustomerId));
     }
 
     [Test]
@@ -88,8 +88,7 @@ public class CustomerServiceTests
         var result = await _customerService.GetCustomerAsync(nonExistentCustomerId);
 
         // Assert
-        Assert.IsNull(result);
-    }
+        Assert.That(result, Is.Null);    }
     
     [Test]
     public async Task CanHashAndVerifyPasswordAsync()
@@ -116,8 +115,7 @@ public class CustomerServiceTests
             Assert.Fail("User registration should succeed.");
         }
         
-        Assert.IsTrue(verificationResult, "Password verification should succeed.");
-
+        Assert.That(verificationResult, Is.True);
         _customerRepositoryMock.Verify(repo => repo.AddCustomerAsync(It.IsAny<Customer>()), Times.Once);
         _customerRepositoryMock.Verify(repo => repo.GetCustomerByEmailAsync(It.IsAny<string>()), Times.Once);
     }

@@ -7,7 +7,7 @@ public class Order
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid OrderID { get; set; }
+    public Guid OrderId { get; set; }
 
     public DateTime OrderDate { get; set; }
 

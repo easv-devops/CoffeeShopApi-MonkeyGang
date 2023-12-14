@@ -45,11 +45,10 @@ public class OrderDetailServiceTests
         var result = orderDetailService.GetOrderDetailById(orderDetailId);
 
         // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(orderDetailDto.OrderDetailId, result.OrderDetailId);
-        Assert.AreEqual(orderDetailDto.ItemId, result.ItemId);
-        Assert.AreEqual(orderDetailDto.Quantity, result.Quantity);
-        Assert.AreEqual(orderDetailDto.Subtotal, result.Subtotal);
+        Assert.That(result, Is.Not.Null);     
+        Assert.That(orderDetailDto.ItemId,Is.EqualTo( result.ItemId));
+        Assert.That(orderDetailDto.Quantity,Is.EqualTo( result.Quantity));
+        Assert.That(orderDetailDto.Subtotal,Is.EqualTo( result.Subtotal));
     }
 
     [Test]
@@ -82,12 +81,12 @@ public class OrderDetailServiceTests
 
         var result = orderDetailService.GetAllOrderDetails();
 
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(orderDetailDtos[0].OrderDetailId, result[0].OrderDetailId);
-        Assert.AreEqual(orderDetailDtos[1].ItemId, result[1].ItemId);
-        Assert.AreEqual(orderDetailDtos[1].Quantity, result[1].Quantity);
-        Assert.AreEqual(orderDetailDtos[1].Subtotal, result[1].Subtotal);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(2, Is.EqualTo(result.Count));
+        Assert.That(orderDetailDtos[0].OrderDetailId,Is.EqualTo( result[0].OrderDetailId));
+        Assert.That(orderDetailDtos[1].ItemId,Is.EqualTo( result[1].ItemId));
+        Assert.That(orderDetailDtos[1].Quantity,Is.EqualTo( result[1].Quantity));
+        Assert.That(orderDetailDtos[1].Subtotal,Is.EqualTo( result[1].Subtotal));
     }
 
     [Test]
