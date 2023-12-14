@@ -1,6 +1,7 @@
 using Data.Repository;
 using Models;
 using Models.DTOs;
+using Models.DTOs.Create;
 
 namespace Service;
 
@@ -11,10 +12,12 @@ using System.Collections.Generic;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IMapper _mapper;
 
-    public OrderService(IOrderRepository orderRepository)
+    public OrderService(IOrderRepository orderRepository, IMapper mapper)
     {
         _orderRepository = orderRepository;
+        _mapper = mapper;
     }
 
     public async Task<List<Order>> GetAllOrdersAsync()
@@ -27,9 +30,19 @@ public class OrderService : IOrderService
         return await _orderRepository.GetOrderByIdAsync(orderId);
     }
 
-    public async Task AddOrderAsync(Order order)
+    public async Task<Guid> AddOrderAsync(CreateOrderDto createOrderDto)
     {
-        await _orderRepository.AddOrderAsync(order);
+        var orderEntity = _mapper.Map<Order>(createOrderDto);
+
+
+        if (orderEntity.OrderId == Guid.Empty)
+        {
+            throw new ArgumentException("Order Id cannot be empty");
+        }
+        
+        var orderId = await _orderRepository.AddOrderAsync(orderEntity);
+
+        return orderId;
     }
 
     public async Task UpdateOrderAsync(Order order)

@@ -14,6 +14,9 @@ public class Post
     public string Text { get; set; }
 
     // Foreign key to refer to a specific Item in an OrderDetail
+    
+    //kunne være based at bruge en item, 
+    
     public Guid ItemId { get; set; }
     public virtual Item Item { get; set; }
 

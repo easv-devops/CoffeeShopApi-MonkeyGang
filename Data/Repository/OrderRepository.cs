@@ -22,10 +22,15 @@ public class OrderRepository : IOrderRepository
         return await _dbContext.Orders.FindAsync(orderId);
     }
 
-    public async Task AddOrderAsync(Order order)
+    public async Task<Guid> AddOrderAsync(Order order)
     {
+        // Optionally, set any other properties or perform additional operations before adding
+        order.OrderId = Guid.NewGuid();
+
         _dbContext.Orders.Add(order);
         await _dbContext.SaveChangesAsync();
+
+        return order.OrderId;
     }
 
     public async Task UpdateOrderAsync(Order order)

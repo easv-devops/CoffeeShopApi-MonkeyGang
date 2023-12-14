@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.DTOs;
+using Models.DTOs.Create;
 using Service;
 
 namespace Presentation.Controllers;
@@ -41,16 +42,20 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddOrder([FromBody] Order order)
+    public async Task<IActionResult> AddOrder([FromBody] CreateOrderDto createOrderDto)
     {
-        if (order == null)
+        try
         {
-            return BadRequest("Invalid order data");
+            var orderId = await _orderService.AddOrderAsync(createOrderDto);
+
+            // Return the newly created order's ID or other relevant information
+            return Ok(new { orderId = orderId, Message = "Order created successfully." });
         }
-
-        await _orderService.AddOrderAsync(order);
-
-        return CreatedAtAction(nameof(GetOrderById), new { orderId = order.OrderId }, order);
+        catch (Exception ex)
+        {
+            // Log the exception or handle it as needed
+            return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+        }
     }
 
     [HttpPut("{orderId}")]

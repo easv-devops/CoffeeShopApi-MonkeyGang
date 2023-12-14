@@ -12,12 +12,11 @@ public class Order
     public DateTime OrderDate { get; set; }
 
     //inge ide hvorfor vi gør det her???
-    public Guid StoreID { get; set; }
+    public Guid StoreId { get; set; }
     public virtual Store Store { get; set; }
 
 
-    //hvorfor har vi både CustomerID og Customer???? (ノಠ益ಠ)ノ彡┻━┻
-    public Guid CustomerID { get; set; }
+    public Guid CustomerId { get; set; }
     public virtual Customer Customer { get; set; }
     public decimal TotalAmount { get; set; }
     public bool IsAccepted { get; set; }
