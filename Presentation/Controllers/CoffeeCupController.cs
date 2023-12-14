@@ -2,6 +2,7 @@
 
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.DTOs.Create;
 using Models.DTOs.Response;
@@ -42,20 +43,38 @@ namespace YourProject.Controllers
         public async Task<IActionResult> GetAllCoffeeCups()
         {
             IEnumerable<CoffeeCup> coffeeCups = await _coffeeCupService.GetAllCoffeeCupsAsync();
+            
+            
+            
+            
+            var coffeeCupDtos = _mapper.Map<List<CoffeeCupResponseDto>>(coffeeCups);
 
-            foreach (var coffeeCup in coffeeCups)
+            //todo: this is a hack to get the quantity of each ingredient in the coffee cup
+            // WARNING: THIS IS A EXTREME LEVEL OF JANK AND SHOULD NOT BE USED IN PRODUCTION
+            /*
+             *(╯°□°)╯︵ ┻━┻
+             *(ノಠ益ಠ)ノ彡┻━┻
+             * (┛◉Д◉)┛彡┻━┻
+             */
+            
+            foreach (var coffeeCupDto in coffeeCupDtos)
             {
-                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
-                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
-                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
-                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
-                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
-                Console.WriteLine($"CoffeeCup Id: {coffeeCup.CoffeeCupIngredients}");
+                foreach (var ingredientDto in coffeeCupDto.Ingredients)
+                {
+                    // Modify the quantity or perform any other modifications as needed
+                    var coffeeCupIngredient = coffeeCups
+                        .SelectMany(cc => cc.CoffeeCupIngredients)
+                        .FirstOrDefault(cci => cci.Ingredient.IngredientId == ingredientDto.IngredientId);
 
+                    if (coffeeCupIngredient != null)
+                    {
+                        ingredientDto.Quantity = coffeeCupIngredient.Quantity;
+                    }
+                }
             }
+
             
             
-            IEnumerable<CoffeeCupResponseDto> coffeeCupDtos = coffeeCups.Select(coffeeCup => _mapper.Map<CoffeeCupResponseDto>(coffeeCup));
             
             return Ok(coffeeCupDtos);
         }
