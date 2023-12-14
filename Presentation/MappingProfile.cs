@@ -93,5 +93,15 @@ public class MappingProfile : Profile
 
         CreateMap<Post, PostDto>();
         CreateMap<PostDto, Post>();
+        
+        
+        
+        //line 171 in customer controller needs this
+        //consider if customerDto is enough
+        
+        CreateMap<CustomerDto , CustomerResponseDto>();
+        
+        
+        
     }
 }

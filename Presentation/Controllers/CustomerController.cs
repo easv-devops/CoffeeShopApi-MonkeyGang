@@ -150,6 +150,35 @@ public class CustomerController : ControllerBase
             return Unauthorized("Invalid email or password.");
         }
     }
+    
+    
+    //retrive customer by email
+    [HttpGet("email/{email}")]
+    public async Task<IActionResult> GetCustomerByEmail(string email)
+    {
+        try
+        {
+            // Retrieve the customer by ID using the service
+            var customer = await _customerService.GetCustomerByEmailAsync(email);
+
+            // Check if the customer exists
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            // Map the customer to the response DTO using AutoMapper
+            var responseDto = _mapper.Map<CustomerResponseDto>(customer);
+
+            // Return the customer response
+            return Ok(responseDto);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest("Failed to retrieve customer.");
+        }
+    }
 
     
     
