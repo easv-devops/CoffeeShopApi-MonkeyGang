@@ -34,6 +34,8 @@ public class OrderService : IOrderService
     {
         var orderEntity = _mapper.Map<Order>(createOrderDto);
         
+        // probably not a smart idea to set the order date here
+        orderEntity.OrderDate = DateTime.Now;
         
         var orderId = await _orderRepository.AddOrderAsync(orderEntity);
 

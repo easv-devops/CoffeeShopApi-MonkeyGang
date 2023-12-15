@@ -17,7 +17,7 @@ public class Order
     public virtual Store Store { get; set; }
 
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
     public virtual User User { get; set; }
     public decimal TotalAmount { get; set; }
     public bool IsAccepted { get; set; }
