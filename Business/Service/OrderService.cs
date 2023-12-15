@@ -33,12 +33,7 @@ public class OrderService : IOrderService
     public async Task<Guid> AddOrderAsync(CreateOrderDto createOrderDto)
     {
         var orderEntity = _mapper.Map<Order>(createOrderDto);
-
-
-        if (orderEntity.OrderId == Guid.Empty)
-        {
-            throw new ArgumentException("Order Id cannot be empty");
-        }
+        
         
         var orderId = await _orderRepository.AddOrderAsync(orderEntity);
 

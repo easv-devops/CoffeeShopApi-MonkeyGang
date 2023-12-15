@@ -1,6 +1,6 @@
 namespace Models.DTOs.Create
 {
-    public class CreateCustomerDto
+    public class CreateUserDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

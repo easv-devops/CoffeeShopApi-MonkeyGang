@@ -63,24 +63,27 @@ public class MappingProfile : Profile
         //???????????????
         //CreateMap(CoffeeCupIngredient, CoffeeCupIngredientDto>();
 
-        CreateMap<Customer, CustomerDto>();
+        CreateMap<User, UserDto>();
 
 
-        CreateMap<CustomerDto, Customer>()
+        CreateMap<UserDto, User>()
             .ForMember(dest => dest.Password, opt => opt.MapFrom(new PasswordResolver()))
             .ForMember(dest => dest.Orders, opt => opt.Ignore())
             .ForMember(dest => dest.Posts, opt => opt.Ignore());
 
-        CreateMap<CreateCustomerDto, Customer>();
-        CreateMap<Customer, CreateCustomerDto>();
-        CreateMap<Customer, CustomerResponseDto>();
+        CreateMap<CreateUserDTO, User>();
+        CreateMap<User, CreateUserDTO>();
+        CreateMap<User, UserResponseDto>();
 
         
         CreateMap<Order, OrderDto>();
         CreateMap<OrderDto, Order>();
+        CreateMap<CreateOrderDto, Order>();
+
         CreateMap<OrderDetail, OrderDetailDto>();
         CreateMap<OrderDetailDto, OrderDetail>();
-
+        CreateMap<CreateOrderDetailDto, OrderDetail>();
+        
         CreateMap<Cake, CakeDto>();
         CreateMap<CakeDto, Cake>();
 
@@ -99,7 +102,7 @@ public class MappingProfile : Profile
         //line 171 in customer controller needs this
         //consider if customerDto is enough
         
-        CreateMap<CustomerDto , CustomerResponseDto>();
+        CreateMap<UserDto , UserResponseDto>();
         
         
         

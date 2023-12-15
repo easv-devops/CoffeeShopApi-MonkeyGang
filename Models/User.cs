@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
-public class Customer
+public class User
 {
     
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

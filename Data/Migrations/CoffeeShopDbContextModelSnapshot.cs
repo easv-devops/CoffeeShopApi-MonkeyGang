@@ -18,6 +18,9 @@ namespace Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,41 +41,6 @@ namespace Data.Migrations
                     b.HasIndex("IngredientId");
 
                     b.ToTable("CoffeeCupIngredients");
-                });
-
-            modelBuilder.Entity("Models.Customer", b =>
-                {
-                    b.Property<Guid>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Models.Ingredient", b =>
@@ -129,30 +97,34 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Order", b =>
                 {
-                    b.Property<Guid>("OrderID")
+                    b.Property<Guid>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerID")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("OrderDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("StoreID")
+                    b.Property<Guid>("StoreId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("OrderID");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("CustomerID");
+                    b.HasKey("OrderId");
 
-                    b.HasIndex("StoreID");
+                    b.HasIndex("StoreId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -200,11 +172,14 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("PostId");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -237,6 +212,41 @@ namespace Data.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("StoreItems");
+                });
+
+            modelBuilder.Entity("Models.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Models.Cake", b =>
@@ -294,21 +304,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Order", b =>
                 {
-                    b.HasOne("Models.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Store", "Store")
                         .WithMany("Orders")
-                        .HasForeignKey("StoreID")
+                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Store");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.OrderDetail", b =>
@@ -332,21 +342,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Post", b =>
                 {
-                    b.HasOne("Models.Customer", "Customer")
-                        .WithMany("Posts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("Models.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Item");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.StoreItem", b =>
@@ -403,13 +413,6 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("Posts");
-                });
-
             modelBuilder.Entity("Models.Ingredient", b =>
                 {
                     b.Navigation("CoffeeCupIngredients");
@@ -430,6 +433,13 @@ namespace Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("StoreItems");
+                });
+
+            modelBuilder.Entity("Models.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Models.CoffeeCup", b =>

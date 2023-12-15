@@ -2,9 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace Models.DTOs;
 
-public class CustomerDto
+public class UserDto
 {
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -13,6 +13,8 @@ public class CustomerDto
 
     public string Password { get; set; }
 
+    public bool IsAdmin { get; set; }
+    
     public List<Order> Orders { get; set; }
     public List<Post> Posts { get; set; }
 }

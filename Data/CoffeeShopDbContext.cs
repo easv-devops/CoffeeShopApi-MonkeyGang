@@ -13,7 +13,7 @@ public class CoffeeShopDbContext : DbContext
     public DbSet<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
 
     //public DbSet<Product> Products { get; set; }
-    public DbSet<Customer> Customers { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<OrderDetail> OrderDetails { get; set; }
@@ -77,8 +77,8 @@ public class CoffeeShopDbContext : DbContext
         
         
     
-        modelBuilder.Entity<Customer>()
-            .Property(cc => cc.CustomerId)
+        modelBuilder.Entity<User>()
+            .Property(cc => cc.UserId)
             .ValueGeneratedOnAdd();
 
         // many-to-many: CoffeeCupIngredient

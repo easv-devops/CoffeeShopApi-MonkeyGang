@@ -24,5 +24,5 @@ public class Post
 
     // Foreign key to refer to the Customer who posted it
     public Guid CustomerId { get; set; }
-    public virtual Customer Customer { get; set; }
+    public virtual User User { get; set; }
 }

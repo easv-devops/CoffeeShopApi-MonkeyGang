@@ -9,15 +9,16 @@ public class Order
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid OrderId { get; set; }
 
+    public Guid StoreId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime OrderDate { get; set; }
 
     //inge ide hvorfor vi gør det her???
-    public Guid StoreId { get; set; }
     public virtual Store Store { get; set; }
 
 
     public Guid CustomerId { get; set; }
-    public virtual Customer Customer { get; set; }
+    public virtual User User { get; set; }
     public decimal TotalAmount { get; set; }
     public bool IsAccepted { get; set; }
     public virtual List<OrderDetail> OrderDetails { get; set; }
