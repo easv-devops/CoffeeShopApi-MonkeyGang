@@ -109,8 +109,23 @@ public class CoffeeShopDbContext : DbContext
             .WithMany(i => i.StoreItems)
             .HasForeignKey(si => si.ItemId);
 
-        // other configurations
+
         
+        // Configure primary key for UserStore
+        modelBuilder.Entity<UserStore>()
+            .HasKey(us => new { us.UserId, us.StoreId });
+
+        // Configure the relationships
+        modelBuilder.Entity<UserStore>()
+            .HasOne(us => us.User)
+            .WithMany(u => u.UserStores)
+            .HasForeignKey(us => us.UserId);
+
+        modelBuilder.Entity<UserStore>()
+            .HasOne(us => us.Store)
+            .WithMany(s => s.UserStores)
+            .HasForeignKey(us => us.StoreId);
+    
         
         
         

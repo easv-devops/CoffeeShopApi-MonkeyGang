@@ -14,5 +14,6 @@ public class Store
 
     public virtual List<Order> Orders { get; set; }
     public virtual List<StoreItem> StoreItems { get; set; }
+    public virtual List<UserStore> UserStores { get; set; }
     //public List<Ingredient> Ingredients { get; set; }
 }

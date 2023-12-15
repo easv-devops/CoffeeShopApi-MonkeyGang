@@ -246,7 +246,22 @@ namespace Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Models.UserStore", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "StoreId");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("UserStore");
                 });
 
             modelBuilder.Entity("Models.Cake", b =>
@@ -378,6 +393,25 @@ namespace Data.Migrations
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("Models.UserStore", b =>
+                {
+                    b.HasOne("Models.Store", "Store")
+                        .WithMany("UserStores")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.User", "User")
+                        .WithMany("UserStores")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Models.Cake", b =>
                 {
                     b.HasOne("Models.CoffeeCup", "CoffeeCup")
@@ -433,6 +467,8 @@ namespace Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("StoreItems");
+
+                    b.Navigation("UserStores");
                 });
 
             modelBuilder.Entity("Models.User", b =>
@@ -440,6 +476,8 @@ namespace Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("UserStores");
                 });
 
             modelBuilder.Entity("Models.CoffeeCup", b =>
