@@ -11,6 +11,7 @@ public class Post
 
     //Todo: research how this exactly works
     DateTime CreatedAt { get; set; } = DateTime.Now;
+    public string Title { get; set; }
     public string Text { get; set; }
 
     // Foreign key to refer to a specific Item in an OrderDetail
