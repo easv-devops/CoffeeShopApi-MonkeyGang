@@ -43,6 +43,21 @@ namespace Data.Migrations
                     b.ToTable("CoffeeCupIngredients");
                 });
 
+            modelBuilder.Entity("Models.CustomCoffeeCupIngredients", b =>
+                {
+                    b.Property<Guid>("CustomCoffeeCupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IngredientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CustomCoffeeCupId", "IngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("CustomCoffeeCupIngredients");
+                });
+
             modelBuilder.Entity("Models.Ingredient", b =>
                 {
                     b.Property<Guid>("IngredientId")
@@ -295,6 +310,13 @@ namespace Data.Migrations
                     b.ToTable("CoffeeCups");
                 });
 
+            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
+                {
+                    b.HasBaseType("Models.Item");
+
+                    b.ToTable("CustomCoffeeCups");
+                });
+
             modelBuilder.Entity("Models.CoffeeCupIngredient", b =>
                 {
                     b.HasOne("Models.CoffeeCup", "CoffeeCup")
@@ -310,6 +332,25 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("CoffeeCup");
+
+                    b.Navigation("Ingredient");
+                });
+
+            modelBuilder.Entity("Models.CustomCoffeeCupIngredients", b =>
+                {
+                    b.HasOne("Models.CustomCoffeeCup", "CustomCoffeeCup")
+                        .WithMany("CustomCoffeeCupIngredients")
+                        .HasForeignKey("CustomCoffeeCupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Ingredient", "Ingredient")
+                        .WithMany("CustomCoffeeCupIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomCoffeeCup");
 
                     b.Navigation("Ingredient");
                 });
@@ -444,9 +485,20 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
+                {
+                    b.HasOne("Models.Item", null)
+                        .WithOne()
+                        .HasForeignKey("Models.CustomCoffeeCup", "ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.Ingredient", b =>
                 {
                     b.Navigation("CoffeeCupIngredients");
+
+                    b.Navigation("CustomCoffeeCupIngredients");
                 });
 
             modelBuilder.Entity("Models.Item", b =>
@@ -482,6 +534,11 @@ namespace Data.Migrations
                     b.Navigation("Cakes");
 
                     b.Navigation("CoffeeCupIngredients");
+                });
+
+            modelBuilder.Entity("Models.CustomCoffeeCup", b =>
+                {
+                    b.Navigation("CustomCoffeeCupIngredients");
                 });
 #pragma warning restore 612, 618
         }

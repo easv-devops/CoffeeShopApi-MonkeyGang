@@ -27,10 +27,11 @@ public class CoffeeShopDbContext : DbContext
 
     public DbSet<Item> Items { get; set; }
 
-    
+
     public DbSet<StoreItem> StoreItems { get; set; }
 
-    
+    public DbSet<CustomCoffeeCup> CustomCoffeeCups { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderDetail>()
@@ -43,7 +44,7 @@ public class CoffeeShopDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>()
             .HasOne(od => od.Item)
-            .WithMany() 
+            .WithMany()
             .HasForeignKey(od => od.ItemId)
             .OnDelete(DeleteBehavior.Restrict);
 
@@ -51,14 +52,13 @@ public class CoffeeShopDbContext : DbContext
         modelBuilder.Entity<CoffeeCup>()
             .Property(cc => cc.ItemId)
             .ValueGeneratedOnAdd();
-        
-      
+
 
         modelBuilder.Entity<Cake>()
             .Property(cc => cc.ItemId)
             .ValueGeneratedOnAdd();
-        
-        
+
+
         modelBuilder.Entity<Cake>()
             .HasOne(cake => cake.CoffeeCup)
             .WithMany(cup => cup.Cakes)
@@ -71,12 +71,7 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(cake => cake.CoffeeCupId)
             .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate behavior
 
-        
-        
-        
-        
-        
-    
+
         modelBuilder.Entity<User>()
             .Property(cc => cc.UserId)
             .ValueGeneratedOnAdd();
@@ -94,8 +89,8 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(cci => cci.Ingredient)
             .WithMany(i => i.CoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
-        
-        
+
+
         modelBuilder.Entity<StoreItem>()
             .HasKey(si => new { si.StoreId, si.ItemId });
 
@@ -110,7 +105,6 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(si => si.ItemId);
 
 
-        
         // Configure primary key for UserStore
         modelBuilder.Entity<UserStore>()
             .HasKey(us => new { us.UserId, us.StoreId });
@@ -125,35 +119,47 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(us => us.Store)
             .WithMany(s => s.UserStores)
             .HasForeignKey(us => us.StoreId);
-    
-        
-        
-        
-        
-
-        /*
-         * INGREDIENT - STORE DISABLED
-         */
 
 
-        // one-to-many: Store-Ingredient
-        // to avoid cycles in the object graph, we need to disable cascading deletes
-        /*
-        modelBuilder.Entity<Ingredient>()
-            .HasOne(i => i.Store)
-            .WithMany(s => s.Ingredients)
-            .OnDelete(DeleteBehavior.Restrict);
-            */
+        // Configure primary key for CustomCoffeeCupIngredients
+        modelBuilder.Entity<CustomCoffeeCupIngredients>()
+            .HasKey(cci => new { cci.CustomCoffeeCupId, cci.IngredientId });
 
-        /*
-        // to avoid cycles in the object graph, we need to disable cascading deletes
-        modelBuilder.Entity<Post>()
-            .HasOne(p => p.Order)
-            .WithMany()
-            .HasForeignKey(p => p.OrderId)
-            .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
-        */
+        // Configure the relationships
+        modelBuilder.Entity<CustomCoffeeCupIngredients>()
+            .HasOne(cci => cci.CustomCoffeeCup)
+            .WithMany(cc => cc.CustomCoffeeCupIngredients)
+            .HasForeignKey(cci => cci.CustomCoffeeCupId);
+
+        modelBuilder.Entity<CustomCoffeeCupIngredients>()
+            .HasOne(cci => cci.Ingredient)
+            .WithMany(i => i.CustomCoffeeCupIngredients)
+            .HasForeignKey(cci => cci.IngredientId);
     }
+
+
+    /*
+     * INGREDIENT - STORE DISABLED
+     */
+
+
+    // one-to-many: Store-Ingredient
+    // to avoid cycles in the object graph, we need to disable cascading deletes
+    /*
+    modelBuilder.Entity<Ingredient>()
+        .HasOne(i => i.Store)
+        .WithMany(s => s.Ingredients)
+        .OnDelete(DeleteBehavior.Restrict);
+        */
+
+    /*
+    // to avoid cycles in the object graph, we need to disable cascading deletes
+    modelBuilder.Entity<Post>()
+        .HasOne(p => p.Order)
+        .WithMany()
+        .HasForeignKey(p => p.OrderId)
+        .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
+    */
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -163,17 +169,15 @@ public class CoffeeShopDbContext : DbContext
         String userName = "CSe2022t_t_2";
         String password = "CSe2022tT2#";
 
-        
 
         String connectionString =
             "Server=EASV-DB4,1433;Database=CSe2022t_t_2_CoffeeShop;User Id=CSe2022t_t_2;Password=CSe2022tT2#;TrustServerCertificate=True;";
 
 
         optionsBuilder.UseSqlServer(connectionString);
-        
+
         //no idea what this does
         //but I'm afraid to delete it ಠ╭╮ಠ
         optionsBuilder.UseLazyLoadingProxies(); // Disable lazy loading
-        
     }
 }
