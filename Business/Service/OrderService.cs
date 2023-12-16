@@ -20,9 +20,9 @@ public class OrderService : IOrderService
         _mapper = mapper;
     }
 
-    public async Task<List<Order>> GetAllOrdersAsync()
+    public  List<Order> GetAllOrdersAsync()
     {
-        return await _orderRepository.GetAllOrdersAsync();
+        return  _orderRepository.GetAllOrdersAsync();
     }
 
     public async Task<Order> GetOrderByIdAsync(Guid orderId)

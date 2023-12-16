@@ -10,11 +10,15 @@ public class OrderRepository : IOrderRepository
     public OrderRepository(CoffeeShopDbContext dbContext)
     {
         _dbContext = dbContext;
+        // turn off proxy creation
+        _dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
-    public async Task<List<Order>> GetAllOrdersAsync()
+    public List<Order> GetAllOrdersAsync()
     {
-        return await _dbContext.Orders.ToListAsync();
+        
+        
+        return  _dbContext.Orders.Include(o => o.OrderDetails).ToList();
     }
 
     public async Task<Order> GetOrderByIdAsync(Guid orderId)

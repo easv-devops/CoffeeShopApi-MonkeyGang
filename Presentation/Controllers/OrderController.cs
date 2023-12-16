@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.DTOs;
 using Models.DTOs.Create;
+using Models.DTOs.Response;
 using Service;
 
 namespace Presentation.Controllers;
@@ -15,17 +16,26 @@ using System.Collections.Generic;
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
-
-    public OrderController(IOrderService orderService)
+    private readonly IMapper _mapper;
+    
+    
+    public OrderController(IOrderService orderService, IMapper mapper)
     {
         _orderService = orderService;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllOrders()
+    public IActionResult GetAllOrders()
     {
-        var orders = await _orderService.GetAllOrdersAsync();
-        return Ok(orders);
+        var orders = _orderService.GetAllOrdersAsync();
+        
+        
+        
+        // Map the orders to the response DTO using AutoMapper
+        var responseDto = _mapper.Map<List<OrderResponseDto>>(orders);
+        
+        return Ok(responseDto);
     }
 
     [HttpGet("{orderId}")]
@@ -92,4 +102,35 @@ public class OrderController : ControllerBase
 
         return NoContent();
     }
+    
+    
+    // not testet
+    [HttpPut("{orderId}/accept")]
+    public IActionResult AcceptOrder(Guid orderId)
+    {
+        try
+        {
+            var order = _orderService.GetOrderByIdAsync(orderId).Result;
+
+            if (order == null)
+            {
+                return NotFound($"Order with id {orderId} not found");
+            }
+
+            // Update the IsAccepted property
+            order.IsAccepted = true;
+
+            // Save changes
+            _orderService.UpdateOrderAsync(order);
+
+            return Ok($"Order with id {orderId} accepted successfully");
+        }
+        catch (Exception ex)
+        {
+            // Log the exception or handle it as needed
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
 }
+    
+    

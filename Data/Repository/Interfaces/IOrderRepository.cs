@@ -4,7 +4,7 @@ namespace Data.Repository;
 
 public interface IOrderRepository
 {
-    Task<List<Order>> GetAllOrdersAsync();
+    List<Order> GetAllOrdersAsync();
     Task<Order> GetOrderByIdAsync(Guid orderId);
     Task<Guid> AddOrderAsync(Order order);
     Task UpdateOrderAsync(Order order);

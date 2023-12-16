@@ -79,10 +79,16 @@ public class MappingProfile : Profile
         CreateMap<Order, OrderDto>();
         CreateMap<OrderDto, Order>();
         CreateMap<CreateOrderDto, Order>();
+        CreateMap<Order, OrderResponseDto>()
+            .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails));
+        CreateMap<OrderResponseDto, Order>();
+
 
         CreateMap<OrderDetail, OrderDetailDto>();
         CreateMap<OrderDetailDto, OrderDetail>();
         CreateMap<CreateOrderDetailDto, OrderDetail>();
+        CreateMap<OrderDetail, OrderDetailResponseDto>();
+        CreateMap<OrderDetailResponseDto, OrderDetail>();
         
         CreateMap<Cake, CakeDto>();
         CreateMap<CakeDto, Cake>();

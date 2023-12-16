@@ -6,7 +6,7 @@ namespace Service;
 
 public interface IOrderService
 {
-    Task<List<Order>> GetAllOrdersAsync();
+    List<Order> GetAllOrdersAsync();
     Task<Order> GetOrderByIdAsync(Guid orderId);
     Task<Guid> AddOrderAsync(CreateOrderDto order);
     Task UpdateOrderAsync(Order order);
