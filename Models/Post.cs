@@ -11,7 +11,7 @@ public class Post
 
     //Todo: research how this exactly works
     DateTime CreatedAt { get; set; } = DateTime.Now;
-    public string PostTitle { get; set; }
+    public string Title { get; set; }
     public string Text { get; set; }
 
     

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data;
 using Data.Repository.Interfaces;
 using Models;
@@ -12,10 +13,12 @@ using Service;
 public class CoffeeCupService : ICoffeeCupService
 {
     private readonly ICoffeeCupRepository _coffeeCupRepository;
+    private readonly IMapper _mapper;
 
-    public CoffeeCupService(ICoffeeCupRepository coffeeCupRepository)
+    public CoffeeCupService(ICoffeeCupRepository coffeeCupRepository, IMapper mapper)
     {
         _coffeeCupRepository = coffeeCupRepository;
+        _mapper = mapper;
     }
 
     public async Task<CoffeeCup> GetCoffeeCupByIdAsync(Guid coffeeCupId)
@@ -56,4 +59,12 @@ public class CoffeeCupService : ICoffeeCupService
 
         return false; // CoffeeCup not found
     }
+    
+    public async Task<IEnumerable<CakeResponseDto>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
+    {
+        var cakesForCoffeeCup = await _coffeeCupRepository.GetCakesForCoffeeCupAsync(coffeeCupId);
+
+        return _mapper.Map<IEnumerable<CakeResponseDto>>(cakesForCoffeeCup);
+    }
+    
 }

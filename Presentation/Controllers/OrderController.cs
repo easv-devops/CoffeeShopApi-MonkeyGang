@@ -113,11 +113,11 @@ public class OrderController : ControllerBase
     
     // not testet
     [HttpPut("{orderId}/accept")]
-    public IActionResult AcceptOrder(Guid orderId)
+    public async  Task<IActionResult> AcceptOrder(Guid orderId)
     {
         try
         {
-            var order = _orderService.GetOrderByIdAsync(orderId).Result;
+            var order = await _orderService.GetOrderByIdAsync(orderId);
 
             if (order == null)
             {
@@ -128,7 +128,7 @@ public class OrderController : ControllerBase
             order.IsAccepted = true;
 
             // Save changes
-            _orderService.UpdateOrderAsync(order);
+            await _orderService.UpdateOrderAsync(order);
 
             return Ok($"Order with id {orderId} accepted successfully");
         }

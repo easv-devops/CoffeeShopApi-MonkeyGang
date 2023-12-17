@@ -12,4 +12,6 @@ public interface ICoffeeCupService
     Task<Guid> AddCoffeeCupAsync(CoffeeCup coffeeCup);
     Task UpdateCoffeeCupAsync(CoffeeCup coffeeCup);
     Task<bool> DeleteCoffeeCupAsync(Guid coffeeCupId);
+    Task<IEnumerable<CakeResponseDto>> GetCakesForCoffeeCupAsync(Guid coffeeCupId);
+    
 }
