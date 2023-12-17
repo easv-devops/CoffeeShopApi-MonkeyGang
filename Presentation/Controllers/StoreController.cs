@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.DTOs;
 using Service;
 
 namespace Presentation.Controllers;
@@ -9,17 +11,20 @@ namespace Presentation.Controllers;
 public class StoreController : ControllerBase
 {
     private readonly IStoreService _storeService;
+    private readonly IMapper _mapper;
 
-    public StoreController(IStoreService storeService)
+    public StoreController(IStoreService storeService, IMapper mapper)
     {
         _storeService = storeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllStores()
     {
         var stores = await _storeService.GetAllStoresAsync();
-        return Ok(stores);
+        IEnumerable<StoreDto> storeDtos =  _mapper.Map<List<StoreDto>>(stores);
+        return Ok(storeDtos);
     }
 
     [HttpGet("{id}")]
@@ -31,8 +36,10 @@ public class StoreController : ControllerBase
         {
             return NotFound();
         }
+        
+        StoreDto storeDto = _mapper.Map<StoreDto>(store);
 
-        return Ok(store);
+        return Ok(storeDto);
     }
 
 
@@ -86,6 +93,7 @@ public class StoreController : ControllerBase
     public IActionResult GetItemsByStoreId(Guid storeId)
     {
         var items = _storeService.GetItemsByStoreId(storeId);
+        _mapper.Map<List<ItemDto>>(items);
         return Ok(items);
     }
     
