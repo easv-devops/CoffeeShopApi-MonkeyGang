@@ -23,7 +23,13 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> GetOrderByIdAsync(Guid orderId)
     {
-        return await _dbContext.Orders.FindAsync(orderId);
+        return await _dbContext.Orders
+            .AsNoTracking()
+            
+            .Include(o => o.Store)
+            .Include(o => o.OrderDetails)
+            .FirstOrDefaultAsync(o => o.OrderId == orderId);
+        
     }
 
     public async Task<Guid> AddOrderAsync(Order order)

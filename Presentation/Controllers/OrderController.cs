@@ -48,7 +48,9 @@ public class OrderController : ControllerBase
             return NotFound();
         }
 
-        return Ok(order);
+        OrderResponseDto orderResponseDto = _mapper.Map<OrderResponseDto>(order);
+        
+        return Ok(orderResponseDto);
     }
 
     [HttpPost]
