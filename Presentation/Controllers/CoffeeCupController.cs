@@ -14,8 +14,8 @@ namespace YourProject.Controllers
     [Route("api/[controller]")]
     public class CoffeeCupController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly ICoffeeCupService _coffeeCupService;
+        private readonly IMapper _mapper;
 
         
         public CoffeeCupController(IMapper mapper, ICoffeeCupService coffeeCupService)

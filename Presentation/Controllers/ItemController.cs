@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.DTOs;
 using Service;
 
 namespace Presentation.Controllers;
@@ -9,17 +11,23 @@ namespace Presentation.Controllers;
 public class ItemController : ControllerBase
 {
     private readonly IItemService _itemService;
+    private readonly IMapper _mapper;
 
-    public ItemController(IItemService itemService)
+    
+    public ItemController(IItemService itemService, IMapper mapper)
     {
         _itemService = itemService;
+        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllItems()
     {
         var items = await _itemService.GetAllItemsAsync();
-        return Ok(items);
+        
+        IEnumerable<ItemDto> itemDtos =  _mapper.Map<List<ItemDto>>(items);
+        
+        return Ok(itemDtos);
     }
 
     [HttpGet("{id}")]
@@ -32,7 +40,9 @@ public class ItemController : ControllerBase
             return NotFound();
         }
 
-        return Ok(item);
+        ItemDto itemDto = _mapper.Map<ItemDto>(item);
+        
+        return Ok(itemDto);
     }
     
 

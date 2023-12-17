@@ -1,7 +1,9 @@
 using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.DTOs;
+using Models.DTOs.Response;
 using Service;
 
 namespace Presentation.Controllers
@@ -11,10 +13,12 @@ namespace Presentation.Controllers
     public class CoffeeCupIngredientController : ControllerBase
     {
                 private readonly ICoffeeCupIngredientService _coffeeCupIngredientService;
+                private readonly IMapper _mapper;
 
-        public CoffeeCupIngredientController(ICoffeeCupIngredientService coffeeCupIngredientService)
+        public CoffeeCupIngredientController(ICoffeeCupIngredientService coffeeCupIngredientService, IMapper Mapper)
         {
             _coffeeCupIngredientService = coffeeCupIngredientService;
+            _mapper = Mapper;
         }
 
         [HttpGet("{coffeeCupId}/{ingredientId}")]
@@ -34,6 +38,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetAllCoffeeCupIngredients(Guid coffeeCupId)
         {
             var coffeeCupIngredients = await _coffeeCupIngredientService.GetAllCoffeeCupIngredientsAsync(coffeeCupId);
+            IEnumerable<CoffeeCupResponseDto> coffeeCupIngredientDtos = _mapper.Map<List<CoffeeCupResponseDto>>(coffeeCupIngredients);
             return Ok(coffeeCupIngredients);
         }
 

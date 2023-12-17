@@ -13,17 +13,24 @@ using System.Collections.Generic;
 public class IngredientController : ControllerBase
 {
     private readonly IIngredientService _ingredientService;
+    private readonly IMapper _mapper;
 
-    public IngredientController(IIngredientService ingredientService)
+
+    public IngredientController(IIngredientService ingredientService, IMapper mapper)
     {
         _ingredientService = ingredientService;
+        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<IngredientDto>>> GetAllIngredients()
     {
         var ingredients = await _ingredientService.GetAllIngredientsAsync();
-        return Ok(ingredients);
+        
+        List<IngredientDto> ingredientDtos = _mapper.Map<List<IngredientDto>>(ingredients);
+        
+        
+        return Ok(ingredientDtos);
     }
 
     [HttpGet("{id}")]
@@ -36,8 +43,10 @@ public class IngredientController : ControllerBase
         {
             return NotFound(); // 404 Not Found
         }
+        
+        IngredientDto ingredientDto = _mapper.Map<IngredientDto>(ingredient);
 
-        return Ok(ingredient);
+        return Ok(ingredientDto);
     }
 
     [HttpPost]

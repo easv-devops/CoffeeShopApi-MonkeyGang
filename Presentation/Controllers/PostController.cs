@@ -1,3 +1,6 @@
+using AutoMapper;
+using Models.DTOs;
+
 namespace Presentation.Controllers;
 
 
@@ -10,17 +13,22 @@ using Service; // Assuming you have a service for managing posts
 public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
+    private readonly IMapper _mapper;
 
-    public PostController(IPostService postService)
+    public PostController(IPostService postService, IMapper mapper)
     {
         _postService = postService;
+        _mapper = mapper;
     }
 
     [HttpGet]
     public IActionResult GetAllPosts()
     {
         var posts = _postService.GetAllPosts();
-        return Ok(posts);
+        
+        List<PostDto> postDtos = _mapper.Map<List<PostDto>>(posts);
+        
+        return Ok(postDtos);
     }
 
     [HttpGet("{postId}")]
@@ -30,8 +38,10 @@ public class PostController : ControllerBase
 
         if (post == null)
             return NotFound();
+        
+        PostDto postDto = _mapper.Map<PostDto>(post);
 
-        return Ok(post);
+        return Ok(postDto);
     }
 
     [HttpPost]
