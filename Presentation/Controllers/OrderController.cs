@@ -34,6 +34,11 @@ public class OrderController : ControllerBase
         
         // Map the orders to the response DTO using AutoMapper
         var responseDto = _mapper.Map<List<OrderResponseDto>>(orders);
+
+        foreach (OrderResponseDto order in responseDto)
+        {
+            Console.WriteLine(order.OrderId);
+        }
         
         return Ok(responseDto);
     }

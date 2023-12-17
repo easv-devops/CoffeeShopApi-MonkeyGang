@@ -21,6 +21,7 @@ public class User
     //BCrypt gemmer salten for os
     public string Password { get; set; }
 
+    public bool IsAdmin { get; set; }
 
     // Navigation property for the one-to-many relationship
     public virtual List<Order> Orders { get; set; }
@@ -34,4 +35,5 @@ public class User
     {
         return BCrypt.Net.BCrypt.Verify(enteredPassword, _passwordHash);
     }
+    
 }

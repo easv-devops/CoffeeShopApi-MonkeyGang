@@ -9,8 +9,8 @@ public class CustomCoffeeCup : Item
     
     [JsonIgnore]
     public virtual List<CustomCoffeeCupIngredients> CustomCoffeeCupIngredients { get; set; }
-    Guid UserId { get; set; }
-    User User { get; set; }
+    public virtual Guid UserId { get; set; }
+    public virtual User User { get; set; }
     
     
 }
