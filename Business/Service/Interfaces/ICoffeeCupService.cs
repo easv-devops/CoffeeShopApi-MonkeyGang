@@ -7,11 +7,10 @@ namespace Service;
 
 public interface ICoffeeCupService
 {
-    Task<CoffeeCup> GetCoffeeCupByIdAsync(Guid coffeeCupId);
-    Task<IEnumerable<CoffeeCup>> GetAllCoffeeCupsAsync();
-    Task<Guid> AddCoffeeCupAsync(CoffeeCup coffeeCup);
-    Task UpdateCoffeeCupAsync(CoffeeCup coffeeCup);
+    Task<CoffeeCupResponseDto> GetCoffeeCupByIdAsync(Guid coffeeCupId);
+    Task<IEnumerable<CoffeeCupResponseDto>> GetAllCoffeeCupsAsync();
+    Task<Guid> AddCoffeeCupAsync(CreateCoffeeCupDto createDto);
+    Task UpdateCoffeeCupAsync(Guid coffeeCupId, CoffeeCupResponseDto updateDto);
     Task<bool> DeleteCoffeeCupAsync(Guid coffeeCupId);
     Task<IEnumerable<CakeResponseDto>> GetCakesForCoffeeCupAsync(Guid coffeeCupId);
-    
 }

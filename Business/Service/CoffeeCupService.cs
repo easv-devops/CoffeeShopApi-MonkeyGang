@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Data;
 using Data.Repository.Interfaces;
 using Models;
 using Models.DTOs.Create;
@@ -21,29 +20,36 @@ public class CoffeeCupService : ICoffeeCupService
         _mapper = mapper;
     }
 
-    public async Task<CoffeeCup> GetCoffeeCupByIdAsync(Guid coffeeCupId)
+    public async Task<CoffeeCupResponseDto> GetCoffeeCupByIdAsync(Guid coffeeCupId)
     {
-        return await _coffeeCupRepository.GetByIdAsync(coffeeCupId);
+        var coffeeCup = await _coffeeCupRepository.GetByIdAsync(coffeeCupId);
+        return _mapper.Map<CoffeeCupResponseDto>(coffeeCup);
     }
 
-    public async Task<IEnumerable<CoffeeCup>> GetAllCoffeeCupsAsync()
+    public async Task<IEnumerable<CoffeeCupResponseDto>> GetAllCoffeeCupsAsync()
     {
-        return await _coffeeCupRepository.GetAllAsync();
+        var coffeeCups = await _coffeeCupRepository.GetAllAsync();
+        return _mapper.Map<IEnumerable<CoffeeCupResponseDto>>(coffeeCups);
     }
 
-    public async Task<Guid> AddCoffeeCupAsync(CoffeeCup coffeeCup)
+    public async Task<Guid> AddCoffeeCupAsync(CreateCoffeeCupDto createDto)
     {
-        // Add coffee cup to the database
+        var coffeeCup = _mapper.Map<CoffeeCup>(createDto);
         await _coffeeCupRepository.AddAsync(coffeeCup);
-
-        // Return the generated ID
         return coffeeCup.ItemId;
     }
 
-    public async Task UpdateCoffeeCupAsync(CoffeeCup coffeeCup)
+    public async Task UpdateCoffeeCupAsync(Guid coffeeCupId, CoffeeCupResponseDto updateDto)
     {
-        // Add any business logic/validation as needed before calling the repository
-        await _coffeeCupRepository.UpdateAsync(coffeeCup);
+        var existingCoffeeCup = await _coffeeCupRepository.GetByIdAsync(coffeeCupId);
+        
+        if (existingCoffeeCup == null)
+        {
+            return;
+        }
+
+        _mapper.Map(updateDto, existingCoffeeCup);
+        await _coffeeCupRepository.UpdateAsync(existingCoffeeCup);
     }
 
     public async Task<bool> DeleteCoffeeCupAsync(Guid coffeeCupId)
@@ -52,19 +58,16 @@ public class CoffeeCupService : ICoffeeCupService
 
         if (coffeeCup != null)
         {
-            // Add any business logic/validation as needed before calling the repository
             await _coffeeCupRepository.DeleteAsync(coffeeCup);
-            return true; // Deletion successful
+            return true;
         }
 
-        return false; // CoffeeCup not found
+        return false;
     }
-    
+
     public async Task<IEnumerable<CakeResponseDto>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
     {
         var cakesForCoffeeCup = await _coffeeCupRepository.GetCakesForCoffeeCupAsync(coffeeCupId);
-
         return _mapper.Map<IEnumerable<CakeResponseDto>>(cakesForCoffeeCup);
     }
-    
 }
