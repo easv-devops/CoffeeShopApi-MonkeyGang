@@ -65,9 +65,9 @@ public class CoffeeCupService : ICoffeeCupService
         return false;
     }
 
-    public async Task<IEnumerable<CakeResponseDto>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
+    public async Task<List<CakeResponseDto>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
     {
         var cakesForCoffeeCup = await _coffeeCupRepository.GetCakesForCoffeeCupAsync(coffeeCupId);
-        return _mapper.Map<IEnumerable<CakeResponseDto>>(cakesForCoffeeCup);
+        return _mapper.Map<List<CakeResponseDto>>(cakesForCoffeeCup);
     }
 }

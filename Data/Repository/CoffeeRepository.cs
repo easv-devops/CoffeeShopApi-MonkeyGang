@@ -71,15 +71,13 @@ public class CoffeeCupRepository : ICoffeeCupRepository
         await _dbContext.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<Cake>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
+    public async Task<List<Cake>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
     {
-        // Implement the logic to fetch cakes associated with a basic coffee cup
-        // This will depend on your data model
-        // For example, assuming there is a navigation property from CoffeeCup to Cake
-        return await _dbContext.CoffeeCups
-            .Where(c => c.ItemId == coffeeCupId)
-            .SelectMany(c => c.Cakes)
+        
+        return await _dbContext.Cakes
+            .Where(c => c.CoffeeCupId == coffeeCupId)
             .ToListAsync();
+        
     }
     
 }

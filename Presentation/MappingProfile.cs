@@ -14,11 +14,13 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // (╯°□°）╯︵ ┻━┻
-        CreateMap<Item, ItemResponseDto>(); // Map the base class
+        CreateMap<Item, ItemResponseDto>(); 
+        CreateMap<ItemResponseDto, Item>();
         CreateMap<ItemDto, Item>();
         CreateMap<CreateItemDto, Item>();
         CreateMap<Item, ItemDto>();
-        
+        CreateMap<ItemResponseDto, CakeResponseDto>();
+        CreateMap<CakeResponseDto, ItemResponseDto>();
         
         CreateMap<CoffeeCupDto, CoffeeCup>()
             // Map other properties...
@@ -109,8 +111,14 @@ public class MappingProfile : Profile
         //consider if customerDto is enough
         
         CreateMap<UserDto , UserResponseDto>();
-        
-        
-        
+
+        CreateMap<Cake, CakeResponseDto>()
+            .IncludeBase<Item,ItemResponseDto>();
+        CreateMap<CakeResponseDto, Cake>()
+            .IncludeBase<ItemResponseDto, Item>();
+
+
+
+
     }
 }

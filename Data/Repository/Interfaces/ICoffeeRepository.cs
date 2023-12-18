@@ -10,5 +10,5 @@ public interface ICoffeeCupRepository
     Task AddAsync(CoffeeCup coffeeCup);
     Task UpdateAsync(CoffeeCup coffeeCup);
     Task DeleteAsync(CoffeeCup coffeeCup);
-    Task<IEnumerable<Cake>> GetCakesForCoffeeCupAsync(Guid coffeeCupId);
+    Task<List<Cake>> GetCakesForCoffeeCupAsync(Guid coffeeCupId);
 }
