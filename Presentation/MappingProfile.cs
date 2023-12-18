@@ -117,8 +117,22 @@ public class MappingProfile : Profile
         CreateMap<CakeResponseDto, Cake>()
             .IncludeBase<ItemResponseDto, Item>();
 
+        CreateMap<Ingredient, IngredientDto>();
+        CreateMap<IngredientDto, Ingredient>();
+
+        CreateMap<CoffeeCupIngredient, CoffeeCupIngredientDto>();
+
+        CreateMap<CreateCoffeeCupIngredientDto, CustomCoffeeCupDto>();
+        CreateMap<CustomCoffeeCupDto, CreateCoffeeCupIngredientDto>();
+        
+        CreateMap<CustomCoffeeCupCreateDto, CustomCoffeeCup>();
+
+        CreateMap<CustomCoffeeCupIngredients, CustomCoffeeCupIngredientsResponseDto>();
 
 
+        CreateMap<CreateCustomCoffeeCupIngredientsDto, CoffeeCupIngredient>();
+
+        CreateMap<CustomCoffeeCup, CustomCoffeeCupResponseDto>();
 
     }
 }

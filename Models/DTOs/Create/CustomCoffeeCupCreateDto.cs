@@ -1,8 +1,9 @@
 ﻿namespace Models.DTOs.Create;
 
-public class CustomCoffeeCupCreateDto
+public class CustomCoffeeCupCreateDto : ItemDto
 {
-    public string Name { get; set; }
-    public List<Guid> IngredientIds { get; set; }
+    public List<CreateCustomCoffeeCupIngredientsDto> Ingredients { get; set; }
     public Guid UserId { get; set; }
+    public ItemType ItemType => ItemType.CoffeeCup;
+    //set price later
 }

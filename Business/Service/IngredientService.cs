@@ -1,6 +1,7 @@
 using Data.Repository;
 using Models;
 using Models.DTOs;
+using Models.DTOs.Response;
 using Service;
 
 namespace Business.Service;
@@ -20,10 +21,10 @@ public class IngredientService : IIngredientService
         _mapper = mapper;
     }
 
-    public async Task<List<IngredientDto>> GetAllIngredientsAsync()
+    public async Task<List<IngredientResponseDto>> GetAllIngredientsAsync()
     {
         var ingredients = await _ingredientRepository.GetAllIngredientsAsync();
-        return _mapper.Map<List<IngredientDto>>(ingredients);
+        return _mapper.Map<List<IngredientResponseDto>>(ingredients);
     }
 
     public async Task<IngredientDto> GetIngredientByIdAsync(Guid ingredientId)

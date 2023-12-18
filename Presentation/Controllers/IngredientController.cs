@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
+using Models.DTOs.Response;
 using Service;
 
 namespace Presentation.Controllers;
@@ -23,14 +24,14 @@ public class IngredientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<IngredientDto>>> GetAllIngredients()
+    public async Task<ActionResult<List<IngredientResponseDto>>> GetAllIngredients()
     {
         var ingredients = await _ingredientService.GetAllIngredientsAsync();
         
-        List<IngredientDto> ingredientDtos = _mapper.Map<List<IngredientDto>>(ingredients);
+        //List<IngredientDto> ingredientDtos = _mapper.Map<List<IngredientDto>>(ingredients);
         
         
-        return Ok(ingredientDtos);
+        return Ok(ingredients);
     }
 
     [HttpGet("{id}")]

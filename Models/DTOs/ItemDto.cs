@@ -13,5 +13,4 @@ public class ItemDto
 
     public Guid StoreId { get; set; }
 
-    // Additional properties specific to ItemDTO...
 }

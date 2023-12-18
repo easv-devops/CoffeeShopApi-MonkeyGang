@@ -20,7 +20,8 @@ public class IngredientRepository : IIngredientRepository
 
     public async Task<List<Ingredient>> GetAllIngredientsAsync()
     {
-        return await _dbContext.Ingredients.ToListAsync();
+        return await _dbContext.Ingredients.IgnoreAutoIncludes().ToListAsync();
+        
     }
 
     public async Task<Guid> AddIngredientAsync(Ingredient ingredient)
