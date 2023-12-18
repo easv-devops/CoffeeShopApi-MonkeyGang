@@ -96,6 +96,7 @@ public class Program
         services.AddScoped<IStoreItemRepository, StoreItemRepository>();
         
         services.AddScoped<ICustomCoffeeCupRepository, CustomCoffeeCupRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
 
         // Add services
         services.AddScoped<ICoffeeCupService, CoffeeCupService>();
@@ -110,6 +111,8 @@ public class Program
         services.AddScoped<IItemService, ItemService>();
         
         services.AddScoped<ICustomCoffeeCupService, CustomCoffeeCupService>();
+        
+        services.AddScoped<IPostService, PostService>();
         
         //services.AddScoped<IStoreItemService, StoreItemService>();
         

@@ -133,6 +133,9 @@ public class MappingProfile : Profile
         CreateMap<CreateCustomCoffeeCupIngredientsDto, CoffeeCupIngredient>();
 
         CreateMap<CustomCoffeeCup, CustomCoffeeCupResponseDto>();
+        
+        CreateMap<CreatePostDto, Post>();
+        CreateMap<Post, PostResponseDto>();
 
     }
 }

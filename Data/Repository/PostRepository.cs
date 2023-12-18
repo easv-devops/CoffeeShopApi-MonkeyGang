@@ -1,6 +1,7 @@
 using Data.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTOs.Create;
 
 namespace Data.Repository;
 

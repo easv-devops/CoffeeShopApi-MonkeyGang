@@ -174,12 +174,6 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -192,8 +186,6 @@ namespace Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("PostId");
-
-                    b.HasIndex("ItemId");
 
                     b.HasIndex("UserId");
 
@@ -407,19 +399,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Post", b =>
                 {
-                    b.HasOne("Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Item");
 
                     b.Navigation("User");
                 });

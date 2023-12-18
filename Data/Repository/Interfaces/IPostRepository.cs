@@ -1,4 +1,5 @@
 using Models;
+using Models.DTOs.Create;
 
 namespace Data.Repository.Interfaces;
 

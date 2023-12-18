@@ -1,5 +1,6 @@
 using AutoMapper;
 using Models.DTOs;
+using Models.DTOs.Create;
 
 namespace Presentation.Controllers;
 
@@ -45,7 +46,7 @@ public class PostController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreatePost([FromBody] Post post)
+    public IActionResult CreatePost([FromBody] CreatePostDto post)
     {
         if (post == null)
             return BadRequest();

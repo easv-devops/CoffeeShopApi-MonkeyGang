@@ -1,5 +1,7 @@
+using AutoMapper;
 using Data.Repository.Interfaces;
 using Models;
+using Models.DTOs.Create;
 using Service;
 
 namespace Business.Service;
@@ -7,10 +9,12 @@ namespace Business.Service;
 public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
-
-    public PostService(IPostRepository postRepository)
+    private readonly IMapper _mapper;
+    
+    public PostService(IPostRepository postRepository, IMapper mapper)
     {
         _postRepository = postRepository;
+        _mapper = mapper;
     }
 
     public List<Post> GetAllPosts()
@@ -20,14 +24,15 @@ public class PostService : IPostService
 
     public Post GetPostById(Guid postId)
     {
+        
         return _postRepository.GetPostById(postId);
     }
 
-    public Guid AddPost(Post post)
+    public Guid AddPost(CreatePostDto postdto)
     {
-        // Add any additional business logic/validation here before calling the repository method
-        // For example, you might want to validate the content of the post before saving it.
-
+        
+        Post post = _mapper.Map<Post>(postdto);
+        
         return _postRepository.AddPost(post);
     }
 
