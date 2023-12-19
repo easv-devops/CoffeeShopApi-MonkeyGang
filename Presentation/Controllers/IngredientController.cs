@@ -14,21 +14,17 @@ using System.Collections.Generic;
 public class IngredientController : ControllerBase
 {
     private readonly IIngredientService _ingredientService;
-    private readonly IMapper _mapper;
 
 
     public IngredientController(IIngredientService ingredientService, IMapper mapper)
     {
         _ingredientService = ingredientService;
-        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<IngredientResponseDto>>> GetAllIngredients()
     {
         var ingredients = await _ingredientService.GetAllIngredientsAsync();
-        
-        //List<IngredientDto> ingredientDtos = _mapper.Map<List<IngredientDto>>(ingredients);
         
         
         return Ok(ingredients);
@@ -37,17 +33,14 @@ public class IngredientController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<IngredientDto>> GetIngredientById(Guid id)
     {
-        var ingredient = await _ingredientService.GetIngredientByIdAsync(id);
+        IngredientDto ingredient = await _ingredientService.GetIngredientByIdAsync(id);
 
-        //Expression is always false according to nullable reference types' annotations
-        if (ingredient == null)
+        if (ingredient.ToString() == null)
         {
             return NotFound(); // 404 Not Found
         }
         
-        IngredientDto ingredientDto = _mapper.Map<IngredientDto>(ingredient);
-
-        return Ok(ingredientDto);
+        return Ok(ingredient);
     }
 
     [HttpPost]

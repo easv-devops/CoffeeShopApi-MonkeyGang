@@ -14,11 +14,9 @@ namespace Presentation.Controllers
     public class CoffeeCupController : ControllerBase
     {
         private readonly ICoffeeCupService _coffeeCupService;
-        private readonly IMapper _mapper;
 
-        public CoffeeCupController(IMapper mapper, ICoffeeCupService coffeeCupService)
+        public CoffeeCupController(ICoffeeCupService coffeeCupService)
         {
-            _mapper = mapper;
             _coffeeCupService = coffeeCupService;
         }
 
@@ -27,7 +25,8 @@ namespace Presentation.Controllers
         {
             var coffeeCupResponseDto = await _coffeeCupService.GetCoffeeCupByIdAsync(coffeeCupId);
 
-            if (coffeeCupResponseDto == null)
+            // If the coffee cup doesn't exist, return a 404 Not Found
+            if (coffeeCupResponseDto.ItemId == Guid.Empty)
             {
                 return NotFound();
             }
@@ -87,7 +86,7 @@ namespace Presentation.Controllers
         {
             var cakesForCoffeeCupDto = await _coffeeCupService.GetCakesForCoffeeCupAsync(id);
 
-            if (cakesForCoffeeCupDto == null)
+            if (cakesForCoffeeCupDto.Count == 0)
             {
                 return NotFound();
             }
