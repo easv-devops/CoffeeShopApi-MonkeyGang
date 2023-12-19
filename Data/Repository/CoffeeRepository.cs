@@ -16,10 +16,6 @@ public class CoffeeCupRepository : ICoffeeCupRepository
     public CoffeeCupRepository(CoffeeShopDbContext context)
     {
         _dbContext = context;
-
-        {
-            
-        };
     }
 
     public async Task<CoffeeCup> GetByIdAsync(Guid id)
@@ -37,21 +33,17 @@ public class CoffeeCupRepository : ICoffeeCupRepository
             .Include(cc => cc.CoffeeCupIngredients)
             .ThenInclude(cci => cci.Ingredient)
             .ToListAsync();
-        
     }
-    
-    
+
+
     public async Task<IEnumerable<CoffeeCup>> GetAllWithIngredientsAsync(string json)
     {
-        
         return await _dbContext.CoffeeCups
             .Include(cc => cc.CoffeeCupIngredients)
             .ThenInclude(cci => cci.Ingredient)
             .ToListAsync();
-        
-        
     }
-    
+
 
     public async Task AddAsync(CoffeeCup coffeeCup)
     {
@@ -70,14 +62,11 @@ public class CoffeeCupRepository : ICoffeeCupRepository
         _dbContext.CoffeeCups.Remove(coffeeCup);
         await _dbContext.SaveChangesAsync();
     }
-    
+
     public async Task<List<Cake>> GetCakesForCoffeeCupAsync(Guid coffeeCupId)
     {
-        
         return await _dbContext.Cakes
             .Where(c => c.CoffeeCupId == coffeeCupId)
             .ToListAsync();
-        
     }
-    
 }

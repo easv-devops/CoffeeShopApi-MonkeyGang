@@ -2,7 +2,6 @@ namespace Models.DTOs.Response;
 
 public class UserResponseDto
 {
-    
     public Guid UserId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -10,5 +9,4 @@ public class UserResponseDto
     public string Phone { get; set; }
     public string Address { get; set; }
     public bool IsAdmin { get; set; }
-    
 }

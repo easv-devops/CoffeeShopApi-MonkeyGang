@@ -22,21 +22,10 @@ public class StoreItemRepository : IStoreItemRepository
         if (items == null)
         {
             Console.WriteLine("No items found for store ID: {0}", storeId);
-            Console.WriteLine("No items found for store ID: {0}", storeId);
-            Console.WriteLine("No items found for store ID: {0}", storeId);
-            Console.WriteLine("No items found for store ID: {0}", storeId);
-            Console.WriteLine("No items found for store ID: {0}", storeId);
-            Console.WriteLine("No items found for store ID: {0}", storeId);
 
             return null;
         }
         
-        Console.WriteLine("Items found for store ID: {0}", storeId);
-        Console.WriteLine("Items found for store ID: {0}", storeId);
-        Console.WriteLine("Items found for store ID: {0}", storeId);
-        Console.WriteLine("Items found for store ID: {0}", storeId);
-        Console.WriteLine("Items found for store ID: {0}", storeId);
-        Console.WriteLine("Items found for store ID: {0}", storeId);
 
         return items;
     }

@@ -23,7 +23,7 @@ public class StoreController : ControllerBase
     public async Task<IActionResult> GetAllStores()
     {
         var stores = await _storeService.GetAllStoresAsync();
-        IEnumerable<StoreDto> storeDtos =  _mapper.Map<List<StoreDto>>(stores);
+        IEnumerable<StoreDto> storeDtos = _mapper.Map<List<StoreDto>>(stores);
         return Ok(storeDtos);
     }
 
@@ -36,7 +36,7 @@ public class StoreController : ControllerBase
         {
             return NotFound();
         }
-        
+
         StoreDto storeDto = _mapper.Map<StoreDto>(store);
 
         return Ok(storeDto);
@@ -88,7 +88,7 @@ public class StoreController : ControllerBase
 
         return NoContent();
     }
-    
+
     [HttpGet("{storeId}/items")]
     public IActionResult GetItemsByStoreId(Guid storeId)
     {
@@ -96,6 +96,4 @@ public class StoreController : ControllerBase
         _mapper.Map<List<ItemDto>>(items);
         return Ok(items);
     }
-    
-    
 }

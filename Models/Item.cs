@@ -19,6 +19,4 @@ public class Item
     public string Image { get; set; }
 
     public virtual List<StoreItem> StoreItems { get; set; }
-    
-
 }

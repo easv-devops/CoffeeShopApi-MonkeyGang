@@ -7,13 +7,11 @@ namespace Models;
 [Table("CoffeeCups")]
 public class CoffeeCup : Item
 {
-    
     //todo: update this in other files
-    [JsonIgnore]
-    public virtual ICollection<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
+    [JsonIgnore] public virtual ICollection<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
 
     public virtual List<Cake> Cakes { get; set; }
-    
+
     public CoffeeCup()
     {
         ItemType = ItemType.CoffeeCup;

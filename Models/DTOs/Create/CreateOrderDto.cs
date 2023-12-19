@@ -9,5 +9,4 @@ public class CreateOrderDto
     public decimal TotalAmount { get; set; }
 
     public List<CreateOrderDetailDto> OrderDetails { get; set; }
-    
 }

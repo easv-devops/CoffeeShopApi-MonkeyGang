@@ -22,7 +22,7 @@ public class StoreRepository : IStoreRepository
     {
         return await _dbContext.Stores.FindAsync(id);
     }
-    
+
 
     public async Task AddAsync(Store store)
     {

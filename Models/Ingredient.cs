@@ -18,8 +18,7 @@ public class Ingredient
     public MeasurementUnit MeasurementUnit { get; set; }
 
     public virtual List<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
-    
+
     // I pray to every god i have knowledge of that this dosen't break anything
     public virtual List<CustomCoffeeCupIngredients> CustomCoffeeCupIngredients { get; set; }
-    
 }

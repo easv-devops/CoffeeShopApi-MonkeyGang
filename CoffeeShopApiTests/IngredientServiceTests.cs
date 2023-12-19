@@ -69,7 +69,6 @@ public class IngredientServiceTests
         {
             Name = "NewIngredient",
             Price = 10.99m,
-            //StockQuantity = 50
         };
 
         var newIngredientId = Guid.NewGuid();
@@ -103,7 +102,6 @@ public class IngredientServiceTests
 
 
         Assert.That(result, Is.True);
-        
     }
 
     [Test]
@@ -121,6 +119,5 @@ public class IngredientServiceTests
         var result = await _ingredientService.DeleteIngredientAsync(existingIngredientId);
 
         Assert.That(result, Is.True);
-        
     }
 }

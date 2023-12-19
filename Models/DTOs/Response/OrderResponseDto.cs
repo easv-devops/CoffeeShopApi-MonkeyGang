@@ -2,12 +2,10 @@ namespace Models.DTOs.Response;
 
 public class OrderResponseDto
 {
-    
     public Guid OrderId { get; set; }
 
     public Guid StoreId { get; set; }
     public DateTime OrderDate { get; set; }
-
 
 
     public Guid UserId { get; set; }

@@ -21,23 +21,20 @@ public class ItemService : IItemService
     {
         return await _itemRepository.GetItemByIdAsync(id);
     }
-    
+
 
     public async Task AddItemAsync(Item item)
     {
-        // Perform any business logic or validation before adding
         await _itemRepository.AddItemAsync(item);
     }
 
     public async Task UpdateItemAsync(Item item)
     {
-        // Perform any business logic or validation before updating
         await _itemRepository.UpdateItemAsync(item);
     }
 
     public async Task DeleteItemAsync(Guid id)
     {
-        // Perform any business logic or validation before deleting
         await _itemRepository.DeleteItemAsync(id);
     }
 }

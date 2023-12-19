@@ -23,23 +23,20 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.Include(ex => ex.Orders).ToListAsync();
     }
 
-    public async Task<User> AddUserAsync(User user)    
+    public async Task<User> AddUserAsync(User user)
     {
-        
-        //check if email is already in use
         var existingUser = await GetUserByEmailAsync(user.Email);
         if (existingUser != null)
         {
             throw new Exception("Email already in use.");
         }
-        
-        //hash password
+
 
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-        
+
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
-        
+
         return user;
     }
 
@@ -58,11 +55,9 @@ public class UserRepository : IUserRepository
             await _dbContext.SaveChangesAsync();
         }
     }
-    
+
     public async Task<User> GetUserByEmailAsync(string email)
     {
         return await _dbContext.Users.FirstOrDefaultAsync(c => c.Email == email);
     }
-    
-    
 }

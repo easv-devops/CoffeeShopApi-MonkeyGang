@@ -17,8 +17,8 @@ public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
-    
-    
+
+
     public OrderController(IOrderService orderService, IMapper mapper)
     {
         _orderService = orderService;
@@ -29,9 +29,8 @@ public class OrderController : ControllerBase
     public IActionResult GetAllOrders()
     {
         var orders = _orderService.GetAllOrdersAsync();
-        
-        
-        
+
+
         // Map the orders to the response DTO using AutoMapper
         var responseDto = _mapper.Map<List<OrderResponseDto>>(orders);
 
@@ -39,7 +38,7 @@ public class OrderController : ControllerBase
         {
             Console.WriteLine(order.OrderId);
         }
-        
+
         return Ok(responseDto);
     }
 
@@ -54,7 +53,7 @@ public class OrderController : ControllerBase
         }
 
         OrderResponseDto orderResponseDto = _mapper.Map<OrderResponseDto>(order);
-        
+
         return Ok(orderResponseDto);
     }
 
@@ -109,11 +108,11 @@ public class OrderController : ControllerBase
 
         return NoContent();
     }
-    
-    
+
+
     // not testet
     [HttpPut("{orderId}/accept")]
-    public async  Task<IActionResult> AcceptOrder(Guid orderId)
+    public async Task<IActionResult> AcceptOrder(Guid orderId)
     {
         try
         {
@@ -139,5 +138,3 @@ public class OrderController : ControllerBase
         }
     }
 }
-    
-    

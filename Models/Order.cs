@@ -10,6 +10,7 @@ public class Order
     public Guid OrderId { get; set; }
 
     public Guid StoreId { get; set; }
+
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime OrderDate { get; set; }
 

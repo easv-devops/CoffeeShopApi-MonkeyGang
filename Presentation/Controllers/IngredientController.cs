@@ -25,8 +25,8 @@ public class IngredientController : ControllerBase
     public async Task<ActionResult<List<IngredientResponseDto>>> GetAllIngredients()
     {
         var ingredients = await _ingredientService.GetAllIngredientsAsync();
-        
-        
+
+
         return Ok(ingredients);
     }
 
@@ -39,7 +39,7 @@ public class IngredientController : ControllerBase
         {
             return NotFound(); // 404 Not Found
         }
-        
+
         return Ok(ingredient);
     }
 

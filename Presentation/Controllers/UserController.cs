@@ -19,9 +19,9 @@ public class UserController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public UserController(IMapper mapper ,IUserService userService)
+    public UserController(IMapper mapper, IUserService userService)
     {
-        _mapper = mapper;   
+        _mapper = mapper;
         _userService = userService ?? throw new ArgumentNullException(nameof(userService));
     }
 
@@ -80,7 +80,7 @@ public class UserController : ControllerBase
             await _userService.AddUserAsync(user);
 
             Guid generatedId = user.UserId;
-            
+
             // Map the created user to a response DTO using AutoMapper
             var responseDto = _mapper.Map<UserResponseDto>(user);
             responseDto.UserId = generatedId;
@@ -129,8 +129,8 @@ public class UserController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
-    
-    
+
+
     [HttpPost("verify-password")]
     public IActionResult VerifyPassword([FromBody] PasswordVerificationRequest request)
     {
@@ -150,8 +150,8 @@ public class UserController : ControllerBase
             return Unauthorized("Invalid email or password.");
         }
     }
-    
-    
+
+
     //retrive user by email
     [HttpGet("email/{email}")]
     public async Task<IActionResult> GetUserByEmail(string email)
@@ -179,8 +179,4 @@ public class UserController : ControllerBase
             return BadRequest("Failed to retrieve user.");
         }
     }
-
-    
-    
-    
 }

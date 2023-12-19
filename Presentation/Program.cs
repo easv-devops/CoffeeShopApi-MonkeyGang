@@ -12,13 +12,11 @@ namespace Presentation;
 
 public class Program
 {
-    
     // ┬┴┬┴┤ ͜ʖ ͡°) ├┬┴┬┴
-    
+
     public static void Main(string[] args)
     {
-        
-        Console.WriteLine( @"
+        Console.WriteLine(@"
 <-. (`-')             <-. (`-')_ <-.(`-')  (`-')  _                      (`-')  _ <-. (`-')_            
    \(OO )_      .->      \( OO) ) __( OO)  ( OO).-/     .->       .->    (OO ).-/    \( OO) )    .->    
 ,--./  ,-.)(`-')----. ,--./ ,--/ '-'. ,--.(,------. ,--.'  ,-. ,---(`-') / ,---.  ,--./ ,--/  ,---(`-') 
@@ -27,10 +25,9 @@ public class Program
 |  |   |  | \|  |)|  ||  |\    | |  .   '  |  .--'  |  /   /) |  | '.(_/(|  .-.  ||  |\    | |  | '.(_/ 
 |  |   |  |  '  '-'  '|  | \   | |  |\   \ |  `---. `-/   /`  |  '-'  |  |  | |  ||  | \   | |  '-'  |  
 `--'   `--'   `-----' `--'  `--' `--' '--' `------'   `--'     `-----'   `--' `--'`--'  `--'  `-----'"
-            );
-        
-        
-        
+        );
+
+
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container. 
@@ -92,9 +89,9 @@ public class Program
 
         services.AddScoped<IStoreRepository, StoreRepository>();
         services.AddScoped<IItemRepository, ItemRepository>();
-        
+
         services.AddScoped<IStoreItemRepository, StoreItemRepository>();
-        
+
         services.AddScoped<ICustomCoffeeCupRepository, CustomCoffeeCupRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
 
@@ -109,14 +106,14 @@ public class Program
 
         services.AddScoped<IStoreService, StoreService>();
         services.AddScoped<IItemService, ItemService>();
-        
+
         services.AddScoped<ICustomCoffeeCupService, CustomCoffeeCupService>();
-        
+
         services.AddScoped<IPostService, PostService>();
-        
+
         //services.AddScoped<IStoreItemService, StoreItemService>();
-        
-        
+
+
         services.AddControllers()
             .AddNewtonsoftJson(options =>
             {

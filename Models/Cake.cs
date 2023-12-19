@@ -10,8 +10,7 @@ public class Cake : Item
         ItemType = ItemType.Cake;
     }
 
-    
-    
+
     public Guid CoffeeCupId { get; set; }
     public virtual CoffeeCup CoffeeCup { get; set; }
 }

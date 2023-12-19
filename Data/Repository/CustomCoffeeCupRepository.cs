@@ -16,14 +16,14 @@ public class CustomCoffeeCupRepository : ICustomCoffeeCupRepository
     public async Task<CustomCoffeeCup> GetCustomCoffeeCupByIdAsync(Guid id)
     {
         return await _dbContext.CustomCoffeeCups
-            .Include(c => c.User)  // Include User navigation property if needed
+            .Include(c => c.User) 
             .FirstOrDefaultAsync(c => c.ItemId == id);
     }
 
     public async Task<IEnumerable<CustomCoffeeCup>> GetAllCustomCoffeeCupsAsync()
     {
         return await _dbContext.CustomCoffeeCups
-            .Include(c => c.User)  // Include User navigation property if needed
+            .Include(c => c.User) 
             .ToListAsync();
     }
 
@@ -49,9 +49,9 @@ public class CustomCoffeeCupRepository : ICustomCoffeeCupRepository
         {
             _dbContext.CustomCoffeeCups.Remove(customCoffeeCup);
             await _dbContext.SaveChangesAsync();
-            return true; // Deletion successful
+            return true;
         }
 
-        return false; // CustomCoffeeCup not found
+        return false;
     }
 }

@@ -5,7 +5,6 @@ using Models.DTOs.Response;
 
 namespace Presentation.Controllers;
 
-
 using Microsoft.AspNetCore.Mvc;
 using Models; // Assuming your Post model is in a "Models" namespace
 using Service; // Assuming you have a service for managing posts
@@ -27,9 +26,9 @@ public class PostController : ControllerBase
     public IActionResult GetAllPosts()
     {
         var posts = _postService.GetAllPosts();
-        
+
         List<PostResponseDto> postDtos = _mapper.Map<List<PostResponseDto>>(posts);
-        
+
         return Ok(postDtos);
     }
 
@@ -40,7 +39,7 @@ public class PostController : ControllerBase
 
         if (post == null)
             return NotFound();
-        
+
         PostDto postDto = _mapper.Map<PostDto>(post);
 
         return Ok(postDto);

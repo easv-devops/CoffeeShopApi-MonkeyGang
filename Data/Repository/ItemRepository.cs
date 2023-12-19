@@ -22,18 +22,14 @@ public class ItemRepository : IItemRepository
     {
         return await _dbContext.Items.FindAsync(id);
     }
-    
-    
+
 
     public async Task<Guid> AddItemAsync(Item item)
     {
         await _dbContext.Items.AddAsync(item);
-        //await _dbContext.SaveChangesAsync();
 
-        // Return the generated ID
         Guid generatedItemId = item.ItemId;
 
-        // Detach the entity from the context
         DetachEntity(item);
 
         return generatedItemId;

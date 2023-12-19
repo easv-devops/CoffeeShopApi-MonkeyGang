@@ -5,20 +5,16 @@ using Models;
 
 public class CoffeeShopDbContext : DbContext
 {
-    // ordered by date of creation (oldest first) for debugging purposes
-    // at cleanup, sort alphabetically (for readability) ｡◕‿◕｡
     public DbSet<CoffeeCup> CoffeeCups { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
 
     public DbSet<CoffeeCupIngredient> CoffeeCupIngredients { get; set; }
 
-    //public DbSet<Product> Products { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<OrderDetail> OrderDetails { get; set; }
 
-    //public DbSet<Item> Items { get; set; }
     public DbSet<Cake> Cakes { get; set; }
     public DbSet<Post> Posts { get; set; }
 
@@ -63,20 +59,19 @@ public class CoffeeShopDbContext : DbContext
             .HasOne(cake => cake.CoffeeCup)
             .WithMany(cup => cup.Cakes)
             .HasForeignKey(cake => cake.CoffeeCupId)
-            .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate behavior
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<CoffeeCup>()
             .HasMany(cup => cup.Cakes)
             .WithOne(cake => cake.CoffeeCup)
             .HasForeignKey(cake => cake.CoffeeCupId)
-            .OnDelete(DeleteBehavior.Restrict); // Choose the appropriate behavior
+            .OnDelete(DeleteBehavior.Restrict);
 
 
         modelBuilder.Entity<User>()
             .Property(cc => cc.UserId)
             .ValueGeneratedOnAdd();
 
-        // many-to-many: CoffeeCupIngredient
         modelBuilder.Entity<CoffeeCupIngredient>()
             .HasKey(cci => new { cci.CoffeeCupId, cci.IngredientId });
 
@@ -105,11 +100,9 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(si => si.ItemId);
 
 
-        // Configure primary key for UserStore
         modelBuilder.Entity<UserStore>()
             .HasKey(us => new { us.UserId, us.StoreId });
 
-        // Configure the relationships
         modelBuilder.Entity<UserStore>()
             .HasOne(us => us.User)
             .WithMany(u => u.UserStores)
@@ -121,11 +114,9 @@ public class CoffeeShopDbContext : DbContext
             .HasForeignKey(us => us.StoreId);
 
 
-        // Configure primary key for CustomCoffeeCupIngredients
         modelBuilder.Entity<CustomCoffeeCupIngredients>()
             .HasKey(cci => new { cci.CustomCoffeeCupId, cci.IngredientId });
 
-        // Configure the relationships
         modelBuilder.Entity<CustomCoffeeCupIngredients>()
             .HasOne(cci => cci.CustomCoffeeCup)
             .WithMany(cc => cc.CustomCoffeeCupIngredients)
@@ -136,30 +127,6 @@ public class CoffeeShopDbContext : DbContext
             .WithMany(i => i.CustomCoffeeCupIngredients)
             .HasForeignKey(cci => cci.IngredientId);
     }
-
-
-    /*
-     * INGREDIENT - STORE DISABLED
-     */
-
-
-    // one-to-many: Store-Ingredient
-    // to avoid cycles in the object graph, we need to disable cascading deletes
-    /*
-    modelBuilder.Entity<Ingredient>()
-        .HasOne(i => i.Store)
-        .WithMany(s => s.Ingredients)
-        .OnDelete(DeleteBehavior.Restrict);
-        */
-
-    /*
-    // to avoid cycles in the object graph, we need to disable cascading deletes
-    modelBuilder.Entity<Post>()
-        .HasOne(p => p.Order)
-        .WithMany()
-        .HasForeignKey(p => p.OrderId)
-        .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
-    */
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -176,8 +143,7 @@ public class CoffeeShopDbContext : DbContext
 
         optionsBuilder.UseSqlServer(connectionString);
 
-        //no idea what this does
-        //but I'm afraid to delete it ಠ╭╮ಠ
+
         optionsBuilder.UseLazyLoadingProxies(); // Disable lazy loading
     }
 }

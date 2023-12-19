@@ -13,7 +13,7 @@ public class ItemController : ControllerBase
     private readonly IItemService _itemService;
     private readonly IMapper _mapper;
 
-    
+
     public ItemController(IItemService itemService, IMapper mapper)
     {
         _itemService = itemService;
@@ -24,9 +24,9 @@ public class ItemController : ControllerBase
     public async Task<IActionResult> GetAllItems()
     {
         var items = await _itemService.GetAllItemsAsync();
-        
-        IEnumerable<ItemDto> itemDtos =  _mapper.Map<List<ItemDto>>(items);
-        
+
+        IEnumerable<ItemDto> itemDtos = _mapper.Map<List<ItemDto>>(items);
+
         return Ok(itemDtos);
     }
 
@@ -41,10 +41,10 @@ public class ItemController : ControllerBase
         }
 
         ItemDto itemDto = _mapper.Map<ItemDto>(item);
-        
+
         return Ok(itemDto);
     }
-    
+
 
     [HttpPost]
     public async Task<IActionResult> AddItem([FromBody] Item item)

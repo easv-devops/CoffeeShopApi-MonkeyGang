@@ -14,14 +14,14 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // (╯°□°）╯︵ ┻━┻
-        CreateMap<Item, ItemResponseDto>(); 
+        CreateMap<Item, ItemResponseDto>();
         CreateMap<ItemResponseDto, Item>();
         CreateMap<ItemDto, Item>();
         CreateMap<CreateItemDto, Item>();
         CreateMap<Item, ItemDto>();
         CreateMap<ItemResponseDto, CakeResponseDto>();
         CreateMap<CakeResponseDto, ItemResponseDto>();
-        
+
         CreateMap<CoffeeCupDto, CoffeeCup>()
             // Map other properties...
             .IncludeBase<ItemDto, Item>(); // Include base class mapping
@@ -29,21 +29,23 @@ public class MappingProfile : Profile
         CreateMap<CoffeeCup, CoffeeCupDto>()
             .IncludeBase<Item, ItemDto>() // Include the base class mapping
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
-            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
+            .ForMember(dest => dest.Ingredients,
+                opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)));
 
 
         CreateMap<CoffeeCup, CoffeeCupResponseDto>()
             .IncludeBase<Item, ItemResponseDto>() // Include the base class mapping
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
-            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)))
-            .ForMember(dest => dest.StoreIds, opt => opt.MapFrom(src => src.StoreItems.Select(si => si.StoreId).ToList()));
-        
-        
-        
+            .ForMember(dest => dest.Ingredients,
+                opt => opt.MapFrom(src => src.CoffeeCupIngredients.Select(cci => cci.Ingredient)))
+            .ForMember(dest => dest.StoreIds,
+                opt => opt.MapFrom(src => src.StoreItems.Select(si => si.StoreId).ToList()));
+
+
         CreateMap<CreateCoffeeCupDto, CoffeeCup>()
             // Map other properties...
             .IncludeBase<CreateItemDto, Item>(); // Include base class mapping
-        
+
         //CreateMap<CoffeeCup, CreateCoffeeCupDto>();
 
 
@@ -51,7 +53,6 @@ public class MappingProfile : Profile
 
         CreateMap<IngredientResponseDto, Ingredient>();
         CreateMap<Ingredient, IngredientResponseDto>();
-        
 
 
         CreateMap<CoffeeCupIngredientDto, CoffeeCupIngredient>()
@@ -77,7 +78,7 @@ public class MappingProfile : Profile
         CreateMap<User, CreateUserDTO>();
         CreateMap<User, UserResponseDto>();
 
-        
+
         CreateMap<Order, OrderDto>();
         CreateMap<OrderDto, Order>();
         CreateMap<CreateOrderDto, Order>();
@@ -91,7 +92,7 @@ public class MappingProfile : Profile
         CreateMap<CreateOrderDetailDto, OrderDetail>();
         CreateMap<OrderDetail, OrderDetailResponseDto>();
         CreateMap<OrderDetailResponseDto, OrderDetail>();
-        
+
         CreateMap<Cake, CakeDto>();
         CreateMap<CakeDto, Cake>();
 
@@ -100,20 +101,16 @@ public class MappingProfile : Profile
 
         CreateMap<Store, StoreDto>();
         CreateMap<StoreDto, Store>();
-        
+
 
         CreateMap<Post, PostDto>();
         CreateMap<PostDto, Post>();
-        
-        
-        
-        //line 171 in customer controller needs this
-        //consider if customerDto is enough
-        
-        CreateMap<UserDto , UserResponseDto>();
+
+
+        CreateMap<UserDto, UserResponseDto>();
 
         CreateMap<Cake, CakeResponseDto>()
-            .IncludeBase<Item,ItemResponseDto>();
+            .IncludeBase<Item, ItemResponseDto>();
         CreateMap<CakeResponseDto, Cake>()
             .IncludeBase<ItemResponseDto, Item>();
 
@@ -124,7 +121,7 @@ public class MappingProfile : Profile
 
         CreateMap<CreateCoffeeCupIngredientDto, CustomCoffeeCupDto>();
         CreateMap<CustomCoffeeCupDto, CreateCoffeeCupIngredientDto>();
-        
+
         CreateMap<CustomCoffeeCupCreateDto, CustomCoffeeCup>();
 
         CreateMap<CustomCoffeeCupIngredients, CustomCoffeeCupIngredientsResponseDto>();
@@ -133,9 +130,8 @@ public class MappingProfile : Profile
         CreateMap<CreateCustomCoffeeCupIngredientsDto, CoffeeCupIngredient>();
 
         CreateMap<CustomCoffeeCup, CustomCoffeeCupResponseDto>();
-        
+
         CreateMap<CreatePostDto, Post>();
         CreateMap<Post, PostResponseDto>();
-
     }
 }

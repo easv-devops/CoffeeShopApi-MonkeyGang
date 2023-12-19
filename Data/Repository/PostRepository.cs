@@ -7,7 +7,7 @@ namespace Data.Repository;
 
 public class PostRepository : IPostRepository
 {
-    private readonly CoffeeShopDbContext _dbContext; 
+    private readonly CoffeeShopDbContext _dbContext;
 
     public PostRepository(CoffeeShopDbContext dbContext)
     {
@@ -29,7 +29,7 @@ public class PostRepository : IPostRepository
         _dbContext.Posts.Add(post);
         _dbContext.SaveChanges();
 
-        return post.PostId; 
+        return post.PostId;
     }
 
     public void UpdatePost(Post post)

@@ -23,7 +23,8 @@ public class OrderDetailRepository : IOrderDetailRepository
 
     public void UpdateOrderDetail(OrderDetail orderDetail)
     {
-        // Implementation to update an order detail in the database
+        var index = orderDetails.FindIndex(od => od.OrderDetailId == orderDetail.OrderDetailId);
+        orderDetails[index] = orderDetail;
     }
 
     public void DeleteOrderDetail(Guid orderDetailId)

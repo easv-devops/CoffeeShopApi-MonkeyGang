@@ -12,5 +12,4 @@ public class ItemDto
     public string Image { get; set; }
 
     public Guid StoreId { get; set; }
-
 }

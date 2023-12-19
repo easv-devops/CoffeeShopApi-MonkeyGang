@@ -46,7 +46,7 @@ public class IngredientService : IIngredientService
 
         if (existingIngredient == null)
         {
-            return false; // Ingredient not found
+            return false;
         }
 
         _mapper.Map(updatedIngredientDto, existingIngredient);
@@ -62,7 +62,7 @@ public class IngredientService : IIngredientService
 
         if (existingIngredient == null)
         {
-            return false; // Ingredient not found
+            return false;
         }
 
         var result = await _ingredientRepository.DeleteIngredientAsync(existingIngredient);

@@ -42,7 +42,7 @@ public class CoffeeCupService : ICoffeeCupService
     public async Task UpdateCoffeeCupAsync(Guid coffeeCupId, CoffeeCupResponseDto updateDto)
     {
         var existingCoffeeCup = await _coffeeCupRepository.GetByIdAsync(coffeeCupId);
-        
+
         if (existingCoffeeCup == null)
         {
             return;

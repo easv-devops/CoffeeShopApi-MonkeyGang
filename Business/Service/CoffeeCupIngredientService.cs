@@ -23,19 +23,16 @@ public class CoffeeCupIngredientService : ICoffeeCupIngredientService
 
     public async Task AddCoffeeCupIngredientAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        // Add any business logic/validation as needed before calling the repository
         await _coffeeCupIngredientRepository.AddAsync(coffeeCupIngredient);
     }
 
     public async Task AddRangeCoffeeCupIngredientsAsync(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients)
     {
-        // Add any business logic/validation as needed before calling the repository
         await _coffeeCupIngredientRepository.AddRangeAsync(coffeeCupIngredients);
     }
 
     public async Task UpdateCoffeeCupIngredientAsync(CoffeeCupIngredient coffeeCupIngredient)
     {
-        // Add any business logic/validation as needed before calling the repository
         await _coffeeCupIngredientRepository.UpdateAsync(coffeeCupIngredient);
     }
 
@@ -45,11 +42,10 @@ public class CoffeeCupIngredientService : ICoffeeCupIngredientService
 
         if (coffeeCupIngredient != null)
         {
-            // Add any business logic/validation as needed before calling the repository
             await _coffeeCupIngredientRepository.DeleteAsync(coffeeCupIngredient);
-            return true; // Deletion successful
+            return true;
         }
 
-        return false; // CoffeeCupIngredient not found
+        return false;
     }
 }

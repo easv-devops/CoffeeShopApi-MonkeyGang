@@ -1,12 +1,5 @@
 namespace Models;
 
-/*
- *
- *  /╲/\╭( ͡° ͡° ͜ʖ ͡° ͡°)╮/\╱\
- *
- * 
- */
-
 public enum ItemType
 {
     Item,

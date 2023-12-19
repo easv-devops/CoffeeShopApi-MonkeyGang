@@ -2,6 +2,6 @@ namespace Models;
 
 public enum MeasurementUnit
 {
-    Grams, // ( ͡° ͜ʖ ͡°)
+    Grams,
     Milliliters,
 }

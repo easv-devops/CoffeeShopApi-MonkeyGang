@@ -10,10 +10,11 @@ public class Store
     public Guid StoreId { get; set; }
 
     [Required] public string Name { get; set; }
-    
+
 
     public virtual List<Order> Orders { get; set; }
     public virtual List<StoreItem> StoreItems { get; set; }
+
     public virtual List<UserStore> UserStores { get; set; }
     //public List<Ingredient> Ingredients { get; set; }
 }

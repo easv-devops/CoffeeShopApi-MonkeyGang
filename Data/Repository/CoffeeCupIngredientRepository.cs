@@ -5,7 +5,7 @@ using Models;
 
 public class CoffeeCupIngredientRepository : ICoffeeCupIngredientRepository
 {
-    private readonly CoffeeShopDbContext _dbContext; // Use your actual DbContext
+    private readonly CoffeeShopDbContext _dbContext;
 
     public CoffeeCupIngredientRepository(CoffeeShopDbContext dbContext)
     {
@@ -27,7 +27,7 @@ public class CoffeeCupIngredientRepository : ICoffeeCupIngredientRepository
         _dbContext.CoffeeCupIngredients.Add(coffeeCupIngredient);
         await _dbContext.SaveChangesAsync();
     }
-    
+
     public async Task AddRangeAsync(IEnumerable<CoffeeCupIngredient> coffeeCupIngredients)
     {
         _dbContext.CoffeeCupIngredients.AddRange(coffeeCupIngredients);
@@ -45,5 +45,4 @@ public class CoffeeCupIngredientRepository : ICoffeeCupIngredientRepository
         _dbContext.CoffeeCupIngredients.Remove(coffeeCupIngredient);
         await _dbContext.SaveChangesAsync();
     }
-
 }

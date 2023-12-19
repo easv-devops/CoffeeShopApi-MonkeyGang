@@ -23,7 +23,7 @@ public class CustomCoffeeCupController : ControllerBase
     {
         var customCoffeeCupDto = await _customCoffeeCupService.GetCustomCoffeeCupByIdAsync(id);
 
-        if (customCoffeeCupDto == null)
+        if (customCoffeeCupDto.ToString() == null)
         {
             return NotFound();
         }

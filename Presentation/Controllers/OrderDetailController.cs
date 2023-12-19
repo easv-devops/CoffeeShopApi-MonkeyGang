@@ -26,7 +26,7 @@ public class OrderDetailsController : ControllerBase
     {
         var orderDetail = _orderDetailService.GetOrderDetailById(id);
 
-        if (orderDetail == null)
+        if (orderDetail.ToString() == null)
         {
             return NotFound();
         }

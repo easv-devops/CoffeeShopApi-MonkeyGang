@@ -62,7 +62,7 @@ namespace Presentation.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCoffeeCup([FromBody] CoffeeCupResponseDto coffeeCupDto)
         {
-            await _coffeeCupService.UpdateCoffeeCupAsync(coffeeCupDto.ItemId,coffeeCupDto);
+            await _coffeeCupService.UpdateCoffeeCupAsync(coffeeCupDto.ItemId, coffeeCupDto);
             return Ok();
         }
 

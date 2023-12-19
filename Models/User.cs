@@ -6,10 +6,10 @@ namespace Models;
 [Table("Users")]
 public class User
 {
-    
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid UserId { get; set; }
+
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -29,11 +29,10 @@ public class User
 
     // Navigation property for the many-to-many relationship
     public virtual List<UserStore> UserStores { get; set; }
-    
+
     // where do we use this?
     public bool IsPasswordCorrect(string enteredPassword)
     {
         return BCrypt.Net.BCrypt.Verify(enteredPassword, _passwordHash);
     }
-    
 }

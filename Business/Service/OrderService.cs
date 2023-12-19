@@ -20,9 +20,9 @@ public class OrderService : IOrderService
         _mapper = mapper;
     }
 
-    public  List<Order> GetAllOrdersAsync()
+    public List<Order> GetAllOrdersAsync()
     {
-        return  _orderRepository.GetAllOrdersAsync();
+        return _orderRepository.GetAllOrdersAsync();
     }
 
     public async Task<Order> GetOrderByIdAsync(Guid orderId)
@@ -33,10 +33,9 @@ public class OrderService : IOrderService
     public async Task<Guid> AddOrderAsync(CreateOrderDto createOrderDto)
     {
         var orderEntity = _mapper.Map<Order>(createOrderDto);
-        
-        // probably not a smart idea to set the order date here
+
         orderEntity.OrderDate = DateTime.Now;
-        
+
         var orderId = await _orderRepository.AddOrderAsync(orderEntity);
 
         return orderId;
@@ -44,20 +43,18 @@ public class OrderService : IOrderService
 
     public async Task UpdateOrderAsync(Order order)
     {
-        //check if guid is empty
         if (order.OrderId == Guid.Empty)
         {
             throw new ArgumentException("Order Id cannot be empty");
         }
-        
-        //check if order exists
+
         var existingOrder = await _orderRepository.GetOrderByIdAsync(order.OrderId);
         if (existingOrder == null)
         {
             throw new ArgumentException($"Order with id {order.OrderId} does not exist");
         }
-        
-        
+
+
         await _orderRepository.UpdateOrderAsync(order);
     }
 

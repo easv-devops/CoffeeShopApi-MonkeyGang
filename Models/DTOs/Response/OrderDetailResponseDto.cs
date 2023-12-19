@@ -9,5 +9,4 @@ public class OrderDetailResponseDto
     public decimal Subtotal { get; set; }
 
     public Guid ItemId { get; set; }
-
 }

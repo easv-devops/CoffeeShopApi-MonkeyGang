@@ -48,11 +48,9 @@ public class UserService : IUserService
 
     public async Task<UserDto> AddUserAsync(User user)
     {
-        
         await _customerRepository.AddUserAsync(user);
-        
-        return _mapper.Map<UserDto>(user);
 
+        return _mapper.Map<UserDto>(user);
     }
 
     public async Task UpdateUserAsync(UserDto userDto)
@@ -79,7 +77,7 @@ public class UserService : IUserService
             throw;
         }
     }
-    
+
     public async Task<UserDto> GetUserByEmailAsync(string email)
     {
         try
@@ -92,19 +90,12 @@ public class UserService : IUserService
             throw;
         }
     }
-    
+
     public bool VerifyPasswordAsync(string email, string password)
     {
-        // Retrieve user by email
         User user = _customerRepository.GetUserByEmailAsync(email).Result;
-        
-        // Check if user exists i don't know how to do this ¯\_(ツ)_/¯
 
-        // Verify the password
-        
-        
+
         return BCrypt.Net.BCrypt.Verify(password, user.Password);
     }
-    
-    
 }

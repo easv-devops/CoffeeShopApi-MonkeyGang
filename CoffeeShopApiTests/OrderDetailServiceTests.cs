@@ -21,7 +21,6 @@ public class OrderDetailServiceTests
     [SetUp]
     public void Setup()
     {
-        // Arrange
         mockOrderDetailRepository = new Mock<IOrderDetailRepository>();
         mockMapper = new Mock<IMapper>();
 
@@ -31,7 +30,6 @@ public class OrderDetailServiceTests
     [Test]
     public void GetOrderDetailById_ShouldReturnCorrectOrderDetail()
     {
-        // Arrange
         Guid orderDetailId = Guid.NewGuid();
         var orderDetailEntity = new OrderDetail
             { OrderDetailId = orderDetailId, Quantity = 2, Subtotal = 15.99m };
@@ -41,19 +39,16 @@ public class OrderDetailServiceTests
         mockOrderDetailRepository.Setup(repo => repo.GetOrderDetailById(orderDetailId)).Returns(orderDetailEntity);
         mockMapper.Setup(mapper => mapper.Map<OrderDetailDto>(orderDetailEntity)).Returns(orderDetailDto);
 
-        // Act
         var result = orderDetailService.GetOrderDetailById(orderDetailId);
 
-        // Assert
-        Assert.That(result, Is.Not.Null);     
-        Assert.That(orderDetailDto.Quantity,Is.EqualTo( result.Quantity));
-        Assert.That(orderDetailDto.Subtotal,Is.EqualTo( result.Subtotal));
+        Assert.That(result, Is.Not.Null);
+        Assert.That(orderDetailDto.Quantity, Is.EqualTo(result.Quantity));
+        Assert.That(orderDetailDto.Subtotal, Is.EqualTo(result.Subtotal));
     }
 
     [Test]
     public void GetAllOrderDetails_ShouldReturnAllOrderDetails()
     {
-        // Arrange
         var orderDetailEntities = new List<OrderDetail>
         {
             new OrderDetail
@@ -82,9 +77,9 @@ public class OrderDetailServiceTests
 
         Assert.That(result, Is.Not.Null);
         Assert.That(2, Is.EqualTo(result.Count));
-        Assert.That(orderDetailDtos[0].OrderDetailId,Is.EqualTo( result[0].OrderDetailId));
-        Assert.That(orderDetailDtos[1].Quantity,Is.EqualTo( result[1].Quantity));
-        Assert.That(orderDetailDtos[1].Subtotal,Is.EqualTo( result[1].Subtotal));
+        Assert.That(orderDetailDtos[0].OrderDetailId, Is.EqualTo(result[0].OrderDetailId));
+        Assert.That(orderDetailDtos[1].Quantity, Is.EqualTo(result[1].Quantity));
+        Assert.That(orderDetailDtos[1].Subtotal, Is.EqualTo(result[1].Subtotal));
     }
 
     [Test]
