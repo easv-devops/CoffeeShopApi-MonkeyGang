@@ -1,6 +1,8 @@
+using AutoMapper;
 using Business.Service;
 using Data.Repository.Interfaces;
 using Models;
+using Models.DTOs.Create;
 using Moq;
 using NUnit.Framework;
 using Service;
@@ -12,12 +14,15 @@ namespace CoffeeShopApiTests;
     {
         private Mock<IPostRepository> _postRepositoryMock;
         private IPostService _postService;
+        private Mock<IMapper> _mapperMock;
 
         [SetUp]
         public void Setup()
         {
             _postRepositoryMock = new Mock<IPostRepository>();
-            _postService = new PostService(_postRepositoryMock.Object);
+            _mapperMock = new Mock<IMapper>();
+
+            _postService = new PostService(_postRepositoryMock.Object, _mapperMock.Object);
         }
 
         [Test]
@@ -65,20 +70,7 @@ namespace CoffeeShopApiTests;
             Assert.That(result, Is.Null);
         }
 
-        [Test]
-        public void AddPost_ShouldReturnCreatedPostId()
-        {
-            // Arrange
-            var newPost = new Post { Title = "New Post" };
-            var expectedPostId = Guid.NewGuid();
-            _postRepositoryMock.Setup(repo => repo.AddPost(newPost)).Returns(expectedPostId);
-
-            // Act
-            var result = _postService.AddPost(newPost);
-
-            // Assert
-            Assert.That(result, Is.EqualTo(expectedPostId));
-        }
+    
 
         [Test]
         public void UpdatePost_ShouldCallUpdatePostInRepository()

@@ -1,6 +1,7 @@
 using AutoMapper;
 using Models.DTOs;
 using Models.DTOs.Create;
+using Models.DTOs.Response;
 
 namespace Presentation.Controllers;
 
@@ -27,7 +28,7 @@ public class PostController : ControllerBase
     {
         var posts = _postService.GetAllPosts();
         
-        List<PostDto> postDtos = _mapper.Map<List<PostDto>>(posts);
+        List<PostResponseDto> postDtos = _mapper.Map<List<PostResponseDto>>(posts);
         
         return Ok(postDtos);
     }
